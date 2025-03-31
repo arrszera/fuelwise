@@ -32,26 +32,50 @@
 			</div>
 		</div>
 	</div>
-	<form method="POST" action ="index.php?page=1">
+	<form method="POST" action ="index.php?page=1" onsubmit="return validarCNPJ()">
 		<div class="row">
 			<div class="col">
+				<p>Digite aqui o nome da transportadora</p>
 				<input type="text"
-				name="nome_transp" class="form-control"
-				placeholder="Digite o nome aqui">
+				name="nome_transp" id="nome_transp" class="form-control"
+				placeholder="XXXXXXX" required>
 			</div>
-				<div class="col">			
+				<div class="col">
+				<p>Digite aqui o endereço</p>			
 				<input type="text"
-				name="endereco" class="form-control"
-				placeholder="Digite seu endereco aqui">
+				name="endereco" id="endereco" class="form-control"
+				placeholder="Rua xxxxxx 111" required>
 			</div>
 			<div class="col">
+			<p>Digite aqui o CNPJ</p>
 				<input type="text"
-				name="cnpj" class="form-control"
-				placeholder="Digite seu cnpj aqui">
+				name="cnpj" id="cnpj" class="form-control"
+				placeholder="11111111111111" required>
 			</div>
 		</div>
 		<button type="submit" class="btn btn-primary">Enviar</button>
 </form>
+<script>
+/*		function validarEndereco() {
+					const endereco = document.getElementById('endereco').value;
+					const enderecoRegex = /^[A-Za-z0-9\s,.-]+$/;
 
+					if (!enderecoRegex.test(endereco)) {
+						alert("Endereço inválido! Digite no formato correto.");
+						return false;
+					}
+					return true; 
+				} */
+		function validarCNPJ() {
+			const cnpj = document.getElementById('cnpj').value;
+			const cnpjRegex = /^\d{2}\.?\d{3}\.?\d{3}\/?\d{4}-?\d{2}$/;
+
+			if (!cnpjRegex.test(cnpj)) {
+				alert("CNPJ inválido! Digite no formato correto.");
+				return false;
+			}
+			return true; 
+		}
+</script>
 </body>
 </html>

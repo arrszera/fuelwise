@@ -1,7 +1,6 @@
 <?php
-
 	if(isset($_POST['id_transp']) && isset($_POST['nome_transp']) && isset($_POST['endereco']) && isset($_POST['cnpj'])) {
-	include conecta_db();
+		$obj = conecta_db();
 		$query = "UPDATE tb_transportadora
 		SET nome_transp = '".$_POST['nome_transp']."',
 		endereco = '".$_POST['endereco']."'	,
@@ -15,6 +14,7 @@
 			echo "<span> class='alert alert-danger'> Não funcionou</span>";
 		}
 	}
+
 
 
 ?>
