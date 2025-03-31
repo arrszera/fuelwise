@@ -19,7 +19,7 @@
 	<div class="row">
 		<div class="col">
 			<a href="index.php?page=1" 
-			class="btn btn-primary">Adicionar novo registo</a>
+			class="btn btn-primary">Adicionar nova transportadora</a>
 		
 			<table class="table table-striped">
 			<thead>

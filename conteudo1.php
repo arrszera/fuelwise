@@ -28,7 +28,7 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col">
-				<h2> inserir nova transportadora </h2>
+				<h2> Inserir nova transportadora </h2>
 			</div>
 		</div>
 	</div>
@@ -40,32 +40,25 @@
 				name="nome_transp" id="nome_transp" class="form-control"
 				placeholder="XXXXXXX" required>
 			</div>
+
 				<div class="col">
 				<p>Digite aqui o endereço</p>			
 				<input type="text"
 				name="endereco" id="endereco" class="form-control"
 				placeholder="Rua xxxxxx 111" required>
 			</div>
+
 			<div class="col">
 			<p>Digite aqui o CNPJ</p>
 				<input type="text"
 				name="cnpj" id="cnpj" class="form-control"
 				placeholder="11111111111111" required>
 			</div>
+
 		</div>
 		<button type="submit" class="btn btn-primary">Enviar</button>
 </form>
 <script>
-/*		function validarEndereco() {
-					const endereco = document.getElementById('endereco').value;
-					const enderecoRegex = /^[A-Za-z0-9\s,.-]+$/;
-
-					if (!enderecoRegex.test(endereco)) {
-						alert("Endereço inválido! Digite no formato correto.");
-						return false;
-					}
-					return true; 
-				} */
 		function validarCNPJ() {
 			const cnpj = document.getElementById('cnpj').value;
 			const cnpjRegex = /^\d{2}\.?\d{3}\.?\d{3}\/?\d{4}-?\d{2}$/;

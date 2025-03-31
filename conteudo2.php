@@ -7,4 +7,5 @@
 	}else{
 		echo "Algo deu errado.";
 	}
+#	codigo para excluir uma transportadora
 ?>	
