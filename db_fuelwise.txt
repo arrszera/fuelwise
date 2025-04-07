@@ -18,4 +18,13 @@ CREATE TABLE tb_posto (
     senha_posto VARCHAR(25) NOT NULL
 );
 
+CREATE TABLE tb_caminhao (
+    id_caminhao INT AUTO_INCREMENT PRIMARY KEY,
+    placa VARCHAR(10) NOT NULL,
+    modelo VARCHAR(45) NOT NULL,
+    eixos TINYINT NOT NULL,
+    observacao VARCHAR(25)
+);
+
+
 Codigo sql para criar banco de dados e table necessaria
