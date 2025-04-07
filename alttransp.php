@@ -1,4 +1,20 @@
 <?php
+include_once('conecta_db.php'); 
+$obj = conecta_db();
+
+    if (isset($_GET['id'])) {
+        $id = $_GET['id'];
+        $query = "SELECT * FROM tb_transportadora WHERE id_transp = '$id'";
+        $result = $obj->query($query);
+
+        if ($result && $result->num_rows > 0) {
+            $dados = $result->fetch_assoc();
+        } else {
+            echo "<span class='alert alert-danger'>transportadora não encontrado!</span>";
+            exit;
+        }
+    }
+
 	if(isset($_POST['nome_transp'])){
 		$obj = conecta_db();
 		$query = "UPDATE tb_transportadora
@@ -45,21 +61,21 @@
 				<p>Digite aqui o novo nome da transportadora</p>
 				<input type="text"
 				name="nome_transp" id="nome_transp" class="form-control"
-				placeholder="XXXXXXX" required>
+				value="<?php echo $dados['nome_transp']; ?>" required>
 			</div>
 
 				<div class="col">
 				<p>Digite aqui o novo endereço</p>			
 				<input type="text"
 				name="endereco" id="endereco" class="form-control"
-				placeholder="Rua xxxxxx 111" required>
+				value="<?php echo $dados['endereco']; ?>" required>
 			</div>
 
 			<div class="col">
 			<p>Digite aqui o novo CNPJ</p>
 				<input type="text"
 				name="cnpj" id="cnpj" class="form-control"
-				placeholder="11111111111111" required>
+				value="<?php echo $dados['cnpj']; ?>" required>
 			</div>
 			
 		</div>

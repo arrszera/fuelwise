@@ -8,11 +8,9 @@
 		if($resultado){
 			header("location: index.php");
 		}else{
-			echo "<span> class='alert alert-danger'> Não funcionou</span>";
+			echo "<span class='alert alert-danger'> Não funcionou</span>";
 		}
 	}
-
-
 ?>
 
 <!DOCTYPE html>
@@ -32,50 +30,50 @@
 			</div>
 		</div>
 	</div>
-	<form method="POST" action ="index.php?page=7" onsubmit="return validarCNPJ()">
+	<form method="POST" action="index.php?page=7" onsubmit="return validarFormulario()">
 		<div class="row">
 			<div class="col">
-				<p>Digite aqui a nova placa</p>
+				<p>Digite aqui a placa*</p>
 				<input type="text"
 				name="placa" id="placa" class="form-control"
-				placeholder="XXXXXXX" required>
-			</div>
-
-				<div class="col">
-				<p>Digite aqui o modelo</p>			
-				<input type="text"
-				name="modelo" id="modelo" class="form-control"
-				placeholder="XXXXXXX" required>
+				placeholder="ABC1D23" required>
 			</div>
 
 			<div class="col">
-			<p>Digite aqui os eixos</p>
+				<p>Digite aqui o modelo*</p>			
+				<input type="text"
+				name="modelo" id="modelo" class="form-control"
+				placeholder="Ex: Volvo FH" required>
+			</div>
+
+			<div class="col">
+				<p>Digite aqui os eixos*</p>
 				<input type="number"
 				name="eixos" id="eixos" class="form-control"
-				placeholder="11111111111111" max=3 required>
+				placeholder="3" min=3 max=10 required>
 			</div>
 
             <div class="col">
-			<p>Digite aqui a observação</p>
+				<p>Digite aqui a observação</p>
 				<input type="text"
 				name="observacao" id="observacao" class="form-control"
-				placeholder="XXXXXXX" required>
+				placeholder="Ex: Caminhão em manutenção" required>
 			</div>
-
 		</div>
 		<button type="submit" class="btn btn-primary">Enviar</button>
-</form>
-<script>
-		function validarCNPJ() {
-			const cnpj = document.getElementById('cnpj').value;
-			const cnpjRegex = /^\d{2}\.?\d{3}\.?\d{3}\/?\d{4}-?\d{2}$/;
+	</form>
 
-			if (!cnpjRegex.test(cnpj)) {
-				alert("CNPJ inválido! Digite no formato correto.");
+	<script>
+		function validarFormulario() {
+			const placa = document.getElementById('placa').value.trim().toUpperCase();
+			const regexPlaca = /^[A-Z]{3}[0-9][A-Z0-9][0-9]{2}$/;
+
+			if (!regexPlaca.test(placa)) {
+				alert("Placa inválida! Use o formato ABC1D23 ou ABC1234.");
 				return false;
 			}
-			return true; 
+			return true;
 		}
-</script>
+	</script>
 </body>
 </html>

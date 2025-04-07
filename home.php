@@ -70,27 +70,31 @@
 			</tbody>
 			</table>
 			<br><br><br>
-			<h3>Postos Cadastrados</h3>
+			<h3>Solicitações</h3>
 			<table class="table table-striped">
 			<thead>
 				<tr>
 					<th>#</th>
 					<th>ID</th>
-					<th>Nome</th>
-					<th>ENDERECO</th>
+					<th>Nome Transportadora</th>
+					<th>ENDERECO Transportadora</th>
+					<th>Telefone</th>
+					<th>Email Usuário</th>
+					<th>CPF</th>
+					<th>CNPJ</th>
 				</tr>
 			
 			</thead>
 			<tbody>
 			<?php
 				$obj = conecta_db();
-				$query = "SELECT * FROM tb_posto";
+				$query = "SELECT * FROM tb_solicitacao";
 				$resultado = $obj->query($query);
 				while($linha = $resultado->fetch_object()){
 					$html = "<tr>";
 					$html .= "<td>";
 					$html .="<a href='index.php?page=5
-					&id=" .$linha->id_posto."'
+					&id=" .$linha->id_solicitacao."'
 					class='btn btn-danger'>Excluir </a>";
 					
 					
@@ -100,9 +104,13 @@
 					class='btn btn-success'>Alterar</a>";
 						   
 					$html .= "</td>";
-					$html .= "<td>" .$linha->id_posto."</td>";
-					$html .= "<td>" .$linha->nome_posto."</td>";
-					$html .= "<td>" .$linha->endereco_posto."</td>";
+					$html .= "<td>" .$linha->id_solicitacao."</td>";
+					$html .= "<td>" .$linha->nome_transportadora."</td>";
+					$html .= "<td>" .$linha->endereco."</td>";
+					$html .= "<td>" .$linha->telefone."</td>";
+					$html .= "<td>" .$linha->emailUsuario."</td>";
+					$html .= "<td>" .$linha->cpf."</td>";
+					$html .= "<td>" .$linha->cnpj."</td>";
 					
 					$html .= "</tr>";
 					echo $html;
@@ -155,69 +163,11 @@
 					$html .= "</tr>";
 					echo $html;
 				}
-
-				
-
-				
 			
 			?>
 			</tbody>
 			</table>
 			
-
-			<br><br><br>
-			<h3>Solicitações</h3>
-			<table class="table table-striped">
-			<thead>
-				<tr>
-					<th>#</th>
-					<th>ID</th>
-					<th>Nome Transportadora</th>
-					<th>ENDERECO Transportadora</th>
-					<th>Telefone</th>
-					<th>Nome Usuário</th>
-					<th>Email Usuário</th>
-					<th>CPF</th>
-					<th>CNPJ</th>
-				</tr>
-			
-			</thead>
-			<tbody>
-			<?php
-				$obj = conecta_db();
-				$query = "SELECT * FROM tb_solicitacao";
-				$resultado = $obj->query($query);
-				while($linha = $resultado->fetch_object()){
-					$html = "<tr>";
-					$html .= "<td>";
-					$html .="<a href='index.php?page=10
-					&id=" .$linha->id_solicitacoes."'
-					class='btn btn-danger'>Excluir </a>";
-					
-					
-					$html .= "<a href='index.php?page=11
-					&id=" . $linha->id_solicitacoes ." 
-					&nome=" . urlencode($linha->nome_transportadora) . "' 
-					class='btn btn-success'>Aceitar</a>";
-						   
-					$html .= "</td>";
-					$html .= "<td>" .$linha->id_solicitacoes."</td>";
-					$html .= "<td>" .$linha->nome_transportadora."</td>";
-					$html .= "<td>" .$linha->endereco."</td>";
-					$html .= "<td>" .$linha->telefone."</td>";
-					$html .= "<td>" .$linha->nomeUsuario."</td>";
-					$html .= "<td>" .$linha->emailUsuario."</td>";
-					$html .= "<td>" .$linha->cpf."</td>";
-					$html .= "<td>" .$linha->cnpj."</td>";
-					
-					$html .= "</tr>";
-					echo $html;
-				}
-			
-			?>
-			</tbody>
-			</table>
-
 			
 		</div>
 	</div>

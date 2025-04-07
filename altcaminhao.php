@@ -1,4 +1,20 @@
 <?php
+include_once('conecta_db.php'); 
+$obj = conecta_db();
+
+    if (isset($_GET['id'])) {
+        $id = $_GET['id'];
+        $query = "SELECT * FROM tb_caminhao WHERE id_caminhao = '$id'";
+        $result = $obj->query($query);
+
+        if ($result && $result->num_rows > 0) {
+            $dados = $result->fetch_assoc();
+        } else {
+            echo "<span class='alert alert-danger'>transportadora não encontrado!</span>";
+            exit;
+        }
+    }
+
 	if(isset($_POST['placa'])){
 		$obj = conecta_db();
 		$query = "UPDATE tb_caminhao
@@ -16,7 +32,7 @@
 	}
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
   <title>Meu primeiro CRUD</title>
   <meta charset="utf-8">
@@ -38,35 +54,36 @@
 			
 			<form 
 			method="POST" 
-			action="index.php?page=9&id=<?php echo $_GET['id'];?>">
+			action="index.php?page=9&id=<?php echo $_GET['id'];?>"
+			onsubmit="return validarPlaca()">
 
 		<div class="row">
 			<div class="col">
 				<p>Digite aqui a nova placa do caminhao</p>
 				<input type="text"
 				name="placa" id="placa" class="form-control"
-				placeholder="XXXXXXX" required>
+				value="<?php echo $dados['placa']; ?>" required>
 			</div>
 
 				<div class="col">
 				<p>Digite aqui o novo modelo</p>			
 				<input type="text"
 				name="modelo" id="modelo" class="form-control"
-				placeholder="Volvo xxx" required>
+				value="<?php echo $dados['modelo']; ?>" required>
 			</div>
 
 			<div class="col">
 			<p>Digite aqui a nova quantidade de eixos</p>
 				<input type="number"
 				name="eixos" id="eixos" class="form-control"
-				placeholder="1" max=3 min=1 required>
+				placeholder="3" min=3 max=10 required>
 			</div>
             
 			<div class="col">
 			<p>Digite aqui a nova observação</p>
 				<input type="text"
 				name="observacao" id="observacao" class="form-control"
-				placeholder="xxxxxxxx" required>
+				value="<?php echo $dados['observacao']; ?>" required>
 			</div>
 
 			
@@ -82,6 +99,15 @@
 	</div>
 </body>
 <script>
+	function validarPlaca() {
+		const placa = document.getElementById('placa').value.toUpperCase();
+		const regex = /^[A-Z]{3}[0-9][A-Z0-9][0-9]{2}$/;
 
+		if (!regex.test(placa)) {
+			alert("Placa inválida! Digite no formato ABC1D23.");
+			return false;
+		}
+		return true;
+	}
 </script>
 </html>

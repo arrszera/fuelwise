@@ -25,7 +25,12 @@
 		}
 		else if($_GET['page'] ==9) {
 			include 'altcaminhao.php';
-		}else{
+		}else if($_GET['page'] ==10) {
+			include 'rmvsolicitacao.php';
+		}else if($_GET['page'] ==11) {
+			include 'actsolicitacao.php';
+		}
+		else{
 			header('location: index.php');
 		}
 	}else{

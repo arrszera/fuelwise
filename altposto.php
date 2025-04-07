@@ -1,10 +1,26 @@
 <?php
+include_once('conecta_db.php'); 
+$obj = conecta_db();
+
+    if (isset($_GET['id'])) {
+        $id = $_GET['id'];
+        $query = "SELECT * FROM tb_posto WHERE id_posto = '$id'";
+        $result = $obj->query($query);
+
+        if ($result && $result->num_rows > 0) {
+            $dados = $result->fetch_assoc();
+        } else {
+            echo "<span class='alert alert-danger'>Posto não encontrado!</span>";
+            exit;
+        }
+    }
+
+
 	if(isset($_POST['nome_posto'])){
 		$obj = conecta_db();
 		$query = "UPDATE tb_posto
 		SET nome_posto = '".$_POST['nome_posto']."',
 		endereco_posto = '".$_POST['endereco_posto']."'	,
-		cnpj = '".$_POST['cnpj']."',
         email_posto = '".$_POST['email_posto']."',
 		senha_posto = '".$_POST['senha_posto']."'
         WHERE id_posto = '".$_GET['id']."'";
@@ -17,7 +33,7 @@
 	}
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
   <title>Meu primeiro CRUD</title>
   <meta charset="utf-8">
@@ -29,7 +45,7 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col">
-				<h2> Atualizando o posto: <?php echo $_GET['nome_posto']; ?> </h2>
+				<h2> Atualizando o posto: <?php echo $dados['nome_posto']; ?> </h2>
 				<h2> ID : <?php echo $_GET['id']; ?> </h2>
 				</div>
 		</div>
@@ -40,44 +56,23 @@
 			<form 
 			method="POST" 
 			action="index.php?page=6&id=<?php echo $_GET['id'];?>"
-			onsubmit="return validarCNPJ()">
+			>
 
 		<div class="row">
 			<div class="col">
 				<p>Digite aqui o novo nome do posto</p>
 				<input type="text"
 				name="nome_posto" id="nome_posto" class="form-control"
-				placeholder="XXXXXXX" required>
+				value="<?php echo $dados['nome_posto']; ?>" required>
 			</div>
 
 				<div class="col">
 				<p>Digite aqui o novo endereço</p>			
 				<input type="text"
 				name="endereco_posto" id="endereco_posto" class="form-control"
-				placeholder="Rua xxxxxx 111" required>
+				value="<?php echo $dados['endereco_posto']; ?>" required>
 			</div>
 
-			<div class="col">
-			<p>Digite aqui o novo CNPJ</p>
-				<input type="text"
-				name="cnpj" id="cnpj" class="form-control"
-				placeholder="11111111111111" required>
-			</div>
-            
-			<div class="col">
-			<p>Digite aqui o novo Email</p>
-				<input type="text"
-				name="email_posto" id="email_posto" class="form-control"
-				placeholder="11111111111111" required>
-			</div>
-            
-			<div class="col">
-			<p>Digite aqui a nova senha</p>
-				<input type="password"
-				name="senha_posto" id="senha_posto" class="form-control"
-				placeholder="11111111111111" required>
-			</div>
-			
 		</div>
 			<button type="submit" 
 					class="mt-2 btn btn-primary">Enviar</button>
@@ -90,15 +85,7 @@
 	</div>
 </body>
 <script>
-		function validarCNPJ() {
-			const cnpj = document.getElementById('cnpj').value;
-			const cnpjRegex = /^\d{2}\.?\d{3}\.?\d{3}\/?\d{4}-?\d{2}$/;
 
-			if (!cnpjRegex.test(cnpj)) {
-				alert("CNPJ inválido! Digite no formato correto.");
-				return false;
-			}
-			return true; 
-		}
+
 </script>
 </html>
