@@ -20,7 +20,12 @@
 		<div class="col">
 			<a href="index.php?page=1" 
 			class="btn btn-primary">Adicionar nova transportadora</a>
-		
+			<a href="index.php?page=4" 
+			class="btn btn-primary">Adicionar novo posto</a>
+			<a href="index.php?page=7" 
+			class="btn btn-primary">Adicionar novo caminhão</a>
+<br><br>
+			<h3>Transportadoras Cadastradas</h3>
 			<table class="table table-striped">
 			<thead>
 				<tr>
@@ -55,6 +60,101 @@
 					$html .= "<td>" .$linha->nome_transp."</td>";
 					$html .= "<td>" .$linha->endereco."</td>";
 					$html .= "<td>" .$linha->cnpj."</td>";
+
+					
+					$html .= "</tr>";
+					echo $html;
+				}
+			
+			?>
+			</tbody>
+			</table>
+			<br><br><br>
+			<h3>Postos Cadastrados</h3>
+			<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>ID</th>
+					<th>Nome</th>
+					<th>ENDERECO</th>
+					<th>CNPJ</th>
+					<th>Email </th>
+				</tr>
+			
+			</thead>
+			<tbody>
+			<?php
+				$obj = conecta_db();
+				$query = "SELECT * FROM tb_posto";
+				$resultado = $obj->query($query);
+				while($linha = $resultado->fetch_object()){
+					$html = "<tr>";
+					$html .= "<td>";
+					$html .="<a href='index.php?page=5
+					&id=" .$linha->id_posto."'
+					class='btn btn-danger'>Excluir </a>";
+					
+					
+					$html .= "<a href='index.php?page=6
+					&id=" . $linha->id_posto ." 
+					&nome=" . urlencode($linha->nome_posto) . "' 
+					class='btn btn-success'>Alterar</a>";
+						   
+					$html .= "</td>";
+					$html .= "<td>" .$linha->id_posto."</td>";
+					$html .= "<td>" .$linha->nome_posto."</td>";
+					$html .= "<td>" .$linha->endereco_posto."</td>";
+					$html .= "<td>" .$linha->cnpj."</td>";
+					$html .= "<td>" .$linha->email_posto."</td>";
+
+					
+					$html .= "</tr>";
+					echo $html;
+				}
+			
+			?>
+			</tbody>
+			</table>
+
+			<br><br><br>
+			<h3>Caminhoes Cadastrados</h3>
+			<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>ID</th>
+					<th>PLACA</th>
+					<th>MODELO</th>
+					<th>EIXOS</th>
+					<th>OBSERVAÇÃO </th>
+				</tr>
+			
+			</thead>
+			<tbody>
+			<?php
+				$obj = conecta_db();
+				$query = "SELECT * FROM tb_caminhao";
+				$resultado = $obj->query($query);
+				while($linha = $resultado->fetch_object()){
+					$html = "<tr>";
+					$html .= "<td>";
+					$html .="<a href='index.php?page=8
+					&id=" .$linha->id_caminhao."'
+					class='btn btn-danger'>Excluir </a>";
+					
+					
+					$html .= "<a href='index.php?page=9
+					&id=" . $linha->id_caminhao ." 
+					&nome=" . urlencode($linha->placa) . "' 
+					class='btn btn-success'>Alterar</a>";
+						   
+					$html .= "</td>";
+					$html .= "<td>" .$linha->id_caminhao."</td>";
+					$html .= "<td>" .$linha->placa."</td>";
+					$html .= "<td>" .$linha->modelo."</td>";
+					$html .= "<td>" .$linha->eixos."</td>";
+					$html .= "<td>" .$linha->observacao."</td>";
 
 					
 					$html .= "</tr>";
