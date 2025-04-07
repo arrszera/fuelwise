@@ -1,0 +1,35 @@
+*{
+    font-family: "Montserrat", serif;
+    font-optical-sizing: auto;
+    font-weight: thin;
+    font-style: normal;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+html{
+    scroll-behavior: smooth;
+}
+
+body{
+    line-height: 1.6;
+    background-color: #ECEBE9;
+}
+
+h3{
+    margin-top: 30px;
+}
+
+.form{
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    margin: 40px auto;
+    /* justify-content: end; */
+}
+
+.btn-primary{
+    margin-top: 10px;
+}
