@@ -24,8 +24,7 @@
     <?php if (!isset($_SESSION['role'])) { ?> <!-- DESLOGADO -->
         <li class="mobile-menu-item"><a href="../pages/login.php">Fazer login</a></li>
         <li class="mobile-menu-item"><a href="../pages/cadastro_transportadora.php?page=1" onclick="scrollIntoView()">Cadastrar como Transportadora</a></li>
-        <li class="mobile-menu-item"><a href="#" onclick="scrollIntoView()">Cadastrar como Funcionário</a></li>
-        <li class="mobile-menu-item"><a href="#" onclick="scrollIntoView()">Cadastrar como Posto &nbsp;<box-icon name='gas-pump' color="#ECEBE9"></box-icon></a></li>
+        <li class="mobile-menu-item"><a href="../pages/cadastro_funcionario.php" onclick="scrollIntoView()">Cadastrar como Funcionário</a></li>
         <li class="mobile-menu-item"><a href="#" onclick="scrollIntoView()">Suporte &nbsp;<box-icon color="#ECEBE9" name="support"></box-icon></a></li>
     <?php } else { 
         switch ($_SESSION['role']) {

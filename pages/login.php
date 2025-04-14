@@ -3,12 +3,13 @@
         include("../elements/connection.php");
         $email = $_POST["email"];
         $password = $_POST["password"];
-        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-        $sql = "SELECT * FROM usuario WHERE email = '".$email."' AND password = '".$password."'";
-
+        $senha = password_hash($password, PASSWORD_DEFAULT);
+        $sql = "SELECT * FROM tb_usuario WHERE email = '".$email."' AND senha = '".$senha."'";
+        
         if ($result = $conn->query($sql)->fetch_assoc()){
             $_SESSION["id"] = $result["id"];
-            $_SESSION['role'] = $result['role']; // 0 = funcionario, 1 = gerente, 2 = posto, 3 ADM
+            $_SESSION['adm'] = $result['adm'];
+            $_SESSION['gerente'] = $result['gerente'];
             header('Location: index.php');
         } else {
             echo"<script>

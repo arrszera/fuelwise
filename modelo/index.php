@@ -29,9 +29,12 @@
 			include 'rmvsolicitacao.php';
 		}else if($_GET['page'] ==11) {
 			include 'actsolicitacao.php';
-		}
-		else{
-			header('location: index.php');
+		}else if($_GET['page'] ==12) {
+			include 'adduser.php';
+		}else if($_GET['page'] ==13) {
+			include 'altuser.php';
+		}else if($_GET['page'] ==14) {
+			include 'rmvuser.php';
 		}
 	}else{
 		include 'main.php';
