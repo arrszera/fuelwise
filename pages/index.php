@@ -1,40 +1,23 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel='stylesheet' href='../css/header.css'>
-    <link rel='stylesheet' href='../css/index.css'>
-    <link rel='stylesheet' href='../css/home.css'>
-    <!-- fonte -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">     
-    <!--  -->
+    <?php 
+        include_once('../config.php');
+        include(ROOT_PATH . '/elements/head.php');
+    ?>
+    <link rel='stylesheet' href='<?php echo ROOT_PATH ?>/css/home.css'>
     <title>Document</title>
 </head>
 <body>
-    <?php include('../elements/header.php') ?>
+    <?php include(ROOT_PATH . '/elements/header.php') ?>
     
     <div class="inicio" id="inicio">
 
     </div>
 
-
-  <!-- Header -->
-  <header>
-    <nav class="top-nav">
-      <a href="#">Início</a>
-      <a href="#funcionalidades">Funcionalidades</a>
-      <a href="#como-funciona">Como Funciona</a>
-      <a href="#contato">Contato</a>
-      <a href="cadastro.html" class="cadastro-link">Cadastre-se</a>
-    </nav>
-  </header>
-
   <!-- Hero Section -->
   <section class="hero">
-    <h1>FullWise</h1>
+    <h1>FuelWise</h1>
     <p>A revolução no abastecimento de frotas começa aqui.</p>
   </section>
 
@@ -99,7 +82,7 @@
     
 
     <!-- JS -->
-    <script src="../js/index.js"></script>
+    <script src="<?php echo ROOT_PATH ?>/js/index.js"></script>
     <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
 </body>
 </html>

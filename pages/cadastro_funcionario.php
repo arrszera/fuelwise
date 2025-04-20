@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <?php include('../elements/head.php') ?>
+    <?php 
+        include_once('../config.php');
+        include(ROOT_PATH . '/elements/head.php');
+    ?>
     <title>Cadastro Funcionário</title>
 <!-- fonte -->
 </head>

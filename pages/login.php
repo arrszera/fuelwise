@@ -1,39 +1,17 @@
-<?php
-    if (isset($_POST["email"]) && isset($_POST["password"])){
-        include("../elements/connection.php");
-        $email = $_POST["email"];
-        $password = $_POST["password"];
-        $senha = password_hash($password, PASSWORD_DEFAULT);
-        $sql = "SELECT * FROM tb_usuario WHERE email = '".$email."' AND senha = '".$senha."'";
-        
-        if ($result = $conn->query($sql)->fetch_assoc()){
-            $_SESSION["id"] = $result["id"];
-            $_SESSION['adm'] = $result['adm'];
-            $_SESSION['gerente'] = $result['gerente'];
-            header('Location: index.php');
-        } else {
-            echo"<script>
-                    alert('Essa senha não pertence a esse usuário')
-                    window.location.href = 'login.php';
-                </script>";
-            exit;
-        }
-    }
-?>
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <?php include('../elements/head.php'); ?>
-    <link rel='stylesheet' href='../css/header.css'>
-    <link rel='stylesheet' href='../css/index.css'>
+    <?php 
+        include_once('../config/config.php');
+        include(ROOT_PATH . '/elements/head.php'); 
+    ?>
     <title>Login</title>
 </head>
 <body>
-    <?php include('../elements/header.php') ?>
+    <?php include(ROOT_PATH . '/elements/header.php') ?>
 
     <div class="form-div" id="form-div">
-        <form method="POST" action="" class="form">
+        <form method="POST" action="login_php.php" class="form">
             <div class="form-group">
                 <label for="exampleInputEmail1">Email</label>
                 <input name="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Insira seu Email">
@@ -47,7 +25,7 @@
         </form>
     </div>
     <!-- JS -->
-    <script src="../js/index.js"></script>
+    <script src="<?php ROOT_PATH ?>/js/index.js"></script>
     <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
 </body>
 </html>

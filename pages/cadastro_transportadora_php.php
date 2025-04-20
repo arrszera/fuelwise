@@ -1,4 +1,5 @@
 <?php 
+include_once('../config.php');
 session_start();
 if($_GET['page'] == 1 || !isset($_GET['page'])){
     $nomeTransportadora = trim($_POST["nomeTransportadora"]);
@@ -9,7 +10,7 @@ if($_GET['page'] == 1 || !isset($_GET['page'])){
             strlen($endereco) == 0 ||
             strlen($cnpj) == 0 
         ){
-        header('Location: cadastro_transportadora.php?page=1&erro=1');
+        header('Location: ' . ROOT_PATH .'/pages/cadastro_transportadora.php?page=1&erro=1');
         exit;
     }
 

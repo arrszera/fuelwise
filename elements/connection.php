@@ -1,8 +1,8 @@
 <?php
-    $host = 'localhost:3307'; 
+    $host = 'localhost:3306'; 
     $user = 'root'; 
     $password = ''; 
-    $database = 'db_fuelwise'; 
+    $database = 'fuelwise'; 
 
     $conn = new mysqli($host, $user, $password, $database);
 

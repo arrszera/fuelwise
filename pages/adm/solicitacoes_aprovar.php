@@ -9,9 +9,9 @@
 		$query = "SELECT * FROM solicitacao WHERE idsolicitacao = ".$_GET['id'];
         $resultado = $conn->query($query);
         $linha = $resultado->fetch_object();
-		$query = "INSERT INTO usuario(email, nome, senha, telefone, cpf ) VALUES(?, ?, ?, ?, ?)";
+		$query = "INSERT INTO usuario(email, nome, senha, telefone, cpf, gerente) VALUES(?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($query);
-        $stmt->bind_param("sssss", $linha->emailUsuario, $linha->nomeUsuario, $linha->senha, $linha->telefone, $linha->cpf);
+        $stmt->bind_param("sssssi", $linha->emailUsuario, $linha->nomeUsuario, $linha->senha, $linha->telefone, $linha->cpf, 1);
         if ($stmt->execute()){
             $query = "INSERT INTO transportadora(nome, endereco, cnpj) VALUES(?, ?, ?)";
             $stmt = $conn->prepare($query);
