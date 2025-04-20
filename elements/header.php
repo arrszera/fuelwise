@@ -1,7 +1,11 @@
-<?php session_start() ?>
+<?php 
+    if ( session_status() !== PHP_SESSION_ACTIVE ){
+       session_start();
+    }
+?>
 <header class="header">
     <div>
-        <!-- <a href="index.html"><div class="logo" id="div-logo"><img src="assets/logo.png" ></div></a> -->
+        <!-- <a href="index.html"><div class="logo" id="div-logo"><img src="../assets/logo.png" ></div></a> -->
         <a href="../pages/index.php"><div>LOGO</div></a>
     </div>
     <div id="menu">

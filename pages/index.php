@@ -14,7 +14,7 @@
 </head>
 <body>
     <?php include('../elements/header.php') ?>
-
+    
     <div class="inicio" id="inicio">
 
     </div>    

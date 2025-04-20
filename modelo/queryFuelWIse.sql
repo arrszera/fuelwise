@@ -1,0 +1,130 @@
+DROP DATABASE `fuelwise`;
+CREATE SCHEMA IF NOT EXISTS `fuelwise` DEFAULT CHARACTER SET utf8;
+USE `fuelwise`;
+
+CREATE TABLE IF NOT EXISTS `transportadora` (
+  `idtransportadora` INT NOT NULL AUTO_INCREMENT,
+  `nome` VARCHAR(50) NOT NULL,
+  `endereco` VARCHAR(100) NOT NULL,
+  `cnpj` VARCHAR(14) NOT NULL,
+  PRIMARY KEY (`idtransportadora`),
+  UNIQUE (`cnpj`)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `posto` (
+  `idposto` INT NOT NULL AUTO_INCREMENT,
+  `endereco` VARCHAR(100) NOT NULL,
+  `nome` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`idposto`)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `usuario` (
+  `idusuario` INT NOT NULL AUTO_INCREMENT,
+  `email` VARCHAR(255) NOT NULL,
+  `nome` VARCHAR(90) NOT NULL,
+  `senha` VARCHAR(255) NOT NULL,
+  `telefone` VARCHAR(45) NOT NULL,
+  `cpf` VARCHAR(11) NOT NULL,
+  `gerente` TINYINT NOT NULL,
+  `adm` TINYINT NOT NULL,
+  PRIMARY KEY (`idusuario`)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `caminhao` (
+  `idcaminhao` INT NOT NULL AUTO_INCREMENT,
+  `placa` VARCHAR(10) NOT NULL,
+  `modelo` VARCHAR(45) NOT NULL,
+  `eixos` TINYINT NOT NULL,
+  `observacao` VARCHAR(100),
+  PRIMARY KEY (`idcaminhao`)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `caminhoneiro_caminhao` (
+  `idcaminhoneiro_caminhao` INT NOT NULL AUTO_INCREMENT,
+  `idusuario` INT NOT NULL,
+  `idcaminhao` INT NOT NULL,
+  `data_inicio` DATETIME NOT NULL,
+  `data_termino` DATETIME NOT NULL,
+  `carga` VARCHAR(100) NOT NULL,
+  `peso` FLOAT(10,2) NOT NULL,
+  `observacao` VARCHAR(100),
+  PRIMARY KEY (`idcaminhoneiro_caminhao`),
+  FOREIGN KEY (`idusuario`) REFERENCES `usuario` (`idusuario`),
+  FOREIGN KEY (`idcaminhao`) REFERENCES `caminhao` (`idcaminhao`)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `combustivel` (
+  `idcombustivel` INT NOT NULL AUTO_INCREMENT,
+  `idposto` INT NOT NULL,
+  `tipo` TINYINT NOT NULL,
+  `preco` FLOAT(10,2) NOT NULL,
+  PRIMARY KEY (`idcombustivel`),
+  FOREIGN KEY (`idposto`) REFERENCES `posto` (`idposto`)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `denuncia` (
+  `iddenuncia` INT NOT NULL AUTO_INCREMENT,
+  `idposto` INT NOT NULL,
+  `motivo` VARCHAR(250) NOT NULL,
+  PRIMARY KEY (`iddenuncia`),
+  FOREIGN KEY (`idposto`) REFERENCES `posto` (`idposto`)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `anexos` (
+  `idanexos` INT NOT NULL,
+  `iddenuncia` INT NOT NULL,
+  `path` VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`idanexos`),
+  FOREIGN KEY (`iddenuncia`) REFERENCES `denuncia` (`iddenuncia`)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `chat` (
+  `idchat` INT NOT NULL AUTO_INCREMENT,
+  `nome` VARCHAR(45) NOT NULL,
+  `data` DATETIME NOT NULL,
+  PRIMARY KEY (`idchat`)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `participante` (
+  `idparticipante` INT NOT NULL,
+  `idusuario` INT NOT NULL,
+  `idchat` INT NOT NULL,
+  `gerente` SMALLINT NOT NULL,
+  PRIMARY KEY (`idparticipante`),
+  FOREIGN KEY (`idusuario`) REFERENCES `usuario` (`idusuario`),
+  FOREIGN KEY (`idchat`) REFERENCES `chat` (`idchat`)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `mensagem` (
+  `idmensagem` INT NOT NULL AUTO_INCREMENT,
+  `idchat` INT NOT NULL,
+  `conteudo` VARCHAR(150) NOT NULL,
+  `data` TIMESTAMP NOT NULL,
+  `idusuario` INT NOT NULL,
+  PRIMARY KEY (`idmensagem`),
+  FOREIGN KEY (`idchat`) REFERENCES `chat` (`idchat`),
+  FOREIGN KEY (`idusuario`) REFERENCES `usuario` (`idusuario`)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `solicitacao` (
+  `idsolicitacao` INT NOT NULL AUTO_INCREMENT,
+  `nomeTransportadora` VARCHAR(50) NOT NULL,
+  `telefone` VARCHAR(45) NOT NULL,
+  `emailUsuario` VARCHAR(45) NOT NULL,
+  `cpf` VARCHAR(11) NOT NULL,
+  `endereco` VARCHAR(100) NOT NULL,
+  `cnpj` VARCHAR(14) NOT NULL,
+  `nomeUsuario` VARCHAR(45) NOT NULL,
+  `senha` VARCHAR(255) NOT NULL,
+  PRIMARY KEY (`idsolicitacao`)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `transportadora_usuario` (
+  `idtransportadora_usuario` INT NOT NULL AUTO_INCREMENT,
+  `idusuario` INT NOT NULL,
+  `idtransportadora` INT NOT NULL,
+  `datalogin` DATE,
+  PRIMARY KEY (`idtransportadora_usuario`),
+  FOREIGN KEY (`idusuario`) REFERENCES `usuario` (`idusuario`),
+  FOREIGN KEY (`idtransportadora`) REFERENCES `transportadora` (`idtransportadora`)
+) ENGINE=InnoDB;

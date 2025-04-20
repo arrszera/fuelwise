@@ -24,6 +24,8 @@
 <html lang="pt-BR">
 <head>
     <?php include('../elements/head.php'); ?>
+    <link rel='stylesheet' href='../css/header.css'>
+    <link rel='stylesheet' href='../css/index.css'>
     <title>Login</title>
 </head>
 <body>
