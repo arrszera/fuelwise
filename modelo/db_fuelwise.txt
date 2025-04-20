@@ -12,10 +12,7 @@ CREATE TABLE tb_transportadora (
 CREATE TABLE tb_posto (
     id_posto INT AUTO_INCREMENT PRIMARY KEY,
     nome_posto VARCHAR(100) NOT NULL,
-    endereco_posto VARCHAR(255) NOT NULL,
-    cnpj VARCHAR(18) NOT NULL UNIQUE,
-    email_posto VARCHAR(100) NOT NULL,
-    senha_posto VARCHAR(25) NOT NULL
+    endereco_posto VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE tb_caminhao (
@@ -26,5 +23,30 @@ CREATE TABLE tb_caminhao (
     observacao VARCHAR(25)
 );
 
+CREATE TABLE tb_usuario (
+    id_usuario INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(255) NOT NULL,
+    nome VARCHAR(90) NOT NULL,
+    senha VARCHAR(255) NOT NULL,
+    telefone VARCHAR(45),
+    cpf VARCHAR(11) NOT NULL UNIQUE,
+    gerente TINYINT NOT NULL DEFAULT 0,
+    FOREIGN KEY (id_transportadora) REFERENCES tb_transportadora(id_transp)
+);
+
+
+CREATE TABLE tb_solicitacao (
+    id_solicitacao INT AUTO_INCREMENT PRIMARY KEY,
+    id_posto INT NOT NULL,
+    id_transportadora INT NOT NULL,
+    id_usuario INT NOT NULL,
+    telefone VARCHAR(45),
+    email_usuario VARCHAR(255),
+    cpf VARCHAR(11),
+    cnpj VARCHAR(18),
+    FOREIGN KEY (id_posto) REFERENCES tb_posto(id_posto),
+    FOREIGN KEY (id_transportadora) REFERENCES tb_transportadora(id_transp),
+    FOREIGN KEY (id_usuario) REFERENCES tb_usuario(id_usuario)
+);
 
 Codigo sql para criar banco de dados e table necessaria
