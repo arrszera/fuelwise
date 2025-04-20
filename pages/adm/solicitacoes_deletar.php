@@ -10,6 +10,6 @@
 		$resultado = $conn->query($query);
 		header("location: solicitacoes.php");
 	}else{
-		echo "Algo deu errado.";
+		echo "Algo deu errado."; 
 	}
 ?>

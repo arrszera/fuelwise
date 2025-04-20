@@ -24,7 +24,7 @@
                     echo "Solicitação aceita, algo deu errado na exclusão da solicitação.";
             } else {
                 echo "Algo deu errado na inclusão da transportadora";
-            }
+            } 
         }
 	}else{
 		echo "Algo deu errado.";

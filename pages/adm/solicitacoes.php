@@ -55,7 +55,7 @@
             $html .= "<td data-label='CNPJ'>" .$linha->cnpj."</td>";
 
             $html .= "</tr>";
-            echo $html;
+            echo $html; 
         }
     ?>
 
