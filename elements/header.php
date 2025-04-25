@@ -40,7 +40,7 @@
         
     <?php break; case 3: ?> <!-- ADM/SUPORTE -->
         <li class="mobile-menu-item"><a href="/FuelWise/pages/adm/solicitacoes.php">Aprovar Cadastros</a></li>
-        <li class="mobile-menu-item"><a href="/FuelWise/pages/adm/cadastrar_posto.php">Cadastrar postos</a></li>
+        <li class="mobile-menu-item"><a href="/FuelWise/pages/adm/postos.php">Cadastrar postos</a></li>
         <li class="mobile-menu-item"><a href="#">Verificar Denuncias</a></li>
         <li class="mobile-menu-item"><a href="#">Visualiazar Solicitações</a></li>
         <li class="mobile-menu-item"><a href="/FuelWise/pages/logout.php">Logout</a></li>

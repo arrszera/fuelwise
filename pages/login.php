@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <?php 
-        include_once('../config/config.php');
+        include_once('../config.php');
         include(ROOT_PATH . '/elements/head.php'); 
     ?>
     <title>Login</title>

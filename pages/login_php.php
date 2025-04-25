@@ -1,6 +1,6 @@
 <?php
     if (isset($_POST["email"]) && isset($_POST["password"])){
-        include_once('../config/config.php');
+        include_once('../config.php');
         include(ROOT_PATH . "/connection.php");
         $email = $_POST["email"];
         $password = $_POST["password"];
