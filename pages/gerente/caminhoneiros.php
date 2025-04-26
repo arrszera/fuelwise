@@ -1,3 +1,87 @@
 <?php 
     include('autenticacaoGerente.php');
 ?>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <title>Postos</title>
+  <?php include('../../elements/head.php'); ?>
+  <link rel="stylesheet" href="../../css/solicitacoes.css">
+  <link rel='stylesheet' href='../../css/header.css'>
+    <link rel='stylesheet' href='../../css/index.css'>
+</head>
+<body>  
+<?php include('../../elements/header.php'); ?>
+<h3>Funcionários</h3>
+<div class="table-container">
+<form method="POST" action="integrantes_busca.php">
+    <input type="text" name="nome" placeholder="Nome do Funcionário">
+    <input type="text" name="cpf" placeholder="Cpf">
+    <select name="perfil">
+        <option value="" selected disabled></option>
+        <option value="motorista">Motorista</option>
+        <option value="gerente">Gerente</option>
+    </select>
+    <button type="submit" name="buscarIntegrante" class="btn btn-primary">Buscar</button>
+</form>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>CPF</th>
+            <th>Email</th>
+            <th>Senha</th>
+            <th>Telefone</th>
+            <th>Perfil</th>
+        </tr>   
+    </thead>
+    <tbody>
+    <?php
+        include('../../elements/connection.php');
+        $query = "SELECT usuario.idusuario AS idusuario, email, usuario.nome AS nome_usuario, telefone, cpf, gerente 
+          FROM transportadora_usuario AS tu
+          JOIN usuario ON tu.idusuario = usuario.idusuario 
+          JOIN transportadora ON tu.idtransportadora = transportadora.idtransportadora";
+
+        $resultado = $conn->query($query);
+        while($linha = $resultado->fetch_object()){
+            $html = "<tr>";
+
+            $html .= "<td data-label='#'>";
+            if ($linha->gerente != 1){
+                $html .= "<a href='caminhoneiro_deletar_php.php?id=".$linha->idusuario."' class='btn btn-danger'>Excluir</a> ";
+                $html .= "<a href='caminhoneiro_alterar.php?id=".$linha->idusuario."&nome=".urlencode($linha->nome_usuario)."&cpf=".$linha->cpf."' class='btn btn-success'>Alterar</a>";
+            }
+            $html .= "</td>";
+
+            $html .= "<td data-label='ID'>" .$linha->idusuario."</td>";
+            $html .= "<td data-label='Nome'>" .$linha->nome_usuario."</td>";
+            $html .= "<td data-label='CPF'>" .$linha->cpf."</td>";
+            $html .= "<td data-label='Email'>" .$linha->email."</td>";
+            $html .= "<td data-label='Senha'>
+                        <button type='button' class='btn btn-primary' onclick=\"window.location.href='redefinir_senha.php?id=" . $linha->idusuario . "'\">Redefinir Senha</button>
+                    </td>";
+            $html .= "<td data-label='Telefone'>" .$linha->telefone."</td>";
+            $html .= "<td data-label='Perfil'";
+
+            if ($linha->gerente == 1) {
+                $html .= " style='padding: 10px; background-color: #f0f0f0;'"; // exemplo de padding e background para o gerente
+                $html .= ">Gerente</td>";
+            } else {
+                $html .= ">Motorista</td>";
+}
+
+            $html .= "</tr>";
+            echo $html; 
+        }
+    ?>
+
+    </tbody>
+</table>
+</div>  
+
+<script src="../../js/index.js"></script>
+</body>
+</html>

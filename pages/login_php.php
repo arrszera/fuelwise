@@ -16,7 +16,7 @@ if (isset($_POST["email"]) && isset($_POST["password"])) {
             $_SESSION["adm"] = $user["adm"];
             $_SESSION["gerente"] = $user["gerente"];
 
-            $sql = "SELECT * FROM transportadora_usuario WHERE idusuario = " . $_SESSION["id"];
+            $sql = "SELECT idtransportadora FROM transportadora_usuario WHERE idusuario = " . $_SESSION["id"];
             $result = $conn->query($sql);
             if ($result && $linha = $result->fetch_assoc()) {
                 $_SESSION["idtransportadora"] = $linha["idtransportadora"];

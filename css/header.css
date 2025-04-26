@@ -63,7 +63,7 @@
     visibility: hidden;
 }
 
-@media (max-width: 958px) {
+@media (max-width: 11958px) {
     .logo{
         width: 250px;
     }
@@ -114,6 +114,7 @@
         .mobile-menu-item{
             margin-bottom: 20px;
             padding: 0.5rem;
+            
         }
 
         & a{
@@ -122,6 +123,7 @@
             color: #ECEBE9;
             display: flex;
             align-items: center;
+            
         }
 
         & li {
@@ -155,4 +157,9 @@
     .menu-icon.active .block:nth-child(3) {
         transform: translateY(-13px) rotate(-45deg);
     }
+}
+
+box-icon{
+    overflow-y: hidden;
+
 }

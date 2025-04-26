@@ -44,12 +44,9 @@ else if($_GET['page'] == 2){
     $cpf = $_POST['cpf'];
     $senha = password_hash($_POST['senha'], PASSWORD_DEFAULT);
     $emailUsuario = $_POST['email'];
-    // $cnpj = $_SESSION['cnpj'];
-    // $nomeTransportadora = $_SESSION['nomeTransportadora'];
-    // $endereco = $_SESSION['endereco'];
-    $cnpj = '11111111111111';
-    $nomeTransportadora = 'carlos';
-    $endereco = 'joaquim';
+    $cnpj = $_SESSION['cnpj'];
+    $nomeTransportadora = $_SESSION['nomeTransportadora'];
+    $endereco = $_SESSION['endereco'];
     $query = "INSERT INTO solicitacao (nomeUsuario, telefone, cpf, senha, nomeTransportadora, endereco, cnpj, emailUsuario) ";
     $query .= "VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
 
