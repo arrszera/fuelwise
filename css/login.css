@@ -1,135 +1,107 @@
 :root {
-    --background-light: #f7f9fc;
-    --background-dark: #121212;
-    --card-light: #ffffff;
-    --card-dark: #1e1e1e;
-    --text-light: #333;
-    --text-dark: #e0e0e0;
-    --primary-color: #027fe9;
-    --accent-color: #e30842;
-    --border-color-light: #ddd;
-    --border-color-dark: #333;
-  }
-  
-  @media (prefers-color-scheme: dark) {
-    body {
-      background-color: var(--background-dark);
-      color: var(--text-dark);
-    }
-    .form-div {
-      background-color: var(--card-dark);
-      border: 1px solid var(--border-color-dark);
-    }
-    input, button {
-      background-color: #2a2a2a;
-      color: var(--text-dark);
-      border: 1px solid #444;
-    }
-  }
-  
-  @media (prefers-color-scheme: light) {
-    body {
-      background-color: var(--background-light);
-      color: var(--text-light);
-    }
-    .form-div {
-      background-color: var(--card-light);
-      border: 1px solid var(--border-color-light);
-    }
-    input, button {
-      background-color: #fff;
-      color: var(--text-light);
-      border: 1px solid var(--border-color-light);
-    }
-  }
-  
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  body {
-    font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 20px;
-  }
-  
+  --background-light: #f7f9fc;
+  --background-dark: #121212;
+  --card-light: #ffffff;
+  --card-dark: #1e1e1e;
+  --text-light: #333;
+  --text-dark: #e0e0e0;
+  --primary-color: #027fe9;
+  --accent-color: #e30842;
+  --border-color-light: #ddd;
+  --border-color-dark: #333;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+  background-color: var(--background-light);
+  color: var(--text-light);
+}
+
+.form-div {
+  width: 100%;
+  max-width: 500px;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  background-color: var(--card-light);
+  border: 1px solid var(--border-color-light);
+  transition: all 0.3s ease;
+}
+
+h3 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: var(--primary-color);
+}
+
+.form-group {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  margin-bottom: 6px;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+input[type="text"],
+input[type="password"] {
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  border: 1px solid var(--border-color-light);
+  transition: border 0.3s, box-shadow 0.3s;
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 8px var(--primary-color);
+}
+
+small {
+  font-size: 12px;
+  color: gray;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  background-color: var(--primary-color);
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  margin-top: 10px;
+}
+
+button:hover {
+  background-color: #0260b3;
+  transform: translateY(-2px);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 600px) {
   .form-div {
-    width: 100%;
-    max-width: 500px;
-    padding: 30px;
-    border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-  }
-  
-  h3 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: var(--primary-color);
-  }
-  
-  .form-group {
-    margin-bottom: 20px;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  label {
-    margin-bottom: 6px;
-    font-weight: 500;
-    font-size: 14px;
-  }
-  
-  input[type="text"],
-  input[type="password"] {
-    padding: 12px;
-    border-radius: 8px;
-    font-size: 14px;
-    transition: border 0.3s, box-shadow 0.3s;
-  }
-  
-  input:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 8px var(--primary-color);
-  }
-  
-  small {
-    font-size: 12px;
-    color: gray;
-  }
-  
-  button {
-    width: 100%;
-    padding: 12px;
-    background-color: var(--primary-color);
-    color: #fff;
-    font-size: 16px;
-    font-weight: bold;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s;
-    margin-top: 10px;
-  }
-  
-  button:hover {
-    background-color: #0260b3;
-    transform: translateY(-2px);
-  }
-  
-  button:active {
-    transform: translateY(0);
-  }
-  
-  @media (max-width: 600px) {
-    .form-div {
       padding: 20px;
-    }
   }
-  
+}

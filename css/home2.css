@@ -17,21 +17,6 @@
     --link-footer: var(--azul-claro);
 }
 
-@media (prefers-color-scheme: dark) {
-    :root {
-        --fundo: #121212;
-        --texto: #e0e0e0;
-        --fundo-card: #1e1e1e;
-        --card-borda: #027fe9;
-        --fundo-header: #0d1117;
-        --texto-header: #ffffff;
-        --hover-link: #e30842;
-        --fundo-footer: #0d1117;
-        --texto-footer: #ffffff;
-        --link-footer: #00caf8;
-    }
-}
-
 * {
     margin: 0;
     padding: 0;
