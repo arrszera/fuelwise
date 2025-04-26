@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <?php 
+<?php 
         include_once('../config.php');
-        include(ROOT_PATH . '/elements/head.php'); 
+        include('../elements/head.php');
     ?>
+    <link rel='stylesheet' href='../css/header.css'>
+    <link rel='stylesheet' href='../css/login.css'>
     <title>Login</title>
 </head>
 <body>
