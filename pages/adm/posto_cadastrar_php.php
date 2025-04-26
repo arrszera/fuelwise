@@ -5,13 +5,12 @@
         exit;
     }
     if (isset($_POST["nomePosto"]) && isset($_POST["enderecoPosto"])){
-        include_once('../../config.php');
-        include(ROOT_PATH . "/elements/connection.php");
+        include("../../elements/connection.php");
         $nomePosto = $_POST["nomePosto"];
         $enderecoPosto = $_POST["enderecoPosto"];
         $sql = "INSERT INTO posto (nome, endereco) VALUES ('$nomePosto', '$enderecoPosto')";
         if ($result = $conn->query($sql)){
-            header('Location: '. ROOT_PATH .'/postos.php');
+            header('Location: postos.php');
         } else {
             echo"<script>
                     alert('Erro na adição do posto.');

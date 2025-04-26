@@ -36,7 +36,7 @@
     <tbody>
     <?php
         include('../../elements/connection.php');
-        $query = "SELECT * FROM posto";
+        $query = "SELECT * FROM posto ORDER BY idposto DESC";
         $resultado = $conn->query($query);
         while($linha = $resultado->fetch_object()){
             $html = "<tr>";
