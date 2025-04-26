@@ -12,7 +12,7 @@
 </head>
 <body>  
 <?php include('../../elements/header.php'); ?>
-<h3>Funcionários</h3>
+<h3>Integrantes</h3>
 <div class="table-container">
 <form method="POST" action="integrantes_busca.php">
     <input type="text" name="nome" placeholder="Nome do Funcionário">
@@ -51,8 +51,8 @@
 
             $html .= "<td data-label='#'>";
             if ($linha->gerente != 1){
-                $html .= "<a href='caminhoneiro_deletar_php.php?id=".$linha->idusuario."' class='btn btn-danger'>Excluir</a> ";
-                $html .= "<a href='caminhoneiro_alterar.php?id=".$linha->idusuario."&nome=".urlencode($linha->nome_usuario)."&cpf=".$linha->cpf."' class='btn btn-success'>Alterar</a>";
+                $html .= "<a href='deletar_integrante_php.php?id=".$linha->idusuario."' class='btn btn-danger'>Excluir</a> ";
+                $html .= "<a href='alterar_integrante.php?id=".$linha->idusuario."&nome=".urlencode($linha->nome_usuario)."&cpf=".$linha->cpf."' class='btn btn-success'>Alterar</a>";
             }
             $html .= "</td>";
 
@@ -71,7 +71,7 @@
                 $html .= ">Gerente</td>";
             } else {
                 $html .= ">Motorista</td>";
-}
+            }
 
             $html .= "</tr>";
             echo $html; 
