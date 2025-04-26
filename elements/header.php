@@ -32,17 +32,17 @@
         <li class="mobile-menu-item"><a href="#" onclick="scrollIntoView()">Suporte &nbsp;<box-icon color="#ECEBE9" name="support"></box-icon></a></li>
     <?php } else { 
         switch ($_SESSION['role']) {
-                case 0: ?> <!-- Funcionario -->
+                case 1: ?> <!-- Funcionario -->
 
-    <?php break; case 1: ?> <!-- Gerente -->
-
-    <?php break; case 2: ?> <!-- Postos -->
-        
+    <?php break; case 2: ?> <!-- Gerente -->
+        <li class="mobile-menu-item"><a href="/FuelWise/pages/gerente/caminhoneiros.php">Gerenciar integrantes</a></li>
+        <li class="mobile-menu-item"><a href="/FuelWise/pages/gerente/caminhoes.php">Gerenciar caminhões</a></li>
+        <li class="mobile-menu-item"><a href="/FuelWise/pages/logout.php">Logout</a></li>
     <?php break; case 3: ?> <!-- ADM/SUPORTE -->
         <li class="mobile-menu-item"><a href="/FuelWise/pages/adm/solicitacoes.php">Aprovar Cadastros</a></li>
-        <li class="mobile-menu-item"><a href="/FuelWise/pages/adm/postos.php">Cadastrar postos</a></li>
+        <li class="mobile-menu-item"><a href="/FuelWise/pages/adm/postos.php">Gerenciar postos</a></li>
+        <li class="mobile-menu-item"><a href="#">Gerenciar Solicitações</a></li>
         <li class="mobile-menu-item"><a href="#">Verificar Denuncias</a></li>
-        <li class="mobile-menu-item"><a href="#">Visualiazar Solicitações</a></li>
         <li class="mobile-menu-item"><a href="/FuelWise/pages/logout.php">Logout</a></li>
     <?php break; }} ?>
 </ul>

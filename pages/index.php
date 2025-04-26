@@ -3,13 +3,15 @@
 <head>
     <?php 
         include_once('../config.php');
-        include(ROOT_PATH . '/elements/head.php');
+        include('../elements/head.php');
     ?>
-    <link rel='stylesheet' href='<?php echo ROOT_PATH ?>/css/home.css'>
-    <title>Document</title>
+
+    <link rel='stylesheet' href='../css/header.css'>
+    <link rel='stylesheet' href='../css/home.css'>
+    <title>Home</title>
 </head>
 <body>
-    <?php include(ROOT_PATH . '/elements/header.php') ?>
+    <?php include('../elements/header.php') ?>
     
     <div class="inicio" id="inicio">
 
@@ -82,7 +84,7 @@
     
 
     <!-- JS -->
-    <script src="<?php echo ROOT_PATH ?>/js/index.js"></script>
+    <script src="../js/index.js"></script>
     <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
 </body>
 </html>

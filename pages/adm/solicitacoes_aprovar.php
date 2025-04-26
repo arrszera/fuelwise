@@ -11,7 +11,8 @@
         $linha = $resultado->fetch_object();
 		$query = "INSERT INTO usuario(email, nome, senha, telefone, cpf, gerente) VALUES(?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($query);
-        $stmt->bind_param("sssssi", $linha->emailUsuario, $linha->nomeUsuario, $linha->senha, $linha->telefone, $linha->cpf, 1);
+        $status = 1;
+        $stmt->bind_param("sssssi", $linha->emailUsuario, $linha->nomeUsuario, $linha->senha, $linha->telefone, $linha->cpf, $status);
         if ($stmt->execute()){
             $query = "INSERT INTO transportadora(nome, endereco, cnpj) VALUES(?, ?, ?)";
             $stmt = $conn->prepare($query);

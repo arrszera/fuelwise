@@ -2,24 +2,17 @@
 <html lang="pt-BR">
 <head>
     <?php 
-        include_once('../config/config.php');
-        include(ROOT_PATH . '/elements/head.php') 
+        include('../elements/head.php') 
     ?>
     <title>Cadastro Transportadora</title>
 <!-- fonte -->
 </head>
 <body>
-    <?php include(ROOT_PATH . '/elements/header.php') ?>
+    <?php include('../elements/header.php') ?>
 
-    <?php
-        if(isset($_GET['erro'])){
-            echo("<script>alert('Preencha todos os campos.');</script>");
-        }
-
-    ?>
     <div class="form-div" id="form-div">
         <?php if (!isset($_GET["page"]) || $_GET["page"] == 1) {?>
-            <form method="POST" action="<?php ROOT_PATH ?>/pages/cadastro_transportadora_php.php?page=1" class="form">
+            <form method="POST" action="cadastro_transportadora_php.php?page=1" class="form">
                 <h3>Cadastro da Transportadora</h3>
                 <small></small><br>
                 <div class="form-group">
@@ -39,7 +32,7 @@
             </form>
 
         <?php } else if (isset($_GET["page"]) && $_GET["page"] == 2) { ?>
-            <form method="POST" action="<?php ROOT_PATH ?>/pages/cadastro_transportadora_php.php?page=2" class="form">
+            <form method="POST" action="cadastro_transportadora_php.php?page=2" class="form">
                 <h3>Cadastro de um gerente</h3>
                 <small class="form-text text-muted">Mais gerentes poderão ser adicionados após o cadastro inicial.</small> <br>
                 <div class="form-group">
@@ -72,7 +65,7 @@
 
     </div>
     <!-- JS -->
-    <script src="<?php ROOT_PATH ?>/js/index.js"></script>
+    <script src="../js/index.js"></script>
     <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
 </body>
 </html>

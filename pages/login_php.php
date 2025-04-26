@@ -1,23 +1,42 @@
 <?php
-    if (isset($_POST["email"]) && isset($_POST["password"])){
-        include_once('../config.php');
-        include(ROOT_PATH . "/connection.php");
-        $email = $_POST["email"];
-        $password = $_POST["password"];
-        $senha = password_hash($password, PASSWORD_DEFAULT);
-        $sql = "SELECT * FROM usuario WHERE email = '".$email."' AND senha = '".$senha."'";
-        
-        if ($result = $conn->query($sql)->fetch_assoc()){
-            $_SESSION["id"] = $result["id"];
-            $_SESSION['adm'] = $result['adm'];
-            $_SESSION['gerente'] = $result['gerente'];
-            header('Location: '. ROOT_PATH .'/pages/index.php');
+session_start();
+
+if (isset($_POST["email"]) && isset($_POST["password"])) {
+    include("../elements/connection.php");
+
+    $email = $_POST["email"];
+    $password = $_POST["password"];
+
+    $sql = "SELECT * FROM usuario WHERE email = '$email'";
+    $result = $conn->query($sql);
+
+    if ($result && $user = $result->fetch_assoc()) {
+        if (password_verify($password, $user["senha"])) {
+            $_SESSION["id"] = $user["idusuario"];
+            $_SESSION["adm"] = $user["adm"];
+            $_SESSION["gerente"] = $user["gerente"];
+
+            $sql = "SELECT * FROM transportadora_usuario WHERE idusuario = " . $_SESSION["id"];
+            $result = $conn->query($sql);
+            if ($result && $linha = $result->fetch_assoc()) {
+                $_SESSION["idtransportadora"] = $linha["idtransportadora"];
+            }
+
+            header("Location: index.php");
+            exit;
         } else {
-            echo"<script>
-                    alert('Essa senha não pertence a esse usuário')
-                    window.location.href = '" . ROOT_PATH . "/pages/login.php';
-                </script>";
+            echo "<script>
+                    alert('Senha incorreta para esse usuário.');
+                    window.location.href = 'login.php';
+                  </script>";
             exit;
         }
+    } else {
+        echo "<script>
+                alert('Usuário não encontrado.');
+                window.location.href = 'login.php';
+              </script>";
+        exit;
     }
+}
 ?>
