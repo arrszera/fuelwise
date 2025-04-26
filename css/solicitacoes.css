@@ -1,161 +1,167 @@
-/* Estilos gerais */
-body {
-  font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
-  background-color: #f7f9fc;
-  color: #333;
+:root {
+  --background-light: #f7f9fc;
+  --background-dark: #121212;
+  --card-light: #ffffff;
+  --card-dark: #1e1e1e;
+  --text-light: #333;
+  --text-dark: #e0e0e0;
+  --primary-color: #027fe9;
+  --accent-color: #e30842;
+  --border-color-light: #ddd;
+  --border-color-dark: #333;
+  --hover-link: #e30842;
+  --background-footer: #1f2a44;
+  --text-footer: #fff;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+      background-color: var(--background-dark);
+      color: var(--text-dark);
+  }
+  .form-div {
+      background-color: var(--card-dark);
+      border: 1px solid var(--border-color-dark);
+  }
+  input, button {
+      background-color: #2a2a2a;
+      color: var(--text-dark);
+      border: 1px solid #444;
+  }
+  .table-container {
+      background-color: var(--card-dark);
+  }
+  table {
+      color: var(--text-dark);
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  body {
+      background-color: var(--background-light);
+      color: var(--text-light);
+  }
+  .form-div {
+      background-color: var(--card-light);
+      border: 1px solid var(--border-color-light);
+  }
+  input, button {
+      background-color: #fff;
+      color: var(--text-light);
+      border: 1px solid var(--border-color-light);
+  }
+  .table-container {
+      background-color: var(--card-light);
+  }
+  table {
+      color: var(--text-light);
+  }
+}
+
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
-/* Tabela */
-.table-container {
-  max-width: 1200px;
-  margin: 30px auto;
-  padding: 20px;
-  background-color: #ffffff;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-th, td {
-  padding: 12px 15px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
-}
-
-th {
-  background-color: #027fe9;
-  color: #fff;
-  font-size: 1rem;
-}
-
-td {
-  background-color: #f9f9f9;
-  color: #333;
-  font-size: 0.9rem;
-}
-
-tr:nth-child(even) td {
-  background-color: #f2f2f2;
-}
-
-tr:hover td {
-  background-color: #f0f0f0;
-}
-
-/* Estilo para o botão de ações dentro da tabela */
-.btn {
-  padding: 8px 15px;
-  border-radius: 5px;
-  font-size: 0.9rem;
-  text-decoration: none;
-  cursor: pointer;
-  transition: background-color 0.3s, transform 0.2s;
-  display: inline-block;
-}
-
-.btn-primary {
-  background-color: #027fe9;
-  color: #fff;
-  border: none;
-}
-
-.btn-danger {
-  background-color: #e30842;
-  color: #fff;
-  border: none;
-}
-
-.btn-success {
-  background-color: #28a745;
-  color: #fff;
-  border: none;
-}
-
-/* Efeitos de hover para os botões */
-.btn:hover {
-  transform: translateY(-2px);
-}
-
-.btn:active {
-  transform: translateY(0);
-}
-
-/* Estilos para o formulário de busca */
-form {
+body {
+  font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 20px;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
 }
 
-form input, form select {
-  padding: 10px;
-  font-size: 1rem;
-  margin-right: 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  width: 200px;
-}
-
-form button {
-  padding: 10px 15px;
-  background-color: #027fe9;
-  color: white;
-  border: none;
-  font-size: 1rem;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-form button:hover {
-  background-color: #0260b3;
-}
-
-/* Estilo do título */
 h3 {
   text-align: center;
   margin-bottom: 20px;
-  color: #333;
-  font-size: 1.5rem;
+  color: var(--primary-color);
 }
 
-/* Estilo para as células de perfil */
-td[data-label="Perfil"] {
-  text-align: center;
-  padding: 10px;
+.table-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th, td {
+  padding: 12px;
+  text-align: left;
+  border: 1px solid var(--border-color-light);
+}
+
+th {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+tr:nth-child(even) {
   background-color: #f9f9f9;
-  font-weight: bold;
 }
 
-td[data-label="Perfil"][style*="gerente"] {
-  background-color: #e1f5fe;
-  color: #027fe9;
+tr:hover {
+  background-color: #f1f1f1;
 }
 
-/* Responsividade */
-@media (max-width: 768px) {
+td a {
+  color: var(--primary-color);
+  text-decoration: none;
+  margin-right: 8px;
+}
+
+td a:hover {
+  text-decoration: underline;
+}
+
+td {
+  position: relative;
+}
+
+@media screen and (max-width: 768px) {
   .table-container {
-      padding: 10px;
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch; /* melhor para mobile */
   }
 
-  table {
-      font-size: 0.9rem;
+  table thead { 
+      display: none; 
   }
 
-  form {
-      flex-direction: column;
-      align-items: flex-start;
-  }
-
-  form input, form select, form button {
-      margin-bottom: 10px;
+  table, tbody, tr, td {
+      display: block;
       width: 100%;
+  }
+
+  tr {
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 10px;
+      background-color: #f9f9f9;
+  }
+
+  td {
+      text-align: right;
+      padding-left: 50%;
+      position: relative;
+  }
+
+  td::before {
+      content: attr(data-label);
+      position: absolute;
+      left: 10px;
+      top: 0;
+      bottom: 0;
+      font-weight: bold;
+      text-align: left;
   }
 }
