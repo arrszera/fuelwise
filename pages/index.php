@@ -19,7 +19,7 @@
 
   <!-- Hero Section -->
   <section class="hero">
-    <h1>FullWise</h1>
+    <h1 style="overflow-y: hidden">FuelWise</h1>
     <p>A revolução no abastecimento de frotas começa aqui.</p>
     <p><strong>Gestão eficiente, pagamento instantâneo, controle total.</strong></p>
   </section>
