@@ -11,8 +11,8 @@
 </head>
 <body>
     <?php include(ROOT_PATH . '/elements/header.php') ?>
-
     <div class="form-div" id="form-div">
+        <center><h2>Login</h2></center>
         <form method="POST" action="login_php.php" class="form">
             <div class="form-group">
                 <label for="exampleInputEmail1">Email</label>

@@ -11,12 +11,14 @@
 
 html{
     scroll-behavior: smooth;
-    background-color: #ECEBE9;
+    /* background-color: #ECEBE9; */
+    background-color: white;
 }
 
 body{
     line-height: 1.6;
-    background-color: #ECEBE9;
+    /* background-color: #ECEBE9; */
+    background-color: white;
 }
 
 h3{

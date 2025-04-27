@@ -26,7 +26,7 @@
             <input type="text" name="modelo" placeholder="Modelo" required>
             <br>
             <input type="text" name="eixos" placeholder="Eixos" required>
-            <input type="text" name="observacao" placeholder="Observacao" required>
+            <input type="text" name="observacao" placeholder="Observacao">
             <br>
             <center><button type="submit" name="adicionarPosto" class="btn btn-primary">Adicionar Veiculo</button></center>
         </form>
@@ -54,7 +54,7 @@
 
                 $html .= "<td data-label='#'>";
                 $html .= "<a href='deletar_veiculo_php.php?idveiculo=".$linha->idveiculo."&idtransportadora=".$_SESSION['idtransportadora']."' class='btn btn-danger'>Remover</a> ";
-                $html .= "<a href='alterar_veiculo.php?idtransportadora=".$_GET['idtransportadora']."&veiculo=".$linha->idveiculo."&placa=".urlencode($linha->placa)."&modelo=".$linha->modelo."&eixos=".$linha->eixos."&observacao=".$linha->observacao."' class='btn btn-success'>Alterar</a>";
+                $html .= "<a href='alterar_veiculo.php?idveiculo=".$linha->idveiculo."&idtransportadora=".$_GET['idtransportadora']."&veiculo=".$linha->idveiculo."&placa=".urlencode($linha->placa)."&modelo=".$linha->modelo."&eixos=".$linha->eixos."&observacao=".$linha->observacao."' class='btn btn-success'>Alterar</a>";
                 $html .= "</td>";
 
                 $html .= "<td data-label='ID'>" .$linha->idveiculo."</td>";

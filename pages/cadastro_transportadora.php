@@ -1,12 +1,9 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<?php 
-        include_once('../config.php');
-        include('../elements/head.php');
+    <?php 
+        include('../elements/head.php') 
     ?>
-    <link rel='stylesheet' href='../css/header.css'>
-    <link rel='stylesheet' href='../css/login.css'>
     <title>Cadastro Transportadora</title>
 <!-- fonte -->
 </head>

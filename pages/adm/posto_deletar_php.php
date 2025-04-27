@@ -6,6 +6,8 @@
 	}
 	if(isset($_GET['id'])){
 		include('../../elements/connection.php');
+		$query = "DELETE FROM combustivel WHERE idposto = ".$_GET['id'];
+		$resultado = $conn->query($query);
 		$query = "DELETE FROM posto WHERE idposto = ".$_GET['id'];
 		$resultado = $conn->query($query);
 		header("location: postos.php");
