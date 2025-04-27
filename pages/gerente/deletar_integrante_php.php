@@ -5,7 +5,7 @@
 		include('../../elements/connection.php');
 		$query = "DELETE FROM transportadora_usuario WHERE idusuario = ".$_GET['idusuario'];
 		$resultado = $conn->query($query);
-		header("location: integrantes.php");
+		header("location: integrantes.php?idtransportadora=".$_SESSION['idtransportadora']);
 	}else{
 		echo "Algo deu errado."; 
 	}

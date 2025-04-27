@@ -55,7 +55,7 @@
                 $html = "<tr>";
 
                 $html .= "<td data-label='#'>";
-                if (!$linha->idusuario == $_SESSION['id']){
+                if (!($linha->idusuario == $_SESSION['id'])){
                     $html .= "<a href='deletar_integrante_php.php?idusuario=".$linha->idusuario."&idtransportadora=".$_SESSION['idtransportadora']."' class='btn btn-danger'>Remover</a> ";
                 }
                 $html .= "<a href='alterar_integrante.php?idtransportadora=".$_GET['idtransportadora']."&idusuario=".$linha->idusuario."&nome=".urlencode($linha->nome_usuario)."&cpf=".$linha->cpf."&telefone=".$linha->telefone."&email=".$linha->email."' class='btn btn-success'>Alterar</a>";
