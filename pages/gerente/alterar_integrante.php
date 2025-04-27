@@ -53,7 +53,7 @@
                         name="cpf" id="cpf" class="form-control"
                         value="<?php echo $_GET['cpf']; ?>" required>
                     </div>
-                    <input type="hidden" name="idRequerente" value="<?php echo $_SESSIOn['id'] ?>">
+                    <input type="hidden" name="idRequerente" value="<?php echo $_SESSION['id'] ?>">
                 </div>
                 <button type="submit" class="mt-2 btn btn-primary">
                     Enviar
