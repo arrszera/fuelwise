@@ -44,6 +44,7 @@
             $html .= "<td data-label='#'>";
             $html .= "<a href='posto_deletar_php.php?id=".$linha->idposto."' class='btn btn-danger'>Excluir</a> ";
             $html .= "<a href='posto_alterar.php?id=".$linha->idposto."&nome=".urlencode($linha->nome)."&endereco=".$linha->endereco."' class='btn btn-success'>Alterar</a>";
+            $html .= "<a href='posto_combustiveis.php?id=".$linha->idposto."&nome=".urlencode($linha->nome)."&endereco=".$linha->endereco."' class='btn btn-success'>Gerenciar Combustíveis</a>";
             $html .= "</td>";
 
             $html .= "<td data-label='ID'>" .$linha->idposto."</td>";
