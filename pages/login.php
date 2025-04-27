@@ -27,7 +27,7 @@
         </form>
     </div>
     <!-- JS -->
-    <script src="<?php ROOT_PATH ?>/js/index.js"></script>
+    <script src="../js/index.js"></script>
     <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
 </body>
 </html>

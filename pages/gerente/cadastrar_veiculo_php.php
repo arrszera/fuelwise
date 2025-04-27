@@ -2,12 +2,10 @@
     include('autenticacaoGerente.php');
     if (isset($_GET['idtransportadora']) && isset($_SESSION['idtransportadora']) && $_SESSION['gerente'] == 1 && $_GET['idtransportadora'] == $_SESSION['idtransportadora']){
         include("../../elements/connection.php");
-        $nome = $_POST["nome"];
-        $email = $_POST["email"];
-        $senha = $_POST["senha"];
-        $telefone = $_POST["telefone"];
-        $cpf = $_POST["cpf"];
-        $gerente = $_POST["gerente"];
+        $placa = $_POST["placa"];
+        $modelo = $_POST["modelo"];
+        $eixos = $_POST["eixos"];
+        $observacao = $_POST["observacao"];
         $sql = "INSERT INTO veiculo (idtransportadora, placa, modelo, eixos, observacao) 
                 VALUES (".$_SESSION['idtransportadora'].", '$placa', '$modelo', $eixos, '$observacao')";
         if ($result = $conn->query($sql)){

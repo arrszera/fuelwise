@@ -2,10 +2,6 @@
     include('autenticacaoGerente.php');
 
 	if(isset($_GET['idusuario']) && isset($_GET['idtransportadora'])){
-        if ($_GET['idusuario'] == $_SESSION['id']){
-            echo 'Você não pode excluir o próprio perfil';
-            exit;
-        }
 		include('../../elements/connection.php');
 		$query = "DELETE FROM transportadora_usuario WHERE idusuario = ".$_GET['idusuario'];
 		$resultado = $conn->query($query);
