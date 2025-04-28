@@ -1,4 +1,4 @@
-:root {
+/* :root {
   --background-light: #f7f9fc;
   --background-dark: #121212;
   --card-light: #ffffff;
@@ -56,7 +56,7 @@
   table {
       color: var(--text-light);
   }
-}
+} */
 
 h3 {
   text-align: center;
@@ -85,7 +85,7 @@ th, td {
 
 th {
   background-color: var(--primary-color);
-  color: white;
+  /* color: white; */
 }
 
 tr:nth-child(even) {
