@@ -8,12 +8,6 @@
         include("../../elements/connection.php");
         $nomePosto = $_POST["nomePosto"];
         $enderecoPosto = $_POST["enderecoPosto"];
-        if ($enderecoPosto > 100 || $nomePosto > 45){
-            echo "<script>
-                    alert('Limite de caracteres excedido.');
-                    window.location.href = 'posto_alterar.php?idposto=".$_GET['id']".';
-                </script>";
-        }
         $sql = "INSERT INTO posto (nome, endereco) VALUES ('$nomePosto', '$enderecoPosto')";
         if ($result = $conn->query($sql)){
             header('Location: postos.php');

@@ -50,16 +50,15 @@ else if($_GET['page'] == 2){
     $query = "INSERT INTO solicitacao (nomeUsuario, telefone, cpf, senha, nomeTransportadora, endereco, cnpj, emailUsuario) ";
     $query .= "VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
 
-    session_destroy();
-
     include('../elements/connection.php');
     $stmt = $conn->prepare($query);
     $stmt->bind_param("ssssssss", $nomeUsuario, $telefone, $cpf, $senha, $nomeTransportadora, $endereco, $cnpj, $emailUsuario);
     if($stmt->execute()){
         echo "<script>
-                alert('Sua solicitação foi enviada com sucesso, o suporte irá realizar a verificação e aprovação em breve.');
-                window.location.href = 'index.php';
-            </script>";
+        alert('Sua solicitação foi enviada com sucesso, o suporte irá realizar a verificação e aprovação em breve.');
+        window.location.href = 'index.php';
+        </script>";
+        session_destroy();
     } else {
         echo "<script>
                 alert('Houve um problema no envio da solicitação, o suporte está trabalhando no erro, tente novamente mais tarde.');

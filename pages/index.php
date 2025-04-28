@@ -26,9 +26,9 @@
 
   <!-- Sobre -->
   <section class="section" id="sobre">
-    <h2>Sobre a FullWise</h2>
-    <p>A FullWise é uma plataforma inteligente que conecta caminhoneiros, transportadoras e postos de combustível, trazendo mais agilidade, segurança e transparência para o processo de abastecimento de frotas.</p>
-    <p>Com pagamentos via PIX autorizados em tempo real pelos gerentes, rastreamento de caminhões e emissão de notas fiscais automáticas, a FullWise facilita a gestão completa de frotas rodoviárias.</p>
+    <h2>Sobre a FuelWise</h2>
+    <p>A FuelWise é uma plataforma inteligente que conecta caminhoneiros, transportadoras e postos de combustível, trazendo mais agilidade, segurança e transparência para o processo de abastecimento de frotas.</p>
+    <p>Com pagamentos via PIX autorizados em tempo real pelos gerentes, rastreamento de caminhões e emissão de notas fiscais automáticas, a FuelWise facilita a gestão completa de frotas rodoviárias.</p>
   </section>
 
   <!-- Funcionalidades -->
@@ -83,7 +83,7 @@
 
   <!-- Destaques -->
   <section class="section destaque">
-    <h2>Vantagens da FullWise</h2>
+    <h2>Vantagens da FuelWise</h2>
     <ul>
       <li> Redução de custos com fraudes e desvios.</li>
       <li> Transparência total em cada transação.</li>
@@ -95,8 +95,8 @@
 
   <!-- Rodapé -->
   <footer id="contato">
-    <p>© 2025 FullWise - Plataforma Inteligente de Combustível</p>
-    <p><a href="mailto:contato@fullwise.com">contato@fullwise.com</a></p>
+    <p>© 2025 FuelWise - Plataforma Inteligente de Combustível</p>
+    <p><a href="mailto:contato@FuelWise.com">contato@FuelWise.com</a></p>
   </footer>
 
     <!-- JS -->
