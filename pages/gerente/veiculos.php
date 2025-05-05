@@ -46,7 +46,9 @@
         <?php
             include('../../elements/connection.php');
             $query = "SELECT * FROM veiculo 
-            JOIN transportadora ON veiculo.idtransportadora  = transportadora.idtransportadora";
+            JOIN transportadora ON veiculo.idtransportadora = transportadora.idtransportadora
+            WHERE transportadora.idtransportadora = " . (int)$_GET['idtransportadora'] . "  ";  
+  
 
             $resultado = $conn->query($query);
             while($linha = $resultado->fetch_object()){
