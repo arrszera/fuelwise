@@ -36,10 +36,12 @@
             <tr>
                 <th>#</th>
                 <th>ID</th>
-                <th>Placa</th>
-                <th>Modelo</th>
-                <th>Eixos</th>
-                <th>Observação</th>
+                <th>Nome</th>
+                <th>CPF</th>
+                <th>Email</th>
+                <th></th>
+                <th>Telefone</th>
+                <th>Cargo</th>
             </tr>   
         </thead>
         <tbody>
