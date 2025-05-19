@@ -26,7 +26,9 @@
             <input type="text" name="modelo" placeholder="Modelo" required>
             <br>
             <input type="text" name="eixos" placeholder="Eixos" required>
+            <input type="text" name="litragem" placeholder="Capacidade de tanque" required>
             <input type="text" name="observacao" placeholder="Observacao">
+            <br>
             <br>
             <center><button type="submit" name="adicionarPosto" class="btn btn-primary">Adicionar Veiculo</button></center>
         </form>
@@ -39,6 +41,7 @@
                 <th>Placa</th>
                 <th>Modelo</th>
                 <th>Eixos</th>
+                <th>Litragem</th>
                 <th>Observação</th>
             </tr>   
         </thead>
@@ -46,14 +49,9 @@
         <?php
             include('../../elements/connection.php');
             $query = "SELECT * FROM veiculo 
-<<<<<<< HEAD
-            JOIN transportadora ON veiculo.idtransportadora  = transportadora.idtransportadora 
-            WHERE transportadora.idtransportadora = ".$_GET['idtransportadora'];
-=======
             JOIN transportadora ON veiculo.idtransportadora = transportadora.idtransportadora
             WHERE transportadora.idtransportadora = " . (int)$_GET['idtransportadora'] . "  ";  
   
->>>>>>> a6c359ea248880fe445d19dc464697aa81343f6d
 
             $resultado = $conn->query($query);
             while($linha = $resultado->fetch_object()){
@@ -68,6 +66,7 @@
                 $html .= "<td data-label='Placa'>" .$linha->placa."</td>";
                 $html .= "<td data-label='Modelo'>" .$linha->modelo."</td>";
                 $html .= "<td data-label='Eixos'>" .$linha->eixos."</td>";
+                $html .= "<td data-label='Capacidade de tanque'>" .$linha->litragem."</td>";
                 $html .= "<td data-label='Observação'>" .$linha->observacao."</td>";
 
                 $html .= "</tr>";
