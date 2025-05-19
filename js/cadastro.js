@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         ],
     };
-
+//
     // adiciona as regras conforme o elemento
     Object.keys(validations).forEach(name => {
         const field = document.querySelector(`${name}`);
