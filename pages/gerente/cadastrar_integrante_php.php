@@ -4,7 +4,7 @@
         include("../../elements/connection.php");
         $nome = $_POST["nome"];
         $email = $_POST["email"];
-        $senha = $_POST["senha"];
+        $senha = password_hash($_POST["senha"], PASSWORD_DEFAULT);
         $telefone = $_POST["telefone"];
         $cpf = $_POST["cpf"];
         $gerente = $_POST["gerente"];
@@ -18,7 +18,7 @@
         
 
         $sql = "INSERT INTO usuario (nome, email, senha, telefone, cpf, gerente) 
-                VALUES ('$nome', '$email', '$hash', '$telefone', '$cpf', '$gerente')";
+                VALUES ('$nome', '$email', '$senha', '$telefone', '$cpf', '$gerente')";
         if ($result = $conn->query($sql)){
             $sql = "INSERT INTO transportadora_usuario (idusuario, idtransportadora, datalogin) 
             VALUES ($conn->insert_id, ".$_SESSION['idtransportadora'].", '".date('Y-m-d')."')";

@@ -39,8 +39,14 @@
                 <th>Nome</th>
                 <th>CPF</th>
                 <th>Email</th>
+<<<<<<< HEAD
                 <th>Senha</th>
                 <th>Telefone</th>
+=======
+                <th></th>
+                <th>Telefone</th>
+                <th>Cargo</th>
+>>>>>>> a6c359ea248880fe445d19dc464697aa81343f6d
             </tr>   
         </thead>
         <tbody>
@@ -49,8 +55,14 @@
             $query = "SELECT usuario.idusuario AS idusuario, email, usuario.nome AS nome_usuario, telefone, cpf, gerente 
             FROM transportadora_usuario AS tu   
             JOIN usuario ON tu.idusuario = usuario.idusuario 
+<<<<<<< HEAD
             JOIN transportadora ON tu.idtransportadora = transportadora.idtransportadora  
             WHERE tu.idtransportadora = ".$_GET['idtransportadora'];
+=======
+            JOIN transportadora ON tu.idtransportadora = transportadora.idtransportadora
+            WHERE transportadora.idtransportadora = " . (int)$_GET['idtransportadora'] . "  ";  
+;
+>>>>>>> a6c359ea248880fe445d19dc464697aa81343f6d
 
             $resultado = $conn->query($query);
             while($linha = $resultado->fetch_object()){

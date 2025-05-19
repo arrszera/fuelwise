@@ -9,7 +9,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <title>Postos</title>
+    <title>Postos</title>
   <?php include('../../elements/head.php'); ?>
   <link rel="stylesheet" href="../../css/solicitacoes.css">
   <link rel='stylesheet' href='../../css/header.css'>
@@ -17,7 +17,9 @@
 </head>
 <body>  
 <?php include('../../elements/header.php'); ?>
-<h3>Postos</h3>
+<a href="../../pages/adm/postos.php">
+    <h3>Postos</h3>
+</a>
 <div class="table-container">
 <form method="POST" action="posto_combustiveis_cadastrar_php.php">
 <h2> Atualizando o posto: <?php echo $_GET['nome']; ?> </h2>

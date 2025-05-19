@@ -1,4 +1,5 @@
-DROP DATABASE `fuelwise`;
+DROP DATABASE IF EXISTS `fuelwise`;
+
 CREATE SCHEMA IF NOT EXISTS `fuelwise` DEFAULT CHARACTER SET utf8;
 USE `fuelwise`;
 
@@ -30,27 +31,29 @@ CREATE TABLE IF NOT EXISTS `usuario` (
   PRIMARY KEY (`idusuario`)
 ) ENGINE=InnoDB;
 
-CREATE TABLE IF NOT EXISTS `caminhao` (
-  `idcaminhao` INT NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `veiculo` (
+  `idveiculo` INT NOT NULL AUTO_INCREMENT,
+  `idtransportadora` INT NOT NULL,
   `placa` VARCHAR(10) NOT NULL,
   `modelo` VARCHAR(45) NOT NULL,
   `eixos` TINYINT NOT NULL,
   `observacao` VARCHAR(100),
-  PRIMARY KEY (`idcaminhao`)
+  PRIMARY KEY (`idveiculo`),
+  FOREIGN KEY (`idtransportadora`) REFERENCES `transportadora` (`idtransportadora`)
 ) ENGINE=InnoDB;
 
-CREATE TABLE IF NOT EXISTS `caminhoneiro_caminhao` (
-  `idcaminhoneiro_caminhao` INT NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `caminhoneiro_veiculo` (
+  `idcaminhoneiro_veiculo` INT NOT NULL AUTO_INCREMENT,
   `idusuario` INT NOT NULL,
-  `idcaminhao` INT NOT NULL,
+  `idveiculo` INT NOT NULL,
   `data_inicio` DATETIME NOT NULL,
   `data_termino` DATETIME NOT NULL,
   `carga` VARCHAR(100) NOT NULL,
   `peso` FLOAT(10,2) NOT NULL,
   `observacao` VARCHAR(100),
-  PRIMARY KEY (`idcaminhoneiro_caminhao`),
+  PRIMARY KEY (`idcaminhoneiro_veiculo`),
   FOREIGN KEY (`idusuario`) REFERENCES `usuario` (`idusuario`),
-  FOREIGN KEY (`idcaminhao`) REFERENCES `caminhao` (`idcaminhao`)
+  FOREIGN KEY (`idveiculo`) REFERENCES `veiculo` (`idveiculo`)
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS `combustivel` (
