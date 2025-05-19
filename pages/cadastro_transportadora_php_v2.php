@@ -71,11 +71,8 @@ function validarCampos($dados) {
 
 session_start();
 
-include('../elements/connection.php');
-
 // armazena os dados preenchidos
 $_SESSION['form_data'] = $_POST;
-
 
 echo var_dump($_SESSION['form_data']);
 exit;
@@ -112,6 +109,9 @@ if (!$erros) {
 // query de inserção
 $query = "INSERT INTO solicitacao (nomeUsuario, telefone, cpf, senha, nomeTransportadora, endereco, cnpj, emailUsuario) 
           VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+include('../elements/connection.php');
+
 $stmt = $conn->prepare($query);
 $stmt->bind_param("ssssssss", $nomeUsuario, $telefone, $cpf, $senha, $nomeTransportadora, $endereco, $cnpj, $emailUsuario);
 

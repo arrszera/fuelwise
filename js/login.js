@@ -57,14 +57,17 @@ function validarLogin(event, button){
         const erro = rules.find(rule => !rule.validate(field.value));
 
         if (erro) {
-        hint.textContent = erro.message;
-        hint.classList.remove("hidden");
-        hint.classList.add("input-error");
-        valido = false;
+            hint.textContent = erro.message;
+            hint.classList.remove("hidden");
+            hint.classList.add("input-error");
+            valido = false;
         } else {
-        hint.textContent = "";
-        hint.classList.add("hidden");
-        hint.classList.remove("input-error");
+            hint.textContent = "";
+            hint.classList.add("hidden");
+            hint.classList.remove("input-error");
         }
     })
+    if (valido){
+        form.submit()
+    }
 }

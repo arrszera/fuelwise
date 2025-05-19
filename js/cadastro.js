@@ -111,8 +111,21 @@ document.addEventListener("DOMContentLoaded", () => {
                 hint.classList.add("input-error");
             } else {
                 hint.textContent = "";
-                hint.classList.add("hidden");
+                // hint.classList.add("hidden");
                 hint.classList.remove("input-error");
+                switch (field.name) {
+                    case 'cnpj':
+                        hint.textContent = 'Número de Identificação Fiscal da Empresa';
+                        break;
+                    case 'email':
+                        hint.textContent = 'Este será seu usuário para login';
+                        break;
+                    case 'senha':
+                        hint.textContent = 'A senha deve ter ao menos 8 caracteres';
+                        break;
+                    default:
+                        hint.textContent = '';
+                }
             }
         })
     })
@@ -216,9 +229,22 @@ function validarFormularioCompleto(event, button) {
       hint.classList.add("input-error");
       valido = false;
     } else {
-      hint.textContent = "";
-      hint.classList.add("hidden");
-      hint.classList.remove("input-error");
+        hint.textContent = "";
+        // hint.classList.add("hidden");
+        hint.classList.remove("input-error");
+        switch (field.name) {
+            case 'cnpj':
+                hint.textContent = 'Número de Identificação Fiscal da Empresa';
+                break;
+            case 'email':
+                hint.textContent = 'Este será seu usuário para login';
+                break;
+            case 'senha':
+                hint.textContent = 'A senha deve ter ao menos 8 caracteres';
+                break;
+            default:
+                hint.textContent = '';
+        }
     }
   });
 
@@ -304,8 +330,20 @@ function alterarAba(de, para, validar=true){
                     hint.classList.remove('hidden');
                     hint.classList.add('input-error');
             } else {
-                    hint.classList.add('hidden');
-                    hint.textContent = '';
+                hint.classList.add('hidden');
+                switch (input.name) {
+                    case 'cnpj':
+                        hint.textContent = 'Número de Identificação Fiscal da Empresa';
+                        break;
+                    case 'email':
+                        hint.textContent = 'Este será seu usuário para login';
+                        break;
+                    case 'senha':
+                        hint.textContent = 'A senha deve ter ao menos 8 caracteres';
+                        break;
+                    default:
+                        hint.textContent = '';
+                }
             }
         });
         
