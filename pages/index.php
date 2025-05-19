@@ -21,13 +21,13 @@
           centralizando os registros de pagamento, localização, gestão de motoristas e veículos — tudo em um só lugar.
         </p>
         <div class="hero-buttons">
-          <a href="/signup" class="btn-outline">Comece já</a>
+          <a href="cadastro_transportadora_v2.php" class="btn-outline">Comece já</a>
           <a href="/contact" class="btn-outline">Contatar equipe</a>
         </div>
       </div>
       <div class="hero-image">
         <div class="image-box">
-          <img src="https://placehold.co/800x600/1E40AF/FFFFFF?text=FuelWise+Dashboard" alt="Painel da FuelWise" />
+          <img src="https://placehold.co/800x600/1E40AF/FFFFFF?text=FuelWise" alt="Painel da FuelWise" />
           <div class="badge">Otimize gastos em combustíveis em até 15%</div>
         </div>
       </div>
@@ -76,14 +76,15 @@
     </div>
   </section>
 
-  <!-- CTA -->
   <section class="cta">
-    <div class="container text-center">
-      <h2>Pronto para otimizar as operações da sua frota?</h2>
-      <p>
-        Junte-se a centenas de transportadoras que já reduziram custos e melhoraram a eficiência com a FuelWise.
-      </p>
-      <a href="/signup" class="btn-white">Inicie seu teste gratuito</a>
+    <div class="cta-elements">
+      <div>
+        <h2>Pronto para otimizar as operações da sua frota?</h2>
+        <p>
+          Junte-se a centenas de transportadoras que já reduziram custos e melhoraram a eficiência com a FuelWise.
+        </p>
+      </div>
+      <a href="cadastro_transportadora.php" class="btn-white">Inicie seu teste gratuito</a>
     </div>
   </section>
 
@@ -111,5 +112,6 @@
 
   <?php include('../elements/footer.php') ?>
 
+  <script src="../js/index.js"></script>
 </body>
 </html>

@@ -29,21 +29,21 @@
 }
 
 .hero-text h1 {
-  font-size: 2.5rem;
+  font-size: 2rem;
   margin-bottom: 1rem;
 }
 
 .hero-text p {
-  font-size: 1.25rem;
+  font-size: 1rem;
   opacity: 0.9;
   margin-bottom: 2rem;
 }
 
 .hero-buttons .btn-outline {
   margin-right: 1rem;
-  border: 2px solid white;
+  /* border: 2px solid white; */
   color: #1e40af;
-  background: transparent;
+  background: white;
   padding: 0.75rem 1.5rem;
   border-radius: 8px;
   text-decoration: none;
@@ -52,18 +52,20 @@
 
 .hero-image .image-box {
   position: relative;
+  overflow: hidden;
 }
 
 .hero-image img {
   border-radius: 12px;
   width: 100%;
+  max-width: 600px;
   height: auto;
 }
 
 .badge {
   position: absolute;
-  bottom: -20px;
-  right: -20px;
+  bottom: 1rem;
+  right: 0.7rem;
   background-color: #f97316;
   color: white;
   padding: 0.5rem 1rem;
@@ -111,8 +113,19 @@
 .cta {
   background: #10b981;
   color: white;
-  padding: 5rem 1rem;
+  padding: 4rem 1rem;
+  display: flex;
+  flex-direction: column;
   text-align: center;
+  justify-content: space-around;
+}
+
+.cta-elements{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 40px;
+  align-items: center;
 }
 
 .btn-white {
