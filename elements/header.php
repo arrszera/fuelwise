@@ -35,7 +35,7 @@
 <ul class="mobile-menu-list" id="mobile-menu-list">
     <?php if (!isset($_SESSION['id'])) { ?> <!-- DESLOGADO -->
         <li class="mobile-menu-item"><a href="/FuelWise/pages/login.php">Fazer login</a></li>
-        <li class="mobile-menu-item"><a href="/FuelWise/pages/cadastro_transportadora.php?page=1" onclick="scrollIntoView()">Cadastrar como Transportadora</a></li>
+        <li class="mobile-menu-item"><a href="/FuelWise/pages/cadastro_transportadora_v2.php?page=1">Cadastrar como Transportadora</a></li>
         <li class="mobile-menu-item"><a href="#" onclick="scrollIntoView()">Suporte &nbsp;<box-icon color="black" name="support"></box-icon></a></li>
     <?php } else if (isset($_SESSION['gerente']) && isset($_SESSION['adm']) && $_SESSION['gerente'] == '0' && $_SESSION['adm'] == '0'){ ?>
         <li class="mobile-menu-item"><a href="/FuelWise/pages/motorista/postos.php">Checar Postos</a></li>

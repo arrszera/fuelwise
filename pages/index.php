@@ -1,106 +1,115 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <?php 
-        include_once('../config.php');
-        include('../elements/head.php');
-    ?>
-
-    <link rel='stylesheet' href='../css/header.css'>
-    <link rel='stylesheet' href='../css/home2.css'> 
-    <title>Home</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FuelWise - Solução de Gerenciamento de Frotas</title>
+  <link rel="stylesheet" href="../css/index.css" />
+  <link rel="stylesheet" href="../css/header.css" />
+  <link rel="stylesheet" href="../css/footer.css" />
+  <link rel="stylesheet" href="../css/landing.css" />
 </head>
 <body>
-    <?php include('../elements/header.php') ?>
-    
-    <div class="inicio" id="inicio">
+  <?php include('../elements/header.php')?>
 
-    </div>
-
-  <!-- Hero Section -->
   <section class="hero">
-    <h1 style="overflow-y: hidden">FuelWise</h1>
-    <p>A revolução no abastecimento de frotas começa aqui.</p>
-    <p><strong>Gestão eficiente, pagamento instantâneo, controle total.</strong></p>
-  </section>
-
-  <!-- Sobre -->
-  <section class="section" id="sobre">
-    <h2>Sobre a FuelWise</h2>
-    <p>A FuelWise é uma plataforma inteligente que conecta caminhoneiros, transportadoras e postos de combustível, trazendo mais agilidade, segurança e transparência para o processo de abastecimento de frotas.</p>
-    <p>Com pagamentos via PIX autorizados em tempo real pelos gerentes, rastreamento de caminhões e emissão de notas fiscais automáticas, a FuelWise facilita a gestão completa de frotas rodoviárias.</p>
+    <div class="container hero-content">
+      <div class="hero-text">
+        <h1>Solução de gerenciamento total de frota</h1>
+        <p>
+          A FuelWise oferece às transportadoras controle total sobre o abastecimento de seus veículos durante as viagens,
+          centralizando os registros de pagamento, localização, gestão de motoristas e veículos — tudo em um só lugar.
+        </p>
+        <div class="hero-buttons">
+          <a href="/signup" class="btn-outline">Comece já</a>
+          <a href="/contact" class="btn-outline">Contatar equipe</a>
+        </div>
+      </div>
+      <div class="hero-image">
+        <div class="image-box">
+          <img src="https://placehold.co/800x600/1E40AF/FFFFFF?text=FuelWise+Dashboard" alt="Painel da FuelWise" />
+          <div class="badge">Otimize gastos em combustíveis em até 15%</div>
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- Funcionalidades -->
-  <section class="section" id="funcionalidades">
-    <h2>Funcionalidades Principais</h2>
-    <div class="grid">
-      <div class="card">
-        <h3>🔄 Pagamento Automatizado via PIX</h3>
-        <p>Geração de QR Code e autorização do gerente para liberar o abastecimento de forma segura e rápida.</p>
-      </div>
-      <div class="card">
-        <h3>⛽ Postos e Preços em Tempo Real</h3>
-        <p>Visualização de postos parceiros próximos e seus respectivos valores atualizados de combustível.</p>
-      </div>
-      <div class="card">
-        <h3>📍 Localização de Frotas</h3>
-        <p>Monitore a posição dos caminhões em tempo real, melhorando a logística e a segurança da carga.</p>
-      </div>
-      <div class="card">
-        <h3>👥 Cadastro de Funcionários e Caminhões</h3>
-        <p>Gerencie motoristas e associe veículos a cada condutor diretamente pela plataforma.</p>
-      </div>
-      <div class="card">
-        <h3>🧾 Emissão de Notas Fiscais</h3>
-        <p>Os postos filiados emitem notas fiscais automaticamente após o pagamento confirmado.</p>
-      </div>
-      <div class="card">
-        <h3>💬 Comunicação Inteligente (Em breve)</h3>
-        <p>Futuramente, um chat interno permitirá comunicação direta entre motoristas e gerentes.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Usuários -->
-  <section class="section" id="usuarios">
-    <h2>Usuários e Responsabilidades</h2>
-    <div class="grid">
-      <div class="card">
-        <h3>👷 Caminhoneiros</h3>
-        <p>Solicitam abastecimentos de forma rápida e segura diretamente pelo aplicativo.</p>
-      </div>
-      <div class="card">
-        <h3>🛡️ Gerentes de Transportadoras</h3>
-        <p>Autorizam pagamentos, acompanham abastecimentos e monitoram a frota em tempo real.</p>
-      </div>
-      <div class="card">
-        <h3>⛽ Postos de Combustível</h3>
-        <p>Realizam o abastecimento, emitem notas fiscais e recebem pagamentos instantaneamente.</p>
+  <section class="features">
+    <div class="container">
+      <h2>Gerenciamento de frota completo</h2>
+      <p>
+        A FuelWise oferece todas as ferramentas necessárias para gerenciar sua frota, pagamentos e equipe em uma única plataforma integrada.
+      </p>
+      <div class="features-grid">
+        <div class="card">
+          <div class="icon">🚗</div>
+          <h3>Gerenciamento de veículos</h3>
+          <p>Rastreie sua frota com dados em tempo real e perfil exclusivo de veículo.</p>
+        </div>
+        <div class="card">
+          <div class="icon">💳</div>
+          <h3>Integração de pagamento</h3>
+          <p>Centralize todos pagamentos de combustíveis e gere relatórios detalhados.</p>
+        </div>
+        <div class="card">
+          <div class="icon">🗺️</div>
+          <h3>Otimização de rota</h3>
+          <p>Encontre a melhor rota e postos de combustíveis mais próximos para maximizar a eficiência.</p>
+        </div>
+        <div class="card">
+          <div class="icon">👥</div>
+          <h3>Gerenciamento de time</h3>
+          <p>Gerencie motoristas e equipe com permissões baseadas em funções e perfis detalhados.</p>
+        </div>
+        <div class="card">
+          <div class="icon">📄</div>
+          <h3>Análise e relatórios</h3>
+          <p>Obtenha insights com relatórios personalizados e painéis de análise em tempo real.</p>
+        </div>
+        <div class="card">
+          <div class="icon">⛽</div>
+          <h3>Catálogo de postos</h3>
+          <p>Acesse informações atualizadas sobre postos de combustíveis, preços e comodidades.</p>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- Destaques -->
-  <section class="section destaque">
-    <h2>Vantagens da FuelWise</h2>
-    <ul>
-      <li> Redução de custos com fraudes e desvios.</li>
-      <li> Transparência total em cada transação.</li>
-      <li> Facilidade na emissão de relatórios e auditorias.</li>
-      <li> Agilidade nos pagamentos via PIX.</li>
-      <li> Zero mensalidade: sem surpresas, sem planos pagos.</li>
-    </ul>
+  <!-- CTA -->
+  <section class="cta">
+    <div class="container text-center">
+      <h2>Pronto para otimizar as operações da sua frota?</h2>
+      <p>
+        Junte-se a centenas de transportadoras que já reduziram custos e melhoraram a eficiência com a FuelWise.
+      </p>
+      <a href="/signup" class="btn-white">Inicie seu teste gratuito</a>
+    </div>
   </section>
 
-  <!-- Rodapé -->
-  <footer id="contato">
-    <p>© 2025 FuelWise - Plataforma Inteligente de Combustível</p>
-    <p><a href="mailto:contato@FuelWise.com">contato@FuelWise.com</a></p>
-  </footer>
+  <!-- Depoimentos -->
+  <section class="testimonials">
+    <div class="container">
+      <h2>Confiado por Gestores de Frotas</h2>
+      <p>Veja o que nossos clientes dizem sobre como a FuelWise transformou suas operações.</p>
+      <div class="testimonials-grid">
+        <div class="card">
+          <p class="quote">"A FuelWise transformou completamente a forma como gerenciamos o abastecimento da nossa frota."</p>
+          <p class="author">João Silva<br/><span>Gestor de Frotas, Acme Logística</span></p>
+        </div>
+        <div class="card">
+          <p class="quote">"Acompanhar os gastos com combustível em tempo real nos deu uma visibilidade sem precedentes."</p>
+          <p class="author">Maria Rodrigues<br/><span>Diretora de Operações, FastFreight</span></p>
+        </div>
+        <div class="card">
+          <p class="quote">"O aplicativo com localizador de postos facilitou o dia a dia e ainda reduziu os custos."</p>
+          <p class="author">Roberto Souza<br/><span>CEO, Transportes Souza</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <!-- JS -->
-    <script src="../js/index.js"></script>
-    <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+  <?php include('../elements/footer.php') ?>
+
 </body>
 </html>
