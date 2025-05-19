@@ -45,6 +45,7 @@
     <?php }else if (isset($_SESSION['gerente']) && $_SESSION['gerente'] == '1'){ ?> <!-- Gerente -->
         <li class="mobile-menu-item"><a href="/FuelWise/pages/gerente/integrantes.php?idtransportadora=<?php echo $_SESSION['idtransportadora']?>">Gerenciar integrantes</a></li>
         <li class="mobile-menu-item"><a href="/FuelWise/pages/gerente/veiculos.php?idtransportadora=<?php echo $_SESSION['idtransportadora']?>">Gerenciar caminhões</a></li>
+        <li class="mobile-menu-item"><a href="/FuelWise/pages/gerente/viagens.php?idtransportadora=<?php echo $_SESSION['idtransportadora']?>">Viagens</a></li>
         <li class="mobile-menu-item"><a href="#" onclick="scrollIntoView()">Suporte &nbsp;<box-icon color="black" name="support"></box-icon></a></li>
         <li class="mobile-menu-item"><a href="/FuelWise/pages/logout.php">Logout</a></li>
     <?php }else if ($_SESSION['adm'] == '1' || $_SESSION['role'] == 3){ ?> <!-- ADM/SUPORTE -->

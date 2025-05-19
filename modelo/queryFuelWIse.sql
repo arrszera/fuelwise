@@ -18,7 +18,6 @@ CREATE TABLE IF NOT EXISTS `posto` (
   `nome` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`idposto`)
 ) ENGINE=InnoDB;
-
 CREATE TABLE IF NOT EXISTS `usuario` (
   `idusuario` INT NOT NULL AUTO_INCREMENT,
   `email` VARCHAR(255) NOT NULL,
@@ -29,7 +28,8 @@ CREATE TABLE IF NOT EXISTS `usuario` (
   `gerente` TINYINT NOT NULL,
   `adm` TINYINT NOT NULL,
   PRIMARY KEY (`idusuario`)
-) ENGINE=InnoDB;
+  ) ENGINE=InnoDB;
+
 
 CREATE TABLE IF NOT EXISTS `veiculo` (
   `idveiculo` INT NOT NULL AUTO_INCREMENT,
@@ -37,21 +37,22 @@ CREATE TABLE IF NOT EXISTS `veiculo` (
   `placa` VARCHAR(10) NOT NULL,
   `modelo` VARCHAR(45) NOT NULL,
   `eixos` TINYINT NOT NULL,
+  `litragem` FLOAT NOT NULL,
   `observacao` VARCHAR(100),
   PRIMARY KEY (`idveiculo`),
   FOREIGN KEY (`idtransportadora`) REFERENCES `transportadora` (`idtransportadora`)
 ) ENGINE=InnoDB;
 
-CREATE TABLE IF NOT EXISTS `caminhoneiro_veiculo` (
-  `idcaminhoneiro_veiculo` INT NOT NULL AUTO_INCREMENT,
-  `idusuario` INT NOT NULL,
+CREATE TABLE IF NOT EXISTS `viagem` (
+  `idviagem` INT NOT NULL AUTO_INCREMENT,
+  `idusuario` INT NOT NULL, 
   `idveiculo` INT NOT NULL,
   `data_inicio` DATETIME NOT NULL,
-  `data_termino` DATETIME NOT NULL,
+  `data_termino` DATETIME,
   `carga` VARCHAR(100) NOT NULL,
   `peso` FLOAT(10,2) NOT NULL,
-  `observacao` VARCHAR(100),
-  PRIMARY KEY (`idcaminhoneiro_veiculo`),
+  `obs` VARCHAR(100),
+  PRIMARY KEY (`idviagem`),
   FOREIGN KEY (`idusuario`) REFERENCES `usuario` (`idusuario`),
   FOREIGN KEY (`idveiculo`) REFERENCES `veiculo` (`idveiculo`)
 ) ENGINE=InnoDB;
