@@ -10,7 +10,9 @@ if($_GET['page'] == 1 || !isset($_GET['page'])){
             strlen($endereco) == 0 ||
             strlen($cnpj) == 0 
         ){
-        header('Location: ' . ROOT_PATH .'/pages/cadastro_transportadora.php?page=1&erro=1');
+        echo("<script>alert('Todos os campos devem ser preenchidos');
+                window.location.href = 'cadastro_transportadora.php?page=1'
+            </script>");
         exit;
     }
 

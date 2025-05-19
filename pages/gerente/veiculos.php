@@ -46,11 +46,12 @@
         <?php
             include('../../elements/connection.php');
             $query = "SELECT * FROM veiculo 
-            JOIN transportadora ON veiculo.idtransportadora  = transportadora.idtransportadora";
+            JOIN transportadora ON veiculo.idtransportadora  = transportadora.idtransportadora 
+            WHERE transportadora.idtransportadora = ".$_GET['idtransportadora'];
 
             $resultado = $conn->query($query);
             while($linha = $resultado->fetch_object()){
-                $html = "<tr>";
+                $html = "<tr>"; 
 
                 $html .= "<td data-label='#'>";
                 $html .= "<a href='deletar_veiculo_php.php?idveiculo=".$linha->idveiculo."&idtransportadora=".$_SESSION['idtransportadora']."' class='btn btn-danger'>Remover</a> ";

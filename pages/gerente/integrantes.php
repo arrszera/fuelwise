@@ -36,19 +36,21 @@
             <tr>
                 <th>#</th>
                 <th>ID</th>
-                <th>Placa</th>
-                <th>Modelo</th>
-                <th>Eixos</th>
-                <th>Observação</th>
+                <th>Nome</th>
+                <th>CPF</th>
+                <th>Email</th>
+                <th>Senha</th>
+                <th>Telefone</th>
             </tr>   
         </thead>
         <tbody>
         <?php
             include('../../elements/connection.php');
             $query = "SELECT usuario.idusuario AS idusuario, email, usuario.nome AS nome_usuario, telefone, cpf, gerente 
-            FROM transportadora_usuario AS tu
+            FROM transportadora_usuario AS tu   
             JOIN usuario ON tu.idusuario = usuario.idusuario 
-            JOIN transportadora ON tu.idtransportadora = transportadora.idtransportadora";
+            JOIN transportadora ON tu.idtransportadora = transportadora.idtransportadora  
+            WHERE tu.idtransportadora = ".$_GET['idtransportadora'];
 
             $resultado = $conn->query($query);
             while($linha = $resultado->fetch_object()){

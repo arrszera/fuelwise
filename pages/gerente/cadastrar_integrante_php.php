@@ -8,6 +8,14 @@
         $telefone = $_POST["telefone"];
         $cpf = $_POST["cpf"];
         $gerente = $_POST["gerente"];
+        
+        if ($result = $conn->query('SELECT * FROM usuario WHERE cpf = '.$cpf)){
+            echo"<script>
+                    alert('Esse CPF já foi registrado.');
+                    window.location.href = 'integrantes.php?integrantes'".$_SESSION['integrantes'].";
+                </script>";
+        }
+        
 
         $sql = "INSERT INTO usuario (nome, email, senha, telefone, cpf, gerente) 
                 VALUES ('$nome', '$email', '$hash', '$telefone', '$cpf', '$gerente')";
