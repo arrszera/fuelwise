@@ -2,81 +2,105 @@ document.addEventListener("DOMContentLoaded", () => {
     const validations = {
         "textarea[name='endereco']": [
             {
-            validate: (value) => value.trim().length > 0,
-            message: "Campo obrigatório."
+                validate: (value) => value.trim().length > 0,
+                message: "Campo obrigatório."
             }
         ],
         "input[name='nomeEmpresa']": [
             {
-            validate: (value) => value.trim().length > 1,
-            message: "O nome deve ter ao menos 2 caracteres."
+                validate: (value) => value.trim().length > 1,
+                message: "O nome deve ter ao menos 2 caracteres."
             }
         ],
         "input[name='telefoneEmpresa']": [
             {
-            validate: (value) => /^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/.test(value),
-            message: "Formato de telefone inválido. Ex: (11) 98765-4321"
+                validate: (value) => /^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/.test(value),
+                message: "Formato de telefone inválido. Ex: (11) 98765-4321"
             }
         ],
         "input[name='telefonePessoal']": [
             {
-            validate: (value) => /^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/.test(value),
-            message: "Formato de telefone inválido. Ex: (11) 98765-4321"
+                validate: (value) => /^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/.test(value),
+                message: "Formato de telefone inválido. Ex: (11) 98765-4321"
             }
         ],
         "input[name='cnpj']": [
             {
-            validate: (value) => /^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/.test(value),
-            message: "Formato de CNPJ inválido."
+                validate: (value) => /^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/.test(value),
+                message: "Formato de CNPJ inválido."
             },
             {
-            validate: (value) => validarCNPJ(value),
-            message: "CNPJ inválido."
+                validate: (value) => validarCNPJ(value),
+                message: "CNPJ inválido."
             }
         ],
         "input[name='email']": [
             {
-            validate: (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
-            message: "E-mail inválido."
+                validate: (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
+                message: "E-mail inválido."
             }
         ],
         "input[name='senha']": [
             {
-            validate: (value) => value.length >= 8,
-            message: "A senha deve ter pelo menos 8 caracteres."
+                validate: (value) => value.length >= 8,
+                message: "A senha deve ter pelo menos 8 caracteres."
             }
         ],
         "input[name='cidade']": [
             {
-            validate: (value) => value.length >= 2,
-            message: "Formato inválido."
+                validate: (value) => value.length >= 2,
+                message: "Formato inválido."
             }
         ],
         "input[name='estado']": [
             {
-            validate: (value) => value.length == 2,
-            message: "Formato de estado inválido."
+                validate: (value) => value.length == 2,
+                message: "Formato de estado inválido."
             }
         ],
         "input[name='cep']": [
             {
-            validate: (value) => value.length >= 8,
-            message: "Formato de CEP inválido."
+                validate: (value) => value.replace(/\D/g, '').length == 8,
+                message: "Formato de CEP inválido."
             }
-        ]
+        ],
+        "input[name='nomePessoal']":[
+            {
+                validate: (value) => value.length >= 2,
+                message: "Nome muito Curto."
+            }
+        ],
+        "input[name='sobrenome']":[
+            {
+                validate: (value) => value.length >= 2,
+                message: "Sobrenome muito Curto."
+            }
+        ],
+        "input[name='senha']":[
+            {
+                validate: (value) => value.length >= 8,
+                message: "Senha muito curta."
+            },
+            {
+                validate: (value) => /[!@#$%^&*()\-_=+\[\]{};:,.?\/|~`]/.test(value),
+                message: "Sua senha deve conter ao menos um caractere especial."
+            },
+        ],
+        "input[name='confirmarSenha']":[
+            {
+                validate: (value) => value == document.querySelector('[name="senha"]'),
+                message: "As senhas não coincidem."
+            }
+        ],
     };
 
+    // adiciona as regras conforme o elemento
     Object.keys(validations).forEach(name => {
         const field = document.querySelector(`${name}`);
         if (!field) return
         field.addEventListener("blur", () => {
             const rules = validations[name];
             let hint = field.parentElement.querySelector("p.hint");
-            if (!hint) {
-                hint = document.createElement("p");
-                hint.classList.add("hint");
-                field.parentElement.appendChild(hint);
-            }
 
             // verificar todas as regras, pegar a primeira que falhar
             const erro = rules.find(rule => !rule.validate(field.value));
@@ -93,25 +117,60 @@ document.addEventListener("DOMContentLoaded", () => {
         })
     })
 
+    // verificacao na troca de aba
+    document.querySelector('#pessoal form').addEventListener('submit', (e) => {
+        const inputs = document.querySelectorAll('input, textarea');
+        let isValid = true;
+
+        inputs.forEach(input => {
+            const name = input.getAttribute('name');
+            const selector = input.tagName.toLowerCase() === 'textarea'
+            ? `textarea[name="${name}"]`
+            : `input[name="${name}"]`;
+
+            const rules = validations[selector];
+            const hint = input.parentElement.querySelector("p.hint");
+
+            if (rules) {
+                const error = rules.find(rule => !rule.validate(input.value));
+                if (error) {
+                    hint.textContent = error.message;
+                    hint.classList.remove("hidden");
+                    hint.classList.add("input-error");
+                    isValid = false;
+                } else {
+                    hint.textContent = "";
+                    hint.classList.add("hidden");
+                    hint.classList.remove("input-error");
+                }
+            }
+        })
+
+        if (!isValid) {
+            e.preventDefault(); // Impede o envio se houver erros
+        }
+    })
+
     // botoes do cadastro
     document.querySelector('.btn.primary').addEventListener('click', (e) => {
       e.preventDefault();
       alterarAba('empresa', 'pessoal');
-    });
+    })
 
     document.querySelector('.form-actions .btn[type="button"]').addEventListener('click', () => {
       alterarAba('pessoal', 'empresa', false);
-    });
+    })
+
     document.querySelectorAll('.tab-btn').forEach(button => {
         button.addEventListener('click', (e) => {
             e.preventDefault();
             const alvo = button.getAttribute('data-tab');
             const ativo = document.querySelector('.tab-btn.active').getAttribute('data-tab');
 
-            // Só executa se clicar em uma aba diferente
+            // só executa se clicar em uma aba diferente
             if (alvo === ativo) return;
 
-            // Se a aba atual for "empresa", exige validação antes de mudar
+            // se a aba atual for "empresa", exige validação antes de mudar
             if (ativo === 'empresa') {
                 alterarAba('empresa', 'pessoal');
             } else {
@@ -119,7 +178,61 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     })
-});
+
+    // autocomplete do cep
+    elementoCep = document.querySelector('[name="cep"]')
+    elementoCep.addEventListener('blur', () =>{
+        const cep = elementoCep.value.replace(/\D/g, '');
+        if (cep.length === 8) {
+            buscarCEP(cep)
+        }
+    })
+
+    // verificacao de formularios nos envios
+    // TODO
+    // document.querySelector('#pessoal form').addEventListener('submit', (e) => {
+    //     if (!validarFormularioCompleto()) {
+    //         e.preventDefault();
+    //         alert('Corrija os erros no formulário antes de enviar.')
+    //     }
+    // })
+
+    // document.querySelector('#empresa form').addEventListener('submit', (e) => {
+    //     if (!validarFormularioCompleto()) {
+    //         e.preventDefault();
+    //         alert('Corrija os erros no formulário antes de enviar.')
+    //     }
+    // })
+})
+
+function validarFormularioCompleto() {
+  let valido = true;
+
+  Object.keys(validations).forEach(selector => {
+    const field = document.querySelector(selector);
+    if (!field) return; // se não achar o campo, ignora
+
+    const rules = validations[selector];
+    const hint = field.parentElement.querySelector("p.hint");
+    
+    // verifica todas as regras, pega o primeiro erro
+    const erro = rules.find(rule => !rule.validate(field.value));
+    
+    if (erro) {
+      hint.textContent = erro.message;
+      hint.classList.remove("hidden");
+      hint.classList.add("input-error");
+      valido = false;
+    } else {
+      hint.textContent = "";
+      hint.classList.add("hidden");
+      hint.classList.remove("input-error");
+    }
+  });
+
+  return valido;
+}
+
 
 function validarCNPJ(cnpj){
     cnpj = cnpj.replace(/[^\d]+/g,'');
@@ -157,6 +270,24 @@ function validarCNPJ(cnpj){
     return false;
 
   return true;
+}
+
+async function buscarCEP(cep) {
+    try {
+      const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+      const data = await response.json();
+      if (data.erro) {
+        return;
+      }
+      
+      document.querySelector('[name="cidade"]').value = data.localidade
+      document.querySelector('[name="estado"]').value = data.uf
+      document.querySelector('[name="endereco"]').value = data.logradouro
+
+
+    } catch (error) {
+      console.error(error);
+    }
 }
 
 function alterarAba(de, para, validar=true){

@@ -40,41 +40,41 @@
                     <p class="hint hidden"></p>
                 </div>
                 <div class="form-group">
-                <label>Endereço</label>
-                <textarea placeholder="Nome da rua" name='endereco'></textarea>
-                <p class="hint hidden"></p>
+                  <label>Logradouro</label>
+                  <textarea placeholder="Nome da rua" name='endereco'></textarea>
+                  <p class="hint hidden"></p>
                 </div>
                 <div class="form-row">
-                <div class="form-group">
-                    <label>Cidade</label>
-                    <input placeholder="São Paulo" name='cidade'/>
-                    <p class="hint hidden"></p>
-                </div>
-                <div class="form-group">
-                    <label>Estado</label>
-                    <input placeholder="SP" name='estado'/>
-                    <p class="hint hidden"></p>
-                </div>
-                <div class="form-group">
-                    <label>CEP</label>
-                    <input placeholder="01000-000" name='cep'/>
-                    <p class="hint hidden"></p>
-                </div>
+                  <div class="form-group">
+                      <label>CEP</label>
+                      <input placeholder="01000-000" name='cep'/>
+                      <p class="hint hidden"></p>
+                  </div>
+                  <div class="form-group">
+                      <label>Cidade</label>
+                      <input placeholder="São Paulo" name='cidade'/>
+                      <p class="hint hidden"></p>
+                  </div>
+                  <div class="form-group">
+                      <label>Estado</label>
+                      <input placeholder="SP" name='estado'/>
+                      <p class="hint hidden"></p>
+                  </div>
                 </div>
                 <div class="form-row">
-                <div class="form-group">
-                    <label>Telefone da Empresa</label>
-                    <input placeholder="(11) 98765-4321" name='telefoneEmpresa'/>
-                    <p class="hint hidden"></p>
-                </div>
-                <div class="form-group">
-                    <label>CNPJ / Identificação Fiscal</label>
-                    <input placeholder="12.345.678/0001-99" name='cnpj'/>
-                    <p class="hint">Número de Identificação Fiscal da Empresa</p>
-                </div>
+                  <div class="form-group">
+                      <label>Telefone da Empresa</label>
+                      <input placeholder="(11) 98765-4321" name='telefoneEmpresa'/>
+                      <p class="hint hidden"></p>
+                  </div>
+                  <div class="form-group">
+                      <label>CNPJ / Identificação Fiscal</label>
+                      <input placeholder="12.345.678/0001-99" name='cnpj'/>
+                      <p class="hint">Número de Identificação Fiscal da Empresa</p>
+                  </div>
                 </div>
                 <div class="form-actions right">
-                <button class="btn primary">Continuar para Informações Pessoais</button>
+                  <button class="btn primary">Continuar para Informações Pessoais</button>
                 </div>
             </form>
             </div>
@@ -82,43 +82,45 @@
             <div class="tab-content hidden" id="pessoal">
             <form class="form">
                 <div class="form-row">
-                <div class="form-group">
-                    <label>Nome</label>
-                    <input placeholder="João" name='nome'/>
-                    <p class="hint hidden"></p>
+                  <div class="form-group">
+                      <label>Nome</label>
+                      <input placeholder="João" name='nomePessoal'/>
+                      <p class="hint hidden"></p>
+                  </div>
+                  <div class="form-group">
+                      <label>Sobrenome</label>
+                      <input placeholder="Silva" name='sobrenome'/>
+                      <p class="hint hidden"></p>
+                  </div>
                 </div>
-                <div class="form-group">
-                    <label>Sobrenome</label>
-                    <input placeholder="Silva" name='sobrenome'/>
-                    <p class="hint hidden"></p>
-                </div>
-                </div>
-                    <div class="form-group">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>CPF</label>
+                    <input type="text" placeholder="Ex: 123.456.789-12" name='cpf'/>
+                    <p class="hint"></p>
+                  </div>
+                  <div class="form-group">
                     <label>E-mail</label>
                     <input type="email" placeholder="joao.silva@exemplo.com" name='email'/>
                     <p class="hint">Este será seu usuário para login</p>
+                  </div>
                 </div>
                 <div class="form-row">
-                <div class="form-group">
-                    <label>Senha</label>
-                    <input type="password" placeholder="********" name='senha'/>
-                    <p class="hint">A senha deve ter ao menos 8 caracteres</p>
-                </div>
-                <div class="form-group">
-                    <label>Confirmar Senha</label>
-                    <input type="password" placeholder="********" name='confirmarSenha'/>
-                    <p class="hint hidden"></p>
-                </div>
-                </div>
-                    <div class="form-group">
-                    <label>Cargo</label>
-                    <input placeholder="Cargo na empresa" name='cargo'/>
-                    <p class="hint hidden"></p>
-                </div>
-                    <div class="form-group">
+                  <div class="form-group">
+                      <label>Senha</label>
+                      <input type="password" placeholder="********" name='senha'/>
+                      <p class="hint">A senha deve ter ao menos 8 caracteres</p>
+                  </div>
+                  <div class="form-group">
+                      <label>Confirmar Senha</label>
+                      <input type="password" placeholder="********" name='confirmarSenha'/>
+                      <p class="hint hidden"></p>
+                  </div>
+                  <div class="form-group">
                     <label>Telefone Pessoal</label>
                     <input placeholder="(11) 98765-4321" name='telefonePessoal'/>
                     <p class="hint hidden"></p>
+                  </div>
                 </div>
                 <div class="form-actions space-between">
                     <button type="button" class="btn">Voltar para Informações da Empresa</button>

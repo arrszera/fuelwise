@@ -43,7 +43,7 @@ body.body {
   color: #4b5563;
 }
 
-/* Card */
+/* card */
 .card {
   background: #fff;
   border-radius: 0.5rem;
@@ -71,7 +71,7 @@ body.body {
   padding: 1.5rem;
 }
 
-/* Tabs */
+/*  */
 .tabs {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -96,7 +96,7 @@ body.body {
   opacity: 0.5;
 }
 
-/* Form */
+/* forms */
 .form {
   display: flex;
   flex-direction: column;
@@ -154,7 +154,7 @@ select:focus {
   }
 }
 
-/* Buttons */
+/* botoes */
 .btn {
   padding: 0.5rem 1rem;
   border: 1px solid #d1d5db;
@@ -182,7 +182,6 @@ select:focus {
   justify-content: space-between;
 }
 
-/* Tab content visibility */
 .tab-content.hidden {
   display: none;
 }
