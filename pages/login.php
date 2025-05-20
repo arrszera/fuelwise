@@ -33,7 +33,7 @@
         <h1 class="title" style="margin-top: 1rem;">Bem-vindo de volta</h1>
         <p class="subtitle">Digite suas credenciais para acessar sua conta</p>
       </div>
-      <div class="card-body">
+      <form class="card-body" action="login_php.php" method="POST">
         <form id="loginForm" action="" method="POST" novalidate>
           <div class='form-row'>
             <div class="form-group">
@@ -50,7 +50,7 @@
           </div>
           <div class='form-row'>
             <div class="form-group">
-              <label for="password">Senha</label>
+              <label for="senha">Senha</label>
               <input
                 id="senha"
                 name="senha"
@@ -64,7 +64,7 @@
             <button class="btn primary" type="button" onclick="validarLogin(event, this)">Entrar</button>
           </div>
         </form>
-      </div>
+      </form>
       <div class="card-footer">
         <a href="#" class="btn-link">Esqueceu sua senha?</a>
         <p>

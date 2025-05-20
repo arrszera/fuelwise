@@ -1,11 +1,11 @@
 <?php
 session_start();
 
-if (isset($_POST["email"]) && isset($_POST["password"])) {
+if (isset($_POST["email"]) && isset($_POST["senha"])) {
     include("../elements/connection.php");
 
     $email = $_POST["email"];
-    $password = $_POST["password"];
+    $password = $_POST["senha"];
 
     $sql = "SELECT * FROM usuario WHERE email = '$email'";
     $result = $conn->query($sql);
