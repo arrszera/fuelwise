@@ -6,7 +6,7 @@
     grid-template-columns: auto 1fr;
     justify-content: space-between;
     padding: 7px 50px;
-    color: #1f2937; /* cinza escuro (textos primários) */
+    color: #333; /* cinza escuro (textos primários) */
 
     & ul {
         text-transform: uppercase;
@@ -72,9 +72,9 @@
     .header {
         display: flex;
         align-items: center;
-        justify-content: space-around;
+        justify-content: space-between;
         margin: 0;
-        padding: 9px 0;
+        padding: 14px 30px;
 
         & ul {
             display: none;
@@ -99,18 +99,19 @@
     }
 
     #mobile-menu-list {
+        border: #ddd 1px solid;
         position: absolute;
         max-height: 0;
         overflow: hidden;
         flex-direction: column;
         text-align: left;
         justify-content: center;
-        margin-top: 50px;
+        /* margin-top: 20px; */
         padding-bottom: 1rem;
-        padding-top: 30px;
+        padding-top: 10px;
         padding-left: 20px;
         width: 100%;
-        color: #1f2937; /* texto escuro */
+        color: #333; /* texto escuro */
         transition: max-height 0.5s ease-out, padding 0.3s ease-in-out, visibility 0.4s;
         background-color: #f9fafb; /* fundo claro */
         visibility: hidden;

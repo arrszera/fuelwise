@@ -25,10 +25,6 @@ const validations = {
     ],
     "input[name='cnpj']": [
         {
-            validate: (value) => /^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/.test(value.replace(/\D/g, '')),
-            message: "Formato de CNPJ inválido."
-        },
-        {
             validate: (value) => validarCNPJ(value),
             message: "CNPJ inválido."
         }
@@ -259,7 +255,7 @@ function validarFormularioCompleto(event, button) {
   } else {
     Swal.fire({
         title:'Preencha corretamente os dados', 
-        text:'Há dados que precisam de alteração', 
+        text:'Há dados que precisam de alteração.', 
         icon:'question', 
         iconColor: "#fedf00"
     })

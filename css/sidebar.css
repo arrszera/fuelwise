@@ -1,0 +1,63 @@
+body{
+    display: flex;
+    flex-direction: row;
+}
+.sidebar {
+    width: 250px;
+    height: 100%;
+    color: white;
+    top: 0;
+    left: 0;
+    padding-top: 20px;
+    background-color: #1e40af;
+    font-family: Arial, sans-serif;
+    z-index: 1000;
+}
+
+.logoSidebar{
+    display: flex;
+    flex-direction: column  ;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+/* Estilo dos itens de menu */
+.mobile-menu-item {
+    list-style: none;
+    margin: 15px 0;
+}
+
+.mobile-menu-item a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    display: block;
+    padding: 10px;
+    padding-left: 15px;
+    transition: background-color 0.3s ease;
+}
+
+/* Cor de fundo do item quando passa o mouse */
+.mobile-menu-item a:hover {
+    background-color: #fff;
+    color: #1e40af;
+}
+
+/* Estilo para o ícone dentro do item do menu */
+.mobile-menu-item a box-icon {
+    margin-left: 5px;
+    vertical-align: middle;
+}
+
+/* .main{
+    min-height: 100vh;
+} */
+.content{
+    padding: 20px;
+}
+@media screen and (max-width: 1062px) {
+    .sidebar{
+        display: none;
+    }
+}

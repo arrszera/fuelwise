@@ -1,73 +1,196 @@
-<?php 
-include_once('../config.php');
+<?php
+function validarCNPJ($cnpj) {
+    if (strlen($cnpj) != 14) return false;
+
+    if (preg_match('/(\d)\1{13}/', $cnpj)) return false;
+
+    for ($t = 12; $t < 14; $t++) {
+        $d = 0;
+        $c = 0;
+        for ($m = $t - 7, $i = 0; $i < $t; $i++) {
+            $d += $cnpj[$i] * $m--;
+            if ($m < 2) $m = 9;
+        }
+        $digito = ((10 * $d) % 11) % 10;
+        if ($cnpj[$t] != $digito) return false;
+    }
+    return true;
+}
+
+function temCaracterEspecial($str) {
+    return preg_match('/[!@#$%^&*()\-_=+\[\]{};:,.?\/|~`]/', $str);
+}
+
+function validarCPF($cpf){
+    if (strlen($cpf) !== 11) {
+        return false;
+    }
+
+    if (preg_match('/(\d)\1{10}/', $cpf)) {
+        return false;
+    }
+
+    for ($t = 9; $t < 11; $t++) {
+        $soma = 0;
+        for ($i = 0; $i < $t; $i++) {
+            $soma += $cpf[$i] * (($t + 1) - $i);
+        }
+        $digito = (10 * $soma) % 11;
+        $digito = ($digito == 10) ? 0 : $digito;
+
+        if ($cpf[$t] != $digito) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+function validarCampos($dados) {
+    foreach ($dados as $campo => $valor) {
+        switch($campo) {
+            case 'nomeEmpresa':
+                if (strlen(trim($valor)) < 2) return false;
+                break;
+            case 'endereco':
+                if (strlen(trim($valor)) == 0) return false;
+                break;
+            case 'cep':
+                if (strlen(preg_replace('/\D/', '', $valor)) != 8) return false;
+                break;
+            case 'cidade':
+                if (strlen(trim($valor)) < 2) return false;
+                break;
+            case 'estado':
+                if (strlen(trim($valor)) != 2 || !ctype_alpha($valor)) return false;
+                break;
+            case 'telefoneEmpresa':
+            case 'telefonePessoal':
+                if (!preg_match('/^\(?\d{2}\)?\s?\d{4,5}-?\d{4}$/', $valor)) return false;
+                break;
+            case 'cnpj':
+                if (!validarCNPJ($valor)) return false;
+                break;
+            case 'nomePessoal':
+            case 'sobrenome':
+                if (strlen(trim($valor)) < 2) return false;
+                break;
+            case 'cpf':
+                if (!validarCPF($valor)) return false;
+                break;
+            case 'email':
+                if (!filter_var($valor, FILTER_VALIDATE_EMAIL)) return false;
+                break;
+            case 'senha':
+                if (strlen($valor) < 8 || !temCaracterEspecial($valor)) return false;
+                break;
+            case 'confirmarSenha':
+                if (!isset($dados['senha']) || $valor !== $dados['senha']) return false;
+                break;
+            // outros campos sem regras específicas, pode continuar
+        }
+    }
+    return true; // se passou por todas as validações
+}
+
 session_start();
-if($_GET['page'] == 1 || !isset($_GET['page'])){
-    $nomeTransportadora = trim($_POST["nomeTransportadora"]);
-    $endereco = trim($_POST["endereco"]);
-    $cnpj = trim(str_replace(['.', '-'], '', $_POST["cnpj"]));
-    if (
-            strlen($nomeTransportadora) == 0 ||
-            strlen($endereco) == 0 ||
-            strlen($cnpj) == 0 
-        ){
-        echo("<script>alert('Todos os campos devem ser preenchidos');
-                window.location.href = 'cadastro_transportadora.php?page=1'
-            </script>");
-        exit;
-    }
 
-    if (strlen($nomeTransportadora) > 50){
-        echo("<script>alert('O tamanho limite do nome é de 50 caracteres');
-                window.location.href = 'cadastro_transportadora.php?page=1'
-            </script>");
-        exit;
-    }
-    if (strlen($endereco) > 100){
-        echo("<script>alert('O tamanho limite do endereço é de 100 caracteres');
-                window.location.href = 'cadastro_transportadora.php?page=1'
-            </script>");
-        exit;
-    }
-    if (strlen($cnpj) != 14){
-        echo("<script>alert('O CNPJ deve ter 14 caracteres (sinais serão ignorados)');
-                window.location.href = 'cadastro_transportadora.php?page=1'
-            </script>");
-        exit;
-    }
-    $_SESSION['nomeTransportadora'] = $nomeTransportadora;
-    $_SESSION['endereco'] = $endereco;
-    $_SESSION['cnpj'] = $cnpj;
+// armazena os dados preenchidos
+$_SESSION['form_data'] = $_POST;
 
-    header('Location: cadastro_transportadora.php?page=2');
+// pegando dados do formulário
+$campos = [
+    'nomeEmpresa', 'endereco', 'cep', 'cidade', 'estado', 'telefoneEmpresa', 'cnpj',
+    'nomePessoal', 'sobrenome', 'cpf', 'email', 'senha', 'confirmarSenha', 'telefonePessoal',
+];
+
+$dados = [];
+
+// pega os dados do POST
+foreach ($campos as $campo) {
+    if (!isset($_POST[$campo]) || trim($_POST[$campo]) === '') {
+        $_SESSION['alert'] = [
+            'title' => 'Erro!',
+            'text' => 'Preencha todos os campos corretamente. Tente novamente.',
+            'icon' => 'question',
+            'iconColor' => '#fedf00',
+            'confirmButtonColor' => '#2563eb',
+        ];
+        header("Location: cadastro_transportadora.php"); exit;
+    }
+    $dados[$campo] = trim($_POST[$campo]);
 }
-else if($_GET['page'] == 2){
-    $nomeUsuario = $_POST['nomeUsuario'];
-    $telefone = $_POST['telefone'];
-    $cpf = $_POST['cpf'];
-    $senha = password_hash($_POST['senha'], PASSWORD_DEFAULT);
-    $emailUsuario = $_POST['email'];
-    $cnpj = $_SESSION['cnpj'];
-    $nomeTransportadora = $_SESSION['nomeTransportadora'];
-    $endereco = $_SESSION['endereco'];
-    $query = "INSERT INTO solicitacao (nomeUsuario, telefone, cpf, senha, nomeTransportadora, endereco, cnpj, emailUsuario) ";
-    $query .= "VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
 
-    include('../elements/connection.php');
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("ssssssss", $nomeUsuario, $telefone, $cpf, $senha, $nomeTransportadora, $endereco, $cnpj, $emailUsuario);
-    if($stmt->execute()){
-        echo "<script>
-        alert('Sua solicitação foi enviada com sucesso, o suporte irá realizar a verificação e aprovação em breve.');
-        window.location.href = 'index.php';
-        </script>";
-        session_destroy();
-    } else {
-        echo "<script>
-                alert('Houve um problema no envio da solicitação, o suporte está trabalhando no erro, tente novamente mais tarde.');
-                window.location.href = 'index.php';
-            </script>";
-    }
-}else{
-    echo "Página não encontrada";          
+// limpa inputs
+$dados['cpf'] = preg_replace('/[^0-9]/', '', $dados['cpf']);
+$dados['cnpj'] = preg_replace('/[^0-9]/', '', $dados['cnpj']);
+$dados['cep'] = preg_replace('/[^0-9]/', '', $dados['cep']);
+$dados['estado'] = strtoupper($dados['estado']);
+
+// verifica se todos os campos atendem as regras estabelecidas
+$erros = validarCampos($dados);
+
+if (!$erros) {
+    $_SESSION['alert'] = [
+        'title' => 'Erro!',
+        'text' => 'Preencha todos os campos corretamente. Tente novamente.',
+        'icon' => 'question',
+        'iconColor' => '#fedf00',
+        'confirmButtonColor' => '#2563eb',
+    ];
+    header("Location: cadastro_transportadora.php"); exit;
 }
+
+// query de inserção
+$query = "INSERT INTO solicitacao (
+    nomeTransportadora, endereco, cep, cidade, estado, telefoneEmpresa, cnpj,
+    nomeUsuario, sobrenome, cpf, emailUsuario, senha, telefoneUsuario, status
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+
+include('../elements/connection.php');
+
+// hash da senha
+$dados['senha'] = password_hash($dados['senha'], PASSWORD_DEFAULT);
+unset($dados['confirmarSenha']);
+$status = 0;
+$stmt = $conn->prepare($query);
+$stmt->bind_param(
+    'sssssssssssssi',
+    $dados['nomeEmpresa'],
+    $dados['endereco'],
+    $dados['cep'],
+    $dados['cidade'],
+    $dados['estado'],
+    $dados['telefoneEmpresa'],
+    $dados['cnpj'],
+    $dados['nomePessoal'],
+    $dados['sobrenome'],
+    $dados['cpf'],
+    $dados['email'],
+    $dados['senha'],
+    $dados['telefonePessoal'],
+    $status
+);
+
+if ($stmt->execute()) {
+    unset($_SESSION['form_data']); // limpa os dados em caso de sucesso
+    $_SESSION['alert'] = [
+        'title' => 'Sucesso!',
+        'text' => 'Cadastro enviado com sucesso! Sua solicitação será analisada em 1-2 dias úteis.',
+        'icon' => 'success', 
+        'confirmButtonColor' => '#2563eb',
+    ];
+    header("Location: index.php"); exit;
+} else {
+    $_SESSION['alert'] = [
+        'title' => 'Erro!',
+        'text' => 'Erro ao enviar cadastro. O suporte está trabalhando nisso.',
+        'icon' => 'question',
+        'iconColor' => '#fedf00',
+        'confirmButtonColor' => '#2563eb',
+    ];
+    header("Location: cadastro_transportadora.php"); exit;
+}
+exit;
 ?>

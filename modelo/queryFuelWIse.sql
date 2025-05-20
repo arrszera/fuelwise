@@ -7,7 +7,11 @@ CREATE TABLE IF NOT EXISTS `transportadora` (
   `idtransportadora` INT NOT NULL AUTO_INCREMENT,
   `nome` VARCHAR(50) NOT NULL,
   `endereco` VARCHAR(100) NOT NULL,
+  `cidade` VARCHAR(45) NOT NULL,
+  `estado` VARCHAR(2) NOT NULL,
+  `cep` VARCHAR(8) NOT NULL,
   `cnpj` VARCHAR(14) NOT NULL,
+  `telefone` VARCHAR(25) NOT NULL,
   PRIMARY KEY (`idtransportadora`),
   UNIQUE (`cnpj`)
 ) ENGINE=InnoDB;
@@ -125,6 +129,7 @@ CREATE TABLE IF NOT EXISTS `solicitacao` (
   `cpf` VARCHAR(11) NOT NULL,
   `senha` VARCHAR(255) NOT NULL,
   `telefoneUsuario` VARCHAR(45) NOT NULL,
+  `status` TINYINT NOT NULL,
   PRIMARY KEY (`idsolicitacao`)
 ) ENGINE=InnoDB;
 

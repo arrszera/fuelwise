@@ -6,8 +6,14 @@
 	}
 	if(isset($_GET['id'])){
 		include('../../elements/connection.php');
-		$query = "DELETE FROM solicitacao WHERE idsolicitacao = ".$_GET['id'];
+
+		$query = "UPDATE solicitacao SET status = 2 WHERE idsolicitacao = ".$_GET['id'];
 		$resultado = $conn->query($query);
+		$_SESSION['alert'] = [
+			'title' => 'Sucesso!',
+			'text' => 'Status de solicitação alterada com sucesso!',
+			'icon' => 'success'
+		];
 		header("location: solicitacoes.php");
 	}else{
 		echo "Algo deu errado."; 

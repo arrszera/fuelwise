@@ -33,7 +33,7 @@
         <p>Preencha ambas as seções para concluir seu cadastro</p>
       </div>
 
-      <form class="form" method="POST" action="cadastro_transportadora_php_v2.php">
+      <form class="form" method="POST" action="cadastro_transportadora_php.php">
         <div class="card-body">
           <div class="tabs">
             <button class="tab-btn active" type="button" data-tab="empresa">Informações da Empresa</button>
