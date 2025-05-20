@@ -10,7 +10,10 @@
   <link rel="stylesheet" href="../css/landing.css" />
 </head>
 <body>
-  <?php include('../elements/header.php')?>
+  <?php 
+    include('../elements/header.php');
+    include('../elements/alert.php');
+  ?>
 
   <section class="hero">
     <div class="container hero-content">

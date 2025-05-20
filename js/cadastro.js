@@ -25,7 +25,7 @@ const validations = {
     ],
     "input[name='cnpj']": [
         {
-            validate: (value) => /^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/.test(value),
+            validate: (value) => /^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/.test(value.replace(/\D/g, '')),
             message: "Formato de CNPJ inválido."
         },
         {
@@ -89,6 +89,12 @@ const validations = {
         {
             validate: (value) => value == document.querySelector('[name="senha"]').value,
             message: "As senhas não coincidem."
+        }
+    ],
+    "input[name='cpf']":[
+        {
+            validate: (value) => validarCPF(value.replace(/\D/g, '')),
+            message: "CPF inválido."
         }
     ],
 }
@@ -356,4 +362,24 @@ function alterarAba(de, para, validar=true){
     document.getElementById(para).classList.remove('hidden');
     document.querySelector(`.tab-btn[data-tab="${para}"]`).classList.add('active');
     document.querySelector(`.tab-btn[data-tab="${para}"]`).disabled = false;
+}
+
+function validarCPF(cpf) {
+    if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) {
+        return false; 
+    }
+
+    for (let t = 9; t < 11; t++) {
+        let soma = 0;
+        for (let i = 0; i < t; i++) {
+            soma += parseInt(cpf.charAt(i)) * ((t + 1) - i);
+        }
+        let digito = (soma * 10) % 11;
+        if (digito === 10) digito = 0;
+        if (parseInt(cpf.charAt(t)) !== digito) {
+            return false;
+        }
+    }
+
+    return true;
 }

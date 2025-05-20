@@ -113,13 +113,18 @@ CREATE TABLE IF NOT EXISTS `mensagem` (
 CREATE TABLE IF NOT EXISTS `solicitacao` (
   `idsolicitacao` INT NOT NULL AUTO_INCREMENT,
   `nomeTransportadora` VARCHAR(50) NOT NULL,
-  `telefone` VARCHAR(45) NOT NULL,
-  `emailUsuario` VARCHAR(45) NOT NULL,
-  `cpf` VARCHAR(11) NOT NULL,
   `endereco` VARCHAR(100) NOT NULL,
+  `cep` VARCHAR(8) NOT NULL,
+  `cidade` VARCHAR(20) NOT NULL,
+  `estado` VARCHAR(2) NOT NULL,
+  `telefoneEmpresa` VARCHAR(45) NOT NULL,
   `cnpj` VARCHAR(14) NOT NULL,
   `nomeUsuario` VARCHAR(45) NOT NULL,
+  `sobrenome` VARCHAR(45) NOT NULL,
+  `emailUsuario` VARCHAR(45) NOT NULL,
+  `cpf` VARCHAR(11) NOT NULL,
   `senha` VARCHAR(255) NOT NULL,
+  `telefoneUsuario` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`idsolicitacao`)
 ) ENGINE=InnoDB;
 
