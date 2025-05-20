@@ -11,7 +11,10 @@
 </head>
 <body class="body">
 
-  <?php include('../elements/header.php') ?>
+  <?php 
+    include('../elements/header.php');
+    include('../elements/alert.php');
+  ?>
 
   <main class="main">
     <div class="card" role="main" aria-label="Formulário de login">

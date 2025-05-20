@@ -36,18 +36,24 @@ if (isset($_POST["email"]) && isset($_POST["senha"])) {
             header("Location: index.php");
             exit;
         } else {
-            echo "<script>
-                    alert('Senha incorreta para esse usuário.');
-                    window.location.href = 'login.php';
-                  </script>";
-            exit;
+            $_SESSION['alert'] = [
+                'title' => 'Erro!',
+                'text' => 'A senha e usuário não coincidem.',
+                'icon' => 'question',
+                'iconColor' => '#fedf00',
+                'confirmButtonColor' => '#2563eb',
+            ];
+            header("Location: login.php"); exit;
         }
     } else {
-        echo "<script>
-                alert('Usuário não encontrado.');
-                window.location.href = 'login.php';
-              </script>";
-        exit;
+        $_SESSION['alert'] = [
+            'title' => 'Erro!',
+            'text' => 'Usuário não encontrado.',
+            'icon' => 'question',
+            'iconColor' => '#fedf00',
+            'confirmButtonColor' => '#2563eb',
+        ];
+        header("Location: login.php"); exit;
     }
 }
 ?>
