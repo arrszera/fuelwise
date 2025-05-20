@@ -88,7 +88,7 @@ $dados = [];
 foreach ($campos as $campo) {
     if (!isset($_POST[$campo]) || trim($_POST[$campo]) === '') {
         $_SESSION['erro'] = true;
-        header("Location: cadastro_transportadora_v2.php");
+        header("Location: cadastro_transportadora.php");
         exit;
     }
     $dados[$campo] = trim($_POST[$campo]);
@@ -103,7 +103,7 @@ if (!$erros) {
         'iconColor' => '#fedf00',
         'confirmButtonColor' => '#2563eb',
     ];
-    header("Location: cadastro_transportadora_v2.php");
+    header("Location: cadastro_transportadora.php");
 }
 
 // query de inserção
@@ -132,7 +132,7 @@ if ($stmt->execute()) {
         'iconColor' => '#fedf00',
         'confirmButtonColor' => '#2563eb',
     ];
-    header("Location: cadastro_transportadora_v2.php"); 
+    header("Location: cadastro_transportadora.php"); 
 }
 exit;
 ?>

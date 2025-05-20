@@ -21,7 +21,7 @@
           centralizando os registros de pagamento, localização, gestão de motoristas e veículos — tudo em um só lugar.
         </p>
         <div class="hero-buttons">
-          <a href="cadastro_transportadora_v2.php" class="btn-outline">Comece já</a>
+          <a href="cadastro_transportadora.php" class="btn-outline">Comece já</a>
           <a href="/contact" class="btn-outline">Contatar equipe</a>
         </div>
       </div>

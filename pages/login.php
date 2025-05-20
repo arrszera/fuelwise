@@ -69,7 +69,7 @@
         <a href="#" class="btn-link">Esqueceu sua senha?</a>
         <p>
           Não tem uma conta? 
-          <a href="cadastro_transportadora_v2.php" class="btn-link">Cadastre-se</a>
+          <a href="cadastro_transportadora.php" class="btn-link">Cadastre-se</a>
         </p>
       </div>
     </div>
