@@ -7,45 +7,34 @@
 	}
 	if(isset($_GET['id'])){
 		include('../../elements/connection.php');
-        $sql = "
-			SELECT status, cnpj, cpf 
-			FROM solicitacao 
-			WHERE idsolicitacao = ".$_GET['id'];
-
-		if ($resultado = $conn->query($sql)) {
-
-			if ($row = $resultado->fetch_assoc()) {
-				if ($row['status'] == 1) {
-					$_SESSION['alert'] = [
-						'title' => 'Erro!',
-						'text' => 'Esse cadastro já foi aprovado e não pode ser revertido!',
-						'icon' => 'warning'
-					];
-					header("Location: solicitacoes.php");
-					exit;
-				}
-                // Verificacoes para existencia de cpf e cnpj previamente
-                //TODO
-				// if (!empty($row['cnpj'])) {
-                //     $_SESSION['alert'] = [
-                //         'title' => 'Erro!',
-				// 		'text' => 'Este CNPJ já foi registrado!',
-				// 		'icon' => 'warning'
-				// 	];
-				// 	header("Location: solicitacoes.php");
-				// 	exit;
-				// }
-				// if (!empty($row['cpf'])){
-				// 	$_SESSION['alert'] = [
-				// 		'title' => 'Erro!',
-				// 		'text' => 'Este CPF já foi registrado!',
-				// 		'icon' => 'warning'
-				// 	];
-				// 	header("Location: solicitacoes.php");
-				// 	exit;
-				// }
-			}
-		}
+        
+        // Verificacoes para existencia de cpf e cnpj previamente
+        //TODO
+        // $sql = "
+		// 	SELECT cnpj, cpf 
+		// 	FROM solicitacao 
+		// 	WHERE idsolicitacao = ".$_GET['id'];
+		// if ($resultado = $conn->query($sql)) {
+            // if (!empty($row['cnpj'])) {
+            //     $_SESSION['alert'] = [
+            //         'title' => 'Erro!',
+            // 		'text' => 'Este CNPJ já foi registrado!',
+            // 		'icon' => 'warning'
+            // 	];
+            // 	header("Location: solicitacoes.php");
+            // 	exit;
+            // }
+            // if (!empty($row['cpf'])){
+            // 	$_SESSION['alert'] = [
+            // 		'title' => 'Erro!',
+            // 		'text' => 'Este CPF já foi registrado!',
+            // 		'icon' => 'warning'
+            // 	];
+            // 	header("Location: solicitacoes.php");
+            // 	exit;
+            // }
+        // }
+	
 		$query = "SELECT * FROM solicitacao WHERE idsolicitacao = ".$_GET['id'];
         $resultado = $conn->query($query);
         $linha = $resultado->fetch_object();

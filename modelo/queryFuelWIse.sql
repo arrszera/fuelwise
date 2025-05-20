@@ -86,34 +86,6 @@ CREATE TABLE IF NOT EXISTS `anexos` (
   FOREIGN KEY (`iddenuncia`) REFERENCES `denuncia` (`iddenuncia`)
 ) ENGINE=InnoDB;
 
-CREATE TABLE IF NOT EXISTS `chat` (
-  `idchat` INT NOT NULL AUTO_INCREMENT,
-  `nome` VARCHAR(45) NOT NULL,
-  `data` DATETIME NOT NULL,
-  PRIMARY KEY (`idchat`)
-) ENGINE=InnoDB;
-
-CREATE TABLE IF NOT EXISTS `participante` (
-  `idparticipante` INT NOT NULL,
-  `idusuario` INT NOT NULL,
-  `idchat` INT NOT NULL,
-  `gerente` SMALLINT NOT NULL,
-  PRIMARY KEY (`idparticipante`),
-  FOREIGN KEY (`idusuario`) REFERENCES `usuario` (`idusuario`),
-  FOREIGN KEY (`idchat`) REFERENCES `chat` (`idchat`)
-) ENGINE=InnoDB;
-
-CREATE TABLE IF NOT EXISTS `mensagem` (
-  `idmensagem` INT NOT NULL AUTO_INCREMENT,
-  `idchat` INT NOT NULL,
-  `conteudo` VARCHAR(150) NOT NULL,
-  `data` TIMESTAMP NOT NULL,
-  `idusuario` INT NOT NULL,
-  PRIMARY KEY (`idmensagem`),
-  FOREIGN KEY (`idchat`) REFERENCES `chat` (`idchat`),
-  FOREIGN KEY (`idusuario`) REFERENCES `usuario` (`idusuario`)
-) ENGINE=InnoDB;
-
 CREATE TABLE IF NOT EXISTS `solicitacao` (
   `idsolicitacao` INT NOT NULL AUTO_INCREMENT,
   `nomeTransportadora` VARCHAR(50) NOT NULL,

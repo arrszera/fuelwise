@@ -8,7 +8,7 @@
 
     include('../../elements/connection.php');
 
-    $sql = "SELECT idsolicitacao, nomeTransportadora, nomeUsuario, emailUsuario, status FROM solicitacao ORDER BY status DESC";
+    $sql = "SELECT idsolicitacao, nomeTransportadora, nomeUsuario, emailUsuario, status FROM solicitacao ORDER BY status ASC";
     $result = $conn->query($sql);
 
     $requests = [];
@@ -122,7 +122,7 @@
     function negarSolicitacao(idsolicitacao){
         Swal.fire({
             title: "Tem certeza?",
-            text: "Você não será capaz de tornar uma solicitação pendente de novo!",
+            text: "Você não será capaz de tornar uma solicitação pendente de novo! Caso a solicitação tenha sido aprovada, deletará todos registros da mesma.",
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
