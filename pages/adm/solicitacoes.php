@@ -8,7 +8,7 @@
 
     include('../../elements/connection.php');
 
-    $sql = "SELECT idsolicitacao, nomeTransportadora, nomeUsuario, emailUsuario, status FROM solicitacao ORDER BY status ASC";
+    $sql = "SELECT * FROM solicitacao ORDER BY status ASC";
     $result = $conn->query($sql);
 
     $requests = [];
@@ -19,6 +19,15 @@
                 'nomeTransportadora' => $row['nomeTransportadora'],
                 'nomeUsuario' => $row['nomeUsuario'],
                 'emailUsuario' => $row['emailUsuario'],
+                'cidade' => $row['cidade'],
+                'estado' => $row['estado'],
+                'endereco' => $row['endereco'],
+                'telefoneEmpresa' => $row['telefoneEmpresa'],
+                'telefoneUsuario' => $row['telefoneUsuario'],
+                'cep' => $row['cep'],
+                'cpf' => $row['cpf'],
+                'cnpj' => $row['cpf'],
+                'sobrenome' => $row['sobrenome'],
                 'status' => $row['status'],
                 // 'data' => $row['created_at  '], 
             ];
@@ -85,8 +94,29 @@
                 </table>
             </div>
         </div>
-        <?php include('../../elements/footer.php') ?>
+        <!-- <?php include('../../elements/footer.php') ?> -->
     </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+			<div class="modal-header">
+				<h2>Detalhes da Solicitação</h2>
+				<span onclick="fecharModal()" class="close">&times;</span>
+			</div>
+            <p><strong>Empresa:</strong> <span id="modal-nomeTransportadora"></span></p>
+            <p><strong>CNPJ:</strong> <span id="modal-cnpj"></span></p>
+            <p><strong>Telefone da Empresa:</strong> <span id="modal-telefone-empresa"></span></p>
+            <p><strong>Logradouro:</strong> <span id="modal-endereco"></span></p>
+            <p><strong>CEP:</strong> <span id="modal-cep"></span></p>
+            <p><strong>Cidade:</strong> <span id="modal-cidade"></span></p>
+            <p><strong>Gerente:</strong> <span id="modal-nomeUsuario"></span></p>
+            <p><strong>Email:</strong> <span id="modal-emailUsuario"></span></p>
+            <p><strong>Telefone Pessoal:</strong> <span id="modal-telefone-pessoal"></span></p>
+            <p><strong>CPF:</strong> <span id="modal-cpf"></span></p>
+            <p><strong>Status:</strong> <span id="modal-status"></span></p>
+        </div>
+    </div>
+
 
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="../../js/index.js"></script>
@@ -105,6 +135,28 @@
       check: `<svg class="icon" viewBox="0 0 24 24" stroke="currentColor"><polyline points="20 6 9 17 4 12"></polyline></svg>`,
       x: `<svg class="icon" viewBox="0 0 24 24" stroke="currentColor"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`
     };
+
+function abrirModal(request) {
+	console.log(request)
+    document.getElementById('modal-nomeTransportadora').textContent = request.nomeTransportadora 
+    document.getElementById('modal-cnpj').textContent = request.cnpj 
+    document.getElementById('modal-telefone-empresa').textContent = request.telefoneEmpresa
+    document.getElementById('modal-endereco').textContent = request.endereco
+    document.getElementById('modal-cep').textContent = request.cep 
+    document.getElementById('modal-cidade').textContent = request.cidade 
+    document.getElementById('modal-nomeUsuario').textContent = request.nomeUsuario + request.sobrenome 
+    document.getElementById('modal-emailUsuario').textContent = request.emailUsuario 
+    document.getElementById('modal-telefone-pessoal').textContent = request.telefoneUsuario
+    document.getElementById('modal-cpf').textContent = request.cpf
+    document.getElementById('modal-status').textContent = getStatusClass(request.status).frase 
+
+    document.getElementById('modal').style.display = 'block';
+}
+
+
+	function fecharModal(){
+		document.getElementById('modal').style.display = 'none';
+	}
 
     function getStatusClass(status) {
         switch (parseInt(status)) {
@@ -155,48 +207,46 @@
 
     // Renderiza as linhas da tabela filtradas
     function renderTable(filtered) {
-      const tbody = document.getElementById('tableBody');
-      tbody.innerHTML = '';
+		const tbody = document.getElementById('tableBody');
+		tbody.innerHTML = '';
 
-      if (filtered.length === 0) {
-        tbody.innerHTML = `
-          <tr>
-            <td class="no-results" colspan="6">Nenhum registro foi encontrado.</td>
-          </tr>
-        `;
-        return;
-      }
+		if (filtered.length === 0) {
+			tbody.innerHTML = `<tr><td class="no-results" colspan="6">Nenhum registro foi encontrado.</td></tr>`;
+			return;
+		}
 
-      filtered.forEach(req => {
-        let status = getStatusClass(req.status)
-        const tr = document.createElement('tr')
-// <td>${formatDate(req.date)}</td>
-        tr.innerHTML = `
-          <td class="font-medium">${req.nomeTransportadora}</td>
-          <td>${req.nomeUsuario}</td>
-          <td>${req.emailUsuario}</td>
-          
-          <td><span class="badge ${status['classe']}">${status['frase']}</span></td>
-          <td>
-            <div class="actions">
-              <button class="btn-icon btn-view" title="Ver mais detalhes" aria-label="Ver detalhes de ${req.nomeTransportadora}">
-                ${icons.eye}
-              </button>
-              <button onclick='aprovarSolicitacao(${req.idsolicitacao})' class="btn-icon btn-approve" title="Aprovar" aria-label="Aprovar a solicitação de ${req.nomeTransportadora}">
-                ${icons.check}
-              </button>
-              <button onclick='negarSolicitacao(${req.idsolicitacao})' class="btn-icon btn-deny" title="Negar" aria-label="Negar ${req.nomeTransportadora}">
-                ${icons.x}
-              </button>
-            </div>
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
+		filtered.forEach(req => {
+			let status = getStatusClass(req.status);
+			const tr = document.createElement('tr');
 
+			tr.innerHTML = `
+				<td class="font-medium">${req.nomeTransportadora}</td>
+				<td>${req.nomeUsuario}</td>
+				<td>${req.emailUsuario}</td>
+				<td><span class="badge ${status.classe}">${status.frase}</span></td>
+				<td>
+					<div class="actions">
+						<button class="btn-icon btn-view" title="Ver mais detalhes" aria-label="Ver detalhes de ${req.nomeTransportadora}">
+							${icons.eye}
+						</button>
+						<button onclick='aprovarSolicitacao(${req.idsolicitacao})' class="btn-icon btn-approve" title="Aprovar">
+							${icons.check}
+						</button>
+						<button onclick='negarSolicitacao(${req.idsolicitacao})' class="btn-icon btn-deny" title="Negar">
+							${icons.x}
+						</button>
+					</div>
+				</td>
+			`
+			tbody.appendChild(tr)
+			document.querySelectorAll(".btn-view").forEach(el => el.addEventListener("click", () => {
+				abrirModal(req)
+			}))
+		});
+	}
+	
     renderTable(requests);
-
+	
     const searchInput = document.getElementById('searchInput');
     searchInput.addEventListener('input', () => {
       const term = searchInput.value.toLowerCase();

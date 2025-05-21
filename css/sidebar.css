@@ -50,9 +50,10 @@ body{
     vertical-align: middle;
 }
 
-/* .main{
+.main{
     min-height: 100vh;
-} */
+    width: 100%;
+}
 .content{
     padding: 20px;
 }
