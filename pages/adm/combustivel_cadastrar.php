@@ -4,7 +4,9 @@
         header('Location: ../index.php');
         exit;
     }
-    // echo var_dump($_POST); exit;
+
+    // TODO verificacoes
+
     // dedicada a atualizacao
     include("../../elements/connection.php");
     if (isset($_GET["precoCombustivel"])) {

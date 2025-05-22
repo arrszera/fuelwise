@@ -32,12 +32,9 @@
                     'preco' => $row['preco']
                 ];
             }
-            // echo var_dump($requests);
         }
     }
-    // var_dump($requests); 
-
-    ?>
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
     <head>
@@ -183,7 +180,6 @@
             document.getElementById('modalAdicionarPosto').style.display = 'block';
         }
   
-        // TODO funcao de adicionar novo combustivel e deletar
         function abrirModalCombustiveis(combustiveis, idposto) {
             const modal = document.getElementById('modalCombustiveis')
             const modalAdicionar = document.getElementById('modalAdicionarCombustivel')
@@ -295,6 +291,7 @@
             });
         }
         
+        // TODO funcao de alterar posto ja existente
         function renderTable(filtered) {
             const tbody = document.getElementById('tableBody')
             tbody.innerHTML = ''

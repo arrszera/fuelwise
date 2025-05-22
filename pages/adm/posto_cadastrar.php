@@ -4,6 +4,9 @@
         header('Location: ../index.php');
         exit;
     }
+    
+    // TODO verificacoes
+
     if (isset($_POST["nomePosto"]) && isset($_POST["enderecoPosto"])){
         include("../../elements/connection.php");
         $nomePosto = $_POST["nomePosto"];

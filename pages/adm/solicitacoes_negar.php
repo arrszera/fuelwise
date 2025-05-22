@@ -34,7 +34,7 @@
 	}
 
 function excluirTransportadora($idsolicitacao) {
-    global $conn; // Conexão com o banco de dados
+    global $conn; 
 
     $sql = "SELECT cnpj FROM solicitacao WHERE idsolicitacao = ?";
     $stmt = $conn->prepare($sql);
@@ -46,14 +46,12 @@ function excluirTransportadora($idsolicitacao) {
 
     if ($cnpj) {
 
-        // Excluir veiculos associados à transportadora
         $sql = "DELETE FROM veiculo WHERE idtransportadora IN (SELECT idtransportadora FROM transportadora WHERE cnpj = ?)";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("s", $cnpj);
         $stmt->execute();
         $stmt->close();
 
-        // Excluir registros na tabela transportadora_usuario
         $sql = "DELETE FROM transportadora_usuario WHERE idtransportadora IN (SELECT idtransportadora FROM transportadora WHERE cnpj = ?)";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("s", $cnpj);
@@ -66,7 +64,6 @@ function excluirTransportadora($idsolicitacao) {
         $stmt->execute();
         $stmt->close();
 
-        // Excluir o registro da transportadora
         $sql = "DELETE FROM transportadora WHERE cnpj = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("s", $cnpj);
