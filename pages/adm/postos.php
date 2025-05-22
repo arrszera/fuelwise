@@ -367,7 +367,6 @@
                 const idposto = el.getAttribute("data-idposto")
                 el.addEventListener("click", () => {
                     abrirModalEditarPosto(requests[idposto])
-                    console.log(requests)
                 })
             })
 
@@ -390,7 +389,6 @@
             )
             renderTable(filtered)
         })
-
         
         function fecharModalCombustivel(){
             document.getElementById('modalAdicionarCombustivel').style.display = 'none'
