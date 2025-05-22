@@ -19,7 +19,6 @@ body{
 }
 
 .search-container {
-    margin-bottom: 24px;
     max-width: 300px;
     position: relative;
 }
@@ -43,6 +42,15 @@ body{
     outline: none;
     border-color: #3b82f6; /* azul */
     box-shadow: 0 0 0 2px rgba(59,130,246,0.3);
+}
+
+.search-wrapper{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    /* border-bottom: 1px solid #ddd; */
 }
 
 /* Table */
@@ -152,4 +160,42 @@ svg.icon {
     padding: 48px 0;
     color: #777;
     font-style: italic;
+}
+
+.btn {
+  padding: 0.5rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  background: #fff;
+  cursor: pointer;
+}
+
+.btn.primary {
+  background: #2563eb;
+  color: #fff;
+  border: none;
+}
+
+/* formulario */
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.3rem;
+    font-weight: 500;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 1rem;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 1rem;
 }

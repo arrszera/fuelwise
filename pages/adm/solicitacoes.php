@@ -70,7 +70,7 @@
                 <input
                 id="searchInput"
                 type="search"
-                placeholder="Search by company or manager name..."
+                placeholder="Filtrar por nome de empresa ou gerente..."
                 class="search-input"
                 aria-label="Search"
                 />
@@ -129,7 +129,6 @@
       return date.toLocaleDateString('en-US', options);
     }
 
-    // Ícones inline SVG
     const icons = {
       eye: `<svg class="icon" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="3"></circle><path d="M2 12c2-4 6-7 10-7s8 3 10 7c-2 4-6 7-10 7s-8-3-10-7z"></path></svg>`,
       check: `<svg class="icon" viewBox="0 0 24 24" stroke="currentColor"><polyline points="20 6 9 17 4 12"></polyline></svg>`,
@@ -144,7 +143,7 @@ function abrirModal(request) {
     document.getElementById('modal-endereco').textContent = request.endereco
     document.getElementById('modal-cep').textContent = request.cep 
     document.getElementById('modal-cidade').textContent = request.cidade 
-    document.getElementById('modal-nomeUsuario').textContent = request.nomeUsuario + request.sobrenome 
+    document.getElementById('modal-nomeUsuario').textContent = request.nomeUsuario + ' ' + request.sobrenome 
     document.getElementById('modal-emailUsuario').textContent = request.emailUsuario 
     document.getElementById('modal-telefone-pessoal').textContent = request.telefoneUsuario
     document.getElementById('modal-cpf').textContent = request.cpf
@@ -152,7 +151,6 @@ function abrirModal(request) {
 
     document.getElementById('modal').style.display = 'block';
 }
-
 
 	function fecharModal(){
 		document.getElementById('modal').style.display = 'none';
@@ -219,7 +217,7 @@ function abrirModal(request) {
 			let status = getStatusClass(req.status);
 			const tr = document.createElement('tr');
 
-			tr.innerHTML = `
+			html = `
 				<td class="font-medium">${req.nomeTransportadora}</td>
 				<td>${req.nomeUsuario}</td>
 				<td>${req.emailUsuario}</td>
@@ -229,15 +227,27 @@ function abrirModal(request) {
 						<button class="btn-icon btn-view" title="Ver mais detalhes" aria-label="Ver detalhes de ${req.nomeTransportadora}">
 							${icons.eye}
 						</button>
-						<button onclick='aprovarSolicitacao(${req.idsolicitacao})' class="btn-icon btn-approve" title="Aprovar">
-							${icons.check}
-						</button>
-						<button onclick='negarSolicitacao(${req.idsolicitacao})' class="btn-icon btn-deny" title="Negar">
-							${icons.x}
-						</button>
+            `
+            if (!(req.status == 1)){
+                html += `
+                    <button onclick='aprovarSolicitacao(${req.idsolicitacao})' class="btn-icon btn-approve" title="Aprovar">
+                        ${icons.check}
+                    </button>
+                `
+            }
+            if (!(req.status == 2)){
+                html += `
+                    <button onclick='negarSolicitacao(${req.idsolicitacao})' class="btn-icon btn-deny" title="Negar">
+                        ${icons.x}
+                    </button>
+                `
+            }
+            html += `
 					</div>
 				</td>
 			`
+
+            tr.innerHTML = html
 			tbody.appendChild(tr)
 			document.querySelectorAll(".btn-view").forEach(el => el.addEventListener("click", () => {
 				abrirModal(req)
