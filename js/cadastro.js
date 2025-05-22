@@ -95,102 +95,72 @@ const validations = {
     ],
 }
 
+function validarCampo(field, selector) {
+    const rules = validations[selector]
+    if (!rules) return
+
+    const hint = field.parentElement.querySelector("p.hint")
+    const erro = rules.find(rule => !rule.validate(field.value))
+
+    if (erro) {
+        hint.textContent = erro.message
+        hint.classList.remove("hidden")
+        hint.classList.add("input-error")
+    } else {
+        hint.textContent = ""
+        hint.classList.remove("input-error")
+
+        switch (field.name) {
+            case 'cnpj':
+                hint.textContent = 'Número de Identificação Fiscal da Empresa'
+                break
+            case 'email':
+                hint.textContent = 'Este será seu usuário para login'
+                break
+            case 'senha':
+                hint.textContent = 'A senha deve ter ao menos 8 caracteres'
+                break
+            default:
+                hint.textContent = ''
+        }
+    }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     // adiciona as regras conforme o elemento
     Object.keys(validations).forEach(name => {
         const field = document.querySelector(`${name}`);
         if (!field) return
         field.addEventListener("blur", () => {
-            const rules = validations[name];
-            let hint = field.parentElement.querySelector("p.hint");
-
-            // verificar todas as regras, pegar a primeira que falhar
-            const erro = rules.find(rule => !rule.validate(field.value));
-
-            if (erro) {
-                hint.textContent = erro.message;
-                hint.classList.remove("hidden");
-                hint.classList.add("input-error");
-            } else {
-                hint.textContent = "";
-                // hint.classList.add("hidden");
-                hint.classList.remove("input-error");
-                switch (field.name) {
-                    case 'cnpj':
-                        hint.textContent = 'Número de Identificação Fiscal da Empresa';
-                        break;
-                    case 'email':
-                        hint.textContent = 'Este será seu usuário para login';
-                        break;
-                    case 'senha':
-                        hint.textContent = 'A senha deve ter ao menos 8 caracteres';
-                        break;
-                    default:
-                        hint.textContent = '';
-                }
-            }
-        })
-    })
-
-    // verificacao na troca de aba
-    // document.querySelector('#pessoal form').addEventListener('submit', (e) => {
-    //     const inputs = document.querySelectorAll('input, textarea');
-    //     let isValid = true;
-
-    //     inputs.forEach(input => {
-    //         const name = input.getAttribute('name');
-    //         const selector = input.tagName.toLowerCase() === 'textarea'
-    //         ? `textarea[name="${name}"]`
-    //         : `input[name="${name}"]`;
-
-    //         const rules = validations[selector];
-    //         const hint = input.parentElement.querySelector("p.hint");
-
-    //         if (rules) {
-    //             const error = rules.find(rule => !rule.validate(input.value));
-    //             if (error) {
-    //                 hint.textContent = error.message;
-    //                 hint.classList.remove("hidden");
-    //                 hint.classList.add("input-error");
-    //                 isValid = false;
-    //             } else {
-    //                 hint.textContent = "";
-    //                 hint.classList.add("hidden");
-    //                 hint.classList.remove("input-error");
-    //             }
-    //         }
-    //     })
-
-    //     if (!isValid) {
-    //         e.preventDefault(); // impede o envio se houver erros
-    //     }
-    // })
-
-    document.querySelectorAll('.tab-btn').forEach(button => {
-        button.addEventListener('click', (e) => {
-            e.preventDefault();
-            const alvo = button.getAttribute('data-tab');
-            const ativo = document.querySelector('.tab-btn.active').getAttribute('data-tab');
-
-            // só executa se clicar em uma aba diferente
-            if (alvo === ativo) return;
-
-            // se a aba atual for "empresa", exige validação antes de mudar
-            if (ativo === 'empresa') {
-                alterarAba('empresa', 'pessoal');
-            } else {
-                alterarAba('pessoal', 'empresa', false); // permite voltar sem validação
-            }
+            validarCampo(field, name);
         });
     })
 
     // autocomplete do cep
     let elementoCep = document.querySelector('[name="cep"]')
     elementoCep.addEventListener('blur', () =>{
-        const cep = elementoCep.value.replace(/\D/g, '');
+        const cep = elementoCep.value.replace(/\D/g, '')
         if (cep.length === 8) {
             buscarCEP(cep)
         }
+    })
+
+    document.querySelectorAll('.tab-btn').forEach(button => {
+        button.addEventListener('click', (e) => {
+            e.preventDefault()
+            const alvo = button.getAttribute('data-tab')
+            const ativo = document.querySelector('.tab-btn.active').getAttribute('data-tab')
+
+            // só executa se clicar em uma aba diferente
+            if (alvo === ativo) return
+
+            // se a aba atual for "empresa", exige validação antes de mudar
+            if (ativo === 'empresa') {
+                alterarAba('empresa', 'pessoal')
+            } else {
+                alterarAba('pessoal', 'empresa', false) // permite voltar sem validação
+            }
+        });
     })
 
     // verificacao de formularios nos envios
@@ -302,19 +272,24 @@ function validarCNPJ(cnpj){
 
 async function buscarCEP(cep) {
     try {
-      const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
-      const data = await response.json();
-      if (data.erro) {
-        return;
-      }
-      
-      document.querySelector('[name="cidade"]').value = data.localidade
-      document.querySelector('[name="estado"]').value = data.uf
-      document.querySelector('[name="endereco"]').value = data.logradouro
+        const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`)
+        const data = await response.json()
+        if (data.erro) return
 
+        const cidade = document.querySelector('[name="cidade"]')
+        const estado = document.querySelector('[name="estado"]')
+        const endereco = document.querySelector('[name="endereco"]')
+
+        cidade.value = data.localidade
+        estado.value = data.uf
+        endereco.value = data.logradouro
+
+        validarCampo(cidade, "input[name='cidade']")
+        validarCampo(estado, "input[name='estado']")
+        validarCampo(endereco, "textarea[name='endereco']")
 
     } catch (error) {
-      console.error(error);
+        console.error(error)
     }
 }
 

@@ -109,7 +109,6 @@
         padding-bottom: 1rem;
         padding-top: 10px;
         padding-left: 20px;
-        margin-left: 250px;
         width: 100%;
         color: #333; /* texto escuro */
         transition: max-height 0.5s ease-out, padding 0.3s ease-in-out, visibility 0.4s;
