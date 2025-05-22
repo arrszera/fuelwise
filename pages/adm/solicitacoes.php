@@ -136,22 +136,23 @@
       x: `<svg class="icon" viewBox="0 0 24 24" stroke="currentColor"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`
     };
 
-function abrirModal(request) {
-	console.log(request)
-    document.getElementById('modal-nomeTransportadora').textContent = request.nomeTransportadora 
-    document.getElementById('modal-cnpj').textContent = request.cnpj 
-    document.getElementById('modal-telefone-empresa').textContent = request.telefoneEmpresa
-    document.getElementById('modal-endereco').textContent = request.endereco
-    document.getElementById('modal-cep').textContent = request.cep 
-    document.getElementById('modal-cidade').textContent = request.cidade 
-    document.getElementById('modal-nomeUsuario').textContent = request.nomeUsuario + ' ' + request.sobrenome 
-    document.getElementById('modal-emailUsuario').textContent = request.emailUsuario 
-    document.getElementById('modal-telefone-pessoal').textContent = request.telefoneUsuario
-    document.getElementById('modal-cpf').textContent = request.cpf
-    document.getElementById('modal-status').textContent = getStatusClass(request.status).frase 
+    // TODO Adicionar pontuacao nos campos de cnpj, cpf, telefone e afins...
+    function abrirModal(request) {
+        console.log(request)
+        document.getElementById('modal-nomeTransportadora').textContent = request.nomeTransportadora 
+        document.getElementById('modal-cnpj').textContent = request.cnpj 
+        document.getElementById('modal-telefone-empresa').textContent = request.telefoneEmpresa
+        document.getElementById('modal-endereco').textContent = request.endereco
+        document.getElementById('modal-cep').textContent = request.cep 
+        document.getElementById('modal-cidade').textContent = request.cidade 
+        document.getElementById('modal-nomeUsuario').textContent = request.nomeUsuario + ' ' + request.sobrenome 
+        document.getElementById('modal-emailUsuario').textContent = request.emailUsuario 
+        document.getElementById('modal-telefone-pessoal').textContent = request.telefoneUsuario
+        document.getElementById('modal-cpf').textContent = request.cpf
+        document.getElementById('modal-status').textContent = getStatusClass(request.status).frase 
 
-    document.getElementById('modal').style.display = 'block';
-}
+        document.getElementById('modal').style.display = 'block';
+    }
 
 	function fecharModal(){
 		document.getElementById('modal').style.display = 'none';
