@@ -61,19 +61,20 @@
                 <h1>Solicitações de Cadastro</h1>
                 <p>Revise e aprove ou negue as solicitações de cadastro de transportadoras.</p>
             </header>
-
-            <div class="search-container">
-                <svg class="icon" viewBox="0 0 24 24" stroke="currentColor">
-                <circle cx="11" cy="11" r="7"></circle>
-                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                </svg>
-                <input
-                id="searchInput"
-                type="search"
-                placeholder="Filtrar por nome de empresa ou gerente..."
-                class="search-input"
-                aria-label="Search"
-                />
+            <div class="search-wrapper">
+                <div class="search-container">
+                    <svg class="icon" viewBox="0 0 24 24" stroke="currentColor">
+                    <circle cx="11" cy="11" r="7"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input
+                    id="searchInput"
+                    type="search"
+                    placeholder="Filtrar por nome de empresa ou gerente..."
+                    class="search-input"
+                    aria-label="Search"
+                    />
+                </div>
             </div>
 
             <div class="table-wrapper">
