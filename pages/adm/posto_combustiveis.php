@@ -21,7 +21,7 @@
     <h3>Postos</h3>
 </a>
 <div class="table-container">
-<form method="POST" action="posto_combustiveis_cadastrar_php.php">
+<form method="POST" action="combustivel_cadastrar.php">
 <h2> Atualizando o posto: <?php echo $_GET['nome']; ?> </h2>
     <label for="tipoCombustivel">Tipo de Combustível:</label>
     <select name="tipoCombustivel" required>

@@ -7,17 +7,27 @@
     include('../../elements/alert.php');
     include('../../elements/connection.php');
 
-    $sql = "SELECT * FROM posto ORDER BY idposto DESC";
+    $sql = "SELECT * FROM posto p LEFT JOIN combustivel c ON p.idposto = c.idposto ORDER BY p.idposto DESC";
     $result = $conn->query($sql);
 
     $requests = [];
     if ($result->num_rows > 0) {
         while($row = $result->fetch_assoc()) {
-            $requests[] = [
-                'idposto' => (int)$row['idposto'],
+            $idposto = (int)$row['idposto'];
+            $requests[$idposto] = [
+                'idposto' => $idposto,
                 'nome' => $row['nome'],
                 'endereco' => $row['endereco'],
+                'combustiveis' => []
             ];
+            if (!empty($row['tipo'])) {
+                $requests[$idposto]['combustiveis'][] = [
+                    'idcombustivel' => $row['idcombustivel'],
+                    'tipo' => $row['tipo'],
+                    'preco' => $row['preco']
+                ];
+            }
+            // echo var_dump($requests);
         }
     }
 ?>
@@ -82,11 +92,12 @@
     <div id="modalCombustiveis" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Detalhes do Posto</h2>
+                <h2>Combustíveis do posto</h2>
                 <span onclick="fecharModal()" class="close">&times;</span>
             </div>
-            <p><strong>Nome:</strong> <span id="modal-nome"></span></p>
-            <p><strong>Endereço:</strong> <span id="modal-endereco"></span></p>
+            <div class="modal-footer">
+                <button class="btn primary">Adicionar novo</button>
+            </div>
         </div>
     </div>
 
@@ -123,18 +134,97 @@
             fuel: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
                     <path d="M12 2C10.54 4.1 5 10.12 5 14.5C5 18.09 8.13 21 12 21C15.87 21 19 18.09 19 14.5C19 10.12 13.46 4.1 12 2ZM12 19C9.24 19 7 16.76 7 14.5C7 12.7 10.31 8.53 12 6.45C13.69 8.53 17 12.7 17 14.5C17 16.76 14.76 19 12 19Z"/>
                 </svg>`,
-            x: `<svg class="icon" viewBox="0 0 24 24" stroke="currentColor"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`
+            x: `<svg class="icon" viewBox="0 0 24 24" stroke="currentColor"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`,
+            save: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#2563eb" viewBox="0 0 24 24">
+                        <path d="M17 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7l-2-4zm-1 16h-8v-4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v4zm-1-10H9V5h6v4z"/>
+                    </svg>
+                    `
         };
 
         function ModalAdicionarPosto() {
             document.getElementById('modalAdicionarPosto').style.display = 'block';
         }
 
-        // PLACEHOLDER TODO
-        function abrirModal(request) {
-            document.getElementById('modal-nome').textContent = request.nome;
-            document.getElementById('modal-endereco').textContent = request.endereco;
-            document.getElementById('modal').style.display = 'block';
+        // TODO funcao de adicionar novo combustivel e deletar
+        function abrirModalCombustiveis(combustiveis) {
+                const modal = document.getElementById('modalCombustiveis');
+                const content = modal.querySelector('.modal-content');
+
+                const oldTable = content.querySelector('table');
+                if (oldTable) oldTable.remove();
+
+                const table = document.createElement('table');
+                table.classList.add('modal-table'); // Você pode definir o estilo no CSS
+
+                table.innerHTML = `
+                <thead> 
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Preço (R$)</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${combustiveis.length > 0 ? combustiveis.map(c => {
+                        let tipoCombustivel = '';
+                        switch (c.tipo) {
+                            case '1':
+                                tipoCombustivel = 'Diesel';
+                                break;
+                            case '2':
+                                tipoCombustivel = 'Etanol';
+                                break;
+                            case '3':
+                                tipoCombustivel = 'Gasolina';
+                                break;
+                            case '4':
+                                tipoCombustivel = 'Gasolina Aditivada';
+                                break;
+                            case '5':
+                                tipoCombustivel = 'Diesel S10';
+                                break;
+                            default:
+                                tipoCombustivel = 'Desconhecido';
+                        }
+                        return `<tr>
+                                    <td>${tipoCombustivel}</td>
+                                    <td><input type="number" class="" value='${parseFloat(c.preco).toFixed(2)}' id='preco-${c.idcombustivel}'></td>
+                                    <td>
+                                        <div class="actions">
+                                            <button onclick='excluirCombustivel(${c.idcombustivel})' class="btn-icon btn-deny" title="Excluir">
+                                                ${icons.x}
+                                            </button>
+                                            <button onclick='salvarCombustivel(${c.idcombustivel})' class="btn-icon" title="Salvar alterações">
+                                                ${icons.save}
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>`;
+                    }).join('') :
+                    `<tr><td colspan="2">Nenhum combustível cadastrado.</td></tr>`
+                }
+            `;
+
+            content.appendChild(table);
+
+            modal.style.display = 'block';
+        }
+
+        function salvarCombustivel(idcombustivel){
+            const precoInput = document.getElementById(`preco-${idcombustivel}`);
+            const novoPreco = parseFloat(precoInput.value).toFixed(2);
+
+            if (isNaN(novoPreco) || novoPreco <= 0) {
+                Swal.fire({
+                    title: 'Erro!',
+                    text: 'Por favor, insira um valor válido para o preço.',
+                    icon: 'error',
+                    confirmButtonText: 'Ok'
+                });
+                return;
+            }
+
+            window.location.href = `combustivel_cadastrar.php?idcombustivel=${idcombustivel}&precoCombustivel=${novoPreco}`
         }
 
         function fecharModal() {
@@ -142,7 +232,6 @@
                 element.style.display = 'none';
             });
         }
-
 
         function excluirPosto(idposto) {
             Swal.fire({
@@ -177,20 +266,24 @@
                     <td>${req.endereco}</td>
                     <td>
                         <div class="actions">
-                            <button onclick='abrirModal(req)' class="btn-icon btn-view" title="Ver combustíveis">
+                            <button class="btn-icon btn-view" title="Ver combustíveis">
                                 ${icons.fuel}
                             </button>
-                            <button onclick='excluirPosto(${req.idposto})' class="btn-icon btn-delete" title="Excluir">
+                            <button onclick='excluirPosto(${req.idposto})' class="btn-icon btn-deny" title="Excluir">
                                 ${icons.x}
                             </button>
                         </div>
                     </td>
                 `;
                 tbody.appendChild(tr);
+
+                document.querySelectorAll(".btn-view").forEach(el => el.addEventListener("click", () => {
+                    abrirModalCombustiveis(req.combustiveis)
+                }))
             });
         }
 
-        renderTable(requests);
+        renderTable(Object.values(requests));
 
         const searchInput = document.getElementById('searchInput');
         searchInput.addEventListener('input', () => {
