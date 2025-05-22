@@ -12,11 +12,21 @@
         if ($result = $conn->query($sql)){
             header('Location: postos.php');
         } else {
-            echo"<script>
-                    alert('Erro na adição do posto.');
-                    window.location.href = 'postos.php';
-                </script>";
+            $_SESSION['alert'] = [
+                'title' => 'Sucesso!',
+                'text' => 'Posto adicionado com sucesso.',
+                'icon' => 'success', 
+                'confirmButtonColor' => '#2563eb',
+            ];
+            header("location: postos.php"); exit;
             exit;
         }
     }
+    $_SESSION['alert'] = [
+        'title' => 'Erro!',
+        'text' => 'Preencha todos os campos.',
+        'icon' => 'question', 
+        'confirmButtonColor' => '#2563eb',
+    ];
+    header("location: postos.php"); exit;
 ?>

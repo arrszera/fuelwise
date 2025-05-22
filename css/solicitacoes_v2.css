@@ -177,25 +177,27 @@ svg.icon {
 }
 
 /* formulario */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
 .form-group {
-    margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
 }
 
 .form-group label {
-    display: block;
-    margin-bottom: 0.3rem;
-    font-weight: 500;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
 }
 
-.form-group input {
-    width: 100%;
-    padding: 0.5rem;
-    font-size: 1rem;
-}
-
-.modal-footer {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 1rem;
+input {
+  padding: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  font-size: 1rem;
+  outline: none;
+  margin-bottom: 15px;
 }

@@ -21,7 +21,7 @@
 			'confirmButtonColor' => '#2563eb',
 		];
 
-		header("location: postos_v2.php");
+		header("location: postos.php");
 	}else{
 		echo "Algo deu errado."; 
 	}
