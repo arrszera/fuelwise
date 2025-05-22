@@ -76,6 +76,10 @@ h3{
     width: 50%;
 }
 
+#modalAdicionarCombustivel .modal-content{
+    width: 30%;
+}
+
 .close {
     font-size: 24px;
     cursor: pointer;

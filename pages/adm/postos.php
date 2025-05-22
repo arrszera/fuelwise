@@ -4,22 +4,27 @@
         header('Location: ../index.php');
         exit;
     }
-    include('../../elements/alert.php');
     include('../../elements/connection.php');
-
-    $sql = "SELECT * FROM posto p LEFT JOIN combustivel c ON p.idposto = c.idposto ORDER BY p.idposto DESC";
+    
+    $sql = "SELECT p.idposto, p.nome, p.endereco, c.idcombustivel, c.tipo, c.preco 
+            FROM posto p    
+            LEFT JOIN combustivel c ON p.idposto = c.idposto 
+            ORDER BY p.idposto DESC";
     $result = $conn->query($sql);
-
+    
     $requests = [];
     if ($result->num_rows > 0) {
         while($row = $result->fetch_assoc()) {
             $idposto = (int)$row['idposto'];
-            $requests[$idposto] = [
-                'idposto' => $idposto,
-                'nome' => $row['nome'],
-                'endereco' => $row['endereco'],
-                'combustiveis' => []
-            ];
+
+            if (!isset($requests[$idposto])) {
+                $requests[$idposto] = [
+                    'idposto' => $idposto,
+                    'nome' => $row['nome'],
+                    'endereco' => $row['endereco'],
+                    'combustiveis' => []
+                ];
+            }
             if (!empty($row['tipo'])) {
                 $requests[$idposto]['combustiveis'][] = [
                     'idcombustivel' => $row['idcombustivel'],
@@ -30,24 +35,26 @@
             // echo var_dump($requests);
         }
     }
-?>
+    // var_dump($requests); 
+
+    ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <title>Postos Cadastrados</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="../../css/solicitacoes_v2.css" rel="stylesheet">
+    <head>
+        <title>Postos Cadastrados</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="../../css/solicitacoes_v2.css" rel="stylesheet">
     <link href="../../css/index.css" rel="stylesheet">
     <link href="../../css/header.css" rel="stylesheet">
     <link href="../../css/sidebar.css" rel="stylesheet">
-  </head>
-  <body>
+</head>
+<body>
     <div class="sidebar">
         <?php 
             include('../../elements/sidebar.php'); 
-            include('../../elements/alert.php')
-        ?>
+            include('../../elements/alert.php');
+            ?>
     </div>
     <div class="main">
         <?php include('../../elements/header.php'); ?>
@@ -96,7 +103,7 @@
                 <span onclick="fecharModal()" class="close">&times;</span>
             </div>
             <div class="modal-footer">
-                <button class="btn primary">Adicionar novo</button>
+                <button class="btn primary" onclick="abrirModalAdicionarCombustivel(this)">Adicionar novo</button>
             </div>
         </div>
     </div>
@@ -118,6 +125,36 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn secondary" onclick="fecharModal()">Cancelar</button>
+                    <button type="submit" class="btn primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <div id="modalAdicionarCombustivel" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Adicionar Novo Combustível</h2>
+                <span onclick="fecharModalCombustivel()" class="close">&times;</span>
+            </div>
+            <form method="POST" action="posto_cadastrar.php">
+                <div class="form-group">
+                    <label for="tipoCombustivel">Tipo de combustível</label>
+                    <select name="tipoCombustivel" required>
+                        <option value="0" selected disabled>Selecione um tipo de combustível</option>
+                        <option value="1">Diesel</option>
+                        <option value="2">Etanol</option>
+                        <option value="3">Gasolina</option>
+                        <option value="4">Gasolina Aditivada</option>
+                        <option value="5">Diesel S10</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="precoPosto">Preço</label>
+                    <input type="number" id="precoPosto" name="precoPosto" required>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn secondary" onclick="fecharModalCombustivel()">Cancelar</button>
                     <button type="submit" class="btn primary">Salvar</button>
                 </div>
             </form>
@@ -145,75 +182,61 @@
             document.getElementById('modalAdicionarPosto').style.display = 'block';
         }
 
-        // TODO funcao de adicionar novo combustivel e deletar
-        function abrirModalCombustiveis(combustiveis) {
-                const modal = document.getElementById('modalCombustiveis');
-                const content = modal.querySelector('.modal-content');
-
-                const oldTable = content.querySelector('table');
-                if (oldTable) oldTable.remove();
-
-                const table = document.createElement('table');
-                table.classList.add('modal-table'); // Você pode definir o estilo no CSS
-
-                table.innerHTML = `
-                <thead> 
-                    <tr>
-                        <th>Tipo</th>
-                        <th>Preço (R$)</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${combustiveis.length > 0 ? combustiveis.map(c => {
-                        let tipoCombustivel = '';
-                        switch (c.tipo) {
-                            case '1':
-                                tipoCombustivel = 'Diesel';
-                                break;
-                            case '2':
-                                tipoCombustivel = 'Etanol';
-                                break;
-                            case '3':
-                                tipoCombustivel = 'Gasolina';
-                                break;
-                            case '4':
-                                tipoCombustivel = 'Gasolina Aditivada';
-                                break;
-                            case '5':
-                                tipoCombustivel = 'Diesel S10';
-                                break;
-                            default:
-                                tipoCombustivel = 'Desconhecido';
-                        }
-                        return `<tr>
-                                    <td>${tipoCombustivel}</td>
-                                    <td><input type="number" class="" value='${parseFloat(c.preco).toFixed(2)}' id='preco-${c.idcombustivel}'></td>
-                                    <td>
-                                        <div class="actions">
-                                            <button onclick='excluirCombustivel(${c.idcombustivel})' class="btn-icon btn-deny" title="Excluir">
-                                                ${icons.x}
-                                            </button>
-                                            <button onclick='salvarCombustivel(${c.idcombustivel})' class="btn-icon" title="Salvar alterações">
-                                                ${icons.save}
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>`;
-                    }).join('') :
-                    `<tr><td colspan="2">Nenhum combustível cadastrado.</td></tr>`
-                }
-            `;
-
-            content.appendChild(table);
-
-            modal.style.display = 'block';
+        function adicionarCombustivel(botao){
+            window.href.location = `combustivel_cadastrar.php?idposto=${botao.id}`
         }
-
+        
+        // TODO funcao de adicionar novo combustivel e deletar
+        function abrirModalCombustiveis(combustiveis, idposto) {
+            const modal = document.getElementById('modalCombustiveis')
+            const content = modal.querySelector('.modal-content')
+            const button = modal.querySelector('.btn.primary').id = `posto-${idposto}`
+            
+            const oldTable = content.querySelector('table')
+            if (oldTable) oldTable.remove()
+            
+            const table = document.createElement('table')
+            table.classList.add('modal-table') // Você pode definir o estilo no CSS
+            
+            table.innerHTML = `
+            <thead> 
+            <tr>
+            <th>Tipo</th>
+            <th>Preço (R$)</th>
+            <th>Ações</th>
+            </tr>
+            </thead>
+            <tbody>
+            ${combustiveis.length > 0 ? combustiveis.map(c => {
+                let tipoCombustivel = pegarCombustivel(c.tipo);
+                
+                return `<tr>
+                <td>${tipoCombustivel}</td>
+                <td><input type="number" class="" value='${parseFloat(c.preco).toFixed(2)}' id='preco-${c.idcombustivel}'></td>
+                <td>
+                <div class="actions">
+                <button onclick='excluirCombustivel(${c.idcombustivel})' class="btn-icon btn-deny" title="Excluir">
+                ${icons.x}
+                </button>
+                <button onclick='salvarCombustivel(${c.idcombustivel})' class="btn-icon" title="Salvar alterações">
+                ${icons.save}
+                </button>
+                </div>
+                </td>
+                </tr>`;
+            }).join('') :
+            `<tr><td colspan="2">Nenhum combustível cadastrado.</td></tr>`
+            } `
+            
+            content.appendChild(table)
+            
+            modal.style.display = 'block'
+        }
+        
         function salvarCombustivel(idcombustivel){
             const precoInput = document.getElementById(`preco-${idcombustivel}`);
             const novoPreco = parseFloat(precoInput.value).toFixed(2);
-
+            
             if (isNaN(novoPreco) || novoPreco <= 0) {
                 Swal.fire({
                     title: 'Erro!',
@@ -223,16 +246,24 @@
                 });
                 return;
             }
-
+            
             window.location.href = `combustivel_cadastrar.php?idcombustivel=${idcombustivel}&precoCombustivel=${novoPreco}`
         }
-
+        
+        function abrirModalAdicionarCombustivel(botao){
+            const idposto = botao.id
+            
+            let modal = document.getElementById('modalAdicionarCombustivel')
+            modal.style.display = 'block'
+            modal.value = idposto
+        }
+        
         function fecharModal() {
             document.querySelectorAll('.modal').forEach(element => {
                 element.style.display = 'none';
             });
         }
-
+        
         function excluirPosto(idposto) {
             Swal.fire({
                 title: "Tem certeza?",
@@ -249,51 +280,77 @@
                 }
             });
         }
-
+        
         function renderTable(filtered) {
             const tbody = document.getElementById('tableBody');
             tbody.innerHTML = '';
-
+            
             if (filtered.length === 0) {
                 tbody.innerHTML = `<tr><td class="no-results" colspan="3">Nenhum posto encontrado.</td></tr>`;
                 return;
             }
-
+            
             filtered.forEach(req => {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td class="font-medium">${req.nome}</td>
-                    <td>${req.endereco}</td>
-                    <td>
-                        <div class="actions">
-                            <button class="btn-icon btn-view" title="Ver combustíveis">
-                                ${icons.fuel}
+                <td class="font-medium">${req.nome}</td>
+                <td>${req.endereco}</td>
+                <td>
+                <div class="actions">
+                <button class="btn-icon btn-view" title="Ver combustíveis">
+                ${icons.fuel}
+                </button>
+                <button onclick='excluirPosto(${req.idposto})' class="btn-icon btn-deny" title="Excluir">
+                ${icons.x}
                             </button>
-                            <button onclick='excluirPosto(${req.idposto})' class="btn-icon btn-deny" title="Excluir">
-                                ${icons.x}
-                            </button>
-                        </div>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-
-                document.querySelectorAll(".btn-view").forEach(el => el.addEventListener("click", () => {
-                    abrirModalCombustiveis(req.combustiveis)
-                }))
-            });
-        }
-
-        renderTable(Object.values(requests));
-
-        const searchInput = document.getElementById('searchInput');
-        searchInput.addEventListener('input', () => {
-            const term = searchInput.value.toLowerCase();
-            const filtered = requests.filter(r =>
+                            </div>
+                            </td>
+                            `;
+                            tbody.appendChild(tr);
+                            
+                            document.querySelectorAll(".btn-view").forEach(el => el.addEventListener("click", () => {
+                                abrirModalCombustiveis(req.combustiveis, req.idposto)
+                            }))
+                        });
+                    }
+                    
+                    renderTable(Object.values(requests));
+                    
+                    function pegarCombustivel(tipo){
+                        switch (tipo) {
+                            case '1':
+                                return 'Diesel';
+                                break;
+                                case '2':
+                                    return 'Etanol';
+                                    break;
+                                    case '3':
+                                        return 'Gasolina';
+                                        break;
+                                        case '4':
+                                            return 'Gasolina Aditivada';
+                                            break;
+                                            case '5':
+                                                return 'Diesel S10';
+                                                break;
+                                                default:
+                                                    return 'Desconhecido';
+                                                }
+                                            }
+                                            
+                                            const searchInput = document.getElementById('searchInput');
+                                            searchInput.addEventListener('input', () => {
+                                                const term = searchInput.value.toLowerCase();
+                                                const filtered = requests.filter(r =>
                 r.nome.toLowerCase().includes(term) ||
                 r.endereco.toLowerCase().includes(term)
             );
             renderTable(filtered);
         });
-    </script>
+        
+                function fecharModalCombustivel(){
+                    document.getElementById('modalAdicionarCombustivel').style.display = 'none'
+                }
+        </script>
   </body>
-</html>
+  </html>

@@ -6,6 +6,7 @@ body{
     width: 250px;
     height: 100%;
     color: white;
+    position: fixed;
     top: 0;
     left: 0;
     padding-top: 20px;
@@ -56,7 +57,14 @@ body{
 }
 .content{
     padding: 20px;
+    height: 100%;
+    padding-left: 270px;
 }
+
+.header{
+    padding-left: 270px;
+}
+
 @media screen and (max-width: 1062px) {
     .sidebar{
         display: none;
