@@ -2,10 +2,10 @@
     include('autenticacaoGerente.php');
     if (isset($_GET['idtransportadora']) && isset($_SESSION['idtransportadora']) && $_SESSION['gerente'] == 1 && $_GET['idtransportadora'] == $_SESSION['idtransportadora']){
         include("../../elements/connection.php");
-        $nome = $_POST["nome"];
+        $nome = $_POST["nome_usuario"];
         $email = $_POST["email"];
         $senha = password_hash($_POST["senha"], PASSWORD_DEFAULT);
-        $telefone = $_POST["telefone"];
+        $telefone = $_POST["telefone_usuario"];
         $cpf = $_POST["cpf"];
         $gerente = $_POST["gerente"];
         
