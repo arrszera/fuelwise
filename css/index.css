@@ -70,14 +70,21 @@ h3{
     justify-content: space-around;
     gap: 5px;
     background-color: white;
-    margin: 10% auto;
+    margin: 12% auto;
     padding: 20px;
     border-radius: 5px;
     width: 50%;
 }
 
 #modalAdicionarCombustivel .modal-content{
+    margin: 9% auto;
     width: 30%;
+    height: 50%;
+}
+
+.modal-content select, input {
+    font-size: 0.75rem;
+    height: 2rem;
 }
 
 .close {

@@ -8,10 +8,15 @@
 		include('../../elements/connection.php');
 		$query = "DELETE FROM combustivel WHERE idcombustivel = ".$_GET['idcombustivel'];
 		$resultado = $conn->query($query);
-		$idposto = $_GET["idposto"];
-        $nome = $_GET["nomeposto"];
 
-		header('Location: posto_combustiveis.php?id='.$idposto.'&nome='.$nome);
+		 $_SESSION['alert'] = [
+			'title' => 'Sucesso!',
+			'text' => 'Combustível deletado com sucesso.',
+			'icon' => 'success', 
+			'confirmButtonColor' => '#2563eb',
+		];
+
+		header('Location: postos.php');
 	}else{
 		echo "Algo deu errado."; 
 	}

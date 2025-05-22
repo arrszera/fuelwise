@@ -96,6 +96,29 @@
         </div>
     </div>
 
+    <div id="modalAdicionarPosto" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Adicionar Novo Posto</h2>
+                <span onclick="fecharModal()" class="close">&times;</span>
+            </div>
+            <form method="POST" action="posto_cadastrar.php">
+                <div class="form-group">
+                    <label for="nome">Nome do Posto</label>
+                    <input placeholder="Escreva o nome do Posto" type="text" id="nome" name="nomePosto" required>
+                </div>
+                <div class="form-group">
+                    <label for="endereco">Endereço</label>
+                    <input placeholder="Escreva o endereço do posto" type="text" id="enderecoPosto" name="enderecoPosto" required>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn secondary" onclick="fecharModal()">Cancelar</button>
+                    <button type="submit" class="btn primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <div id="modalCombustiveis" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -107,29 +130,6 @@
             </div>
         </div>
     </div>
-
-    <div id="modalAdicionarPosto" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Adicionar Novo Posto</h2>
-                <span onclick="fecharModal()" class="close">&times;</span>
-            </div>
-            <form method="POST" action="posto_cadastrar.php">
-                <div class="form-group">
-                    <label for="nome">Nome do Posto</label>
-                    <input type="text" id="nome" name="nomePosto" required>
-                </div>
-                <div class="form-group">
-                    <label for="endereco">Endereço</label>
-                    <input type="text" id="enderecoPosto" name="enderecoPosto" required>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn secondary" onclick="fecharModal()">Cancelar</button>
-                    <button type="submit" class="btn primary">Salvar</button>
-                </div>
-            </form>
-        </div>
-    </div>
     
     <div id="modalAdicionarCombustivel" class="modal">
         <div class="modal-content">
@@ -137,7 +137,7 @@
                 <h2>Adicionar Novo Combustível</h2>
                 <span onclick="fecharModalCombustivel()" class="close">&times;</span>
             </div>
-            <form method="POST" action="posto_cadastrar.php">
+            <form method="POST" action="combustivel_cadastrar.php">
                 <div class="form-group">
                     <label for="tipoCombustivel">Tipo de combustível</label>
                     <select name="tipoCombustivel" required>
@@ -150,9 +150,10 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="precoPosto">Preço</label>
-                    <input type="number" id="precoPosto" name="precoPosto" required>
+                    <label for="precoCombustivel">Preço</label>
+                    <input plaecholder="Escreva o preço do combustível" type="number" step="0.01" id="precoCombustivel" name="precoCombustivel" required>
                 </div>
+                <input type="hidden" name="idposto" id="idposto">
                 <div class="modal-footer">
                     <button type="button" class="btn secondary" onclick="fecharModalCombustivel()">Cancelar</button>
                     <button type="submit" class="btn primary">Salvar</button>
@@ -176,21 +177,18 @@
                         <path d="M17 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7l-2-4zm-1 16h-8v-4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v4zm-1-10H9V5h6v4z"/>
                     </svg>
                     `
-        };
+        }
 
         function ModalAdicionarPosto() {
             document.getElementById('modalAdicionarPosto').style.display = 'block';
         }
-
-        function adicionarCombustivel(botao){
-            window.href.location = `combustivel_cadastrar.php?idposto=${botao.id}`
-        }
-        
+  
         // TODO funcao de adicionar novo combustivel e deletar
         function abrirModalCombustiveis(combustiveis, idposto) {
             const modal = document.getElementById('modalCombustiveis')
+            const modalAdicionar = document.getElementById('modalAdicionarCombustivel')
             const content = modal.querySelector('.modal-content')
-            const button = modal.querySelector('.btn.primary').id = `posto-${idposto}`
+            modalAdicionar.querySelector('#idposto').value = idposto
             
             const oldTable = content.querySelector('table')
             if (oldTable) oldTable.remove()
@@ -200,37 +198,42 @@
             
             table.innerHTML = `
             <thead> 
-            <tr>
-            <th>Tipo</th>
-            <th>Preço (R$)</th>
-            <th>Ações</th>
-            </tr>
+                <tr>
+                    <th>Tipo</th>
+                    <th>Preço (R$)</th>
+                    <th>Ações</th>
+                </tr>
             </thead>
             <tbody>
             ${combustiveis.length > 0 ? combustiveis.map(c => {
-                let tipoCombustivel = pegarCombustivel(c.tipo);
+                let tipoCombustivel = pegarCombustivel(c.tipo)
                 
-                return `<tr>
-                <td>${tipoCombustivel}</td>
-                <td><input type="number" class="" value='${parseFloat(c.preco).toFixed(2)}' id='preco-${c.idcombustivel}'></td>
-                <td>
-                <div class="actions">
-                <button onclick='excluirCombustivel(${c.idcombustivel})' class="btn-icon btn-deny" title="Excluir">
-                ${icons.x}
-                </button>
-                <button onclick='salvarCombustivel(${c.idcombustivel})' class="btn-icon" title="Salvar alterações">
-                ${icons.save}
-                </button>
-                </div>
-                </td>
+                return `
+                <tr>
+                    <td>${tipoCombustivel}</td>
+                    <td><input type="number" step="0.01" value='${parseFloat(c.preco).toFixed(2)}' id='preco-${c.idcombustivel}'></td>
+                    <td>
+                        <div class="actions">
+                            <button onclick='excluirCombustivel(${c.idcombustivel})' class="btn-icon btn-deny" title="Excluir">
+                            ${icons.x}
+                            </button>
+                            <button onclick='salvarCombustivel(${c.idcombustivel})' class="btn-icon" title="Salvar alterações">
+                            ${icons.save}
+                            </button>
+                        </div>
+                    </td>
                 </tr>`;
             }).join('') :
             `<tr><td colspan="2">Nenhum combustível cadastrado.</td></tr>`
-            } `
+            } ` // condicional na mesma linha
             
             content.appendChild(table)
             
             modal.style.display = 'block'
+        }
+
+        function adicionarCombustivel(){
+            window.href.location = `combustivel_cadastrar.php`
         }
         
         function salvarCombustivel(idcombustivel){
@@ -248,6 +251,17 @@
             }
             
             window.location.href = `combustivel_cadastrar.php?idcombustivel=${idcombustivel}&precoCombustivel=${novoPreco}`
+        }
+
+        function excluirCombustivel(idcombustivel){
+            Swal.fire({
+                title: 'Excluir combustível',
+                text: 'Você tem certeza que deseja excluir esse combustível?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Sim, excluir',
+                cancelButtonText: 'Não, cancelar',
+            }).then((result) => window.location.href = `combustivel_deletar.php?idcombustivel=${idcombustivel}`)
         }
         
         function abrirModalAdicionarCombustivel(botao){
@@ -282,75 +296,83 @@
         }
         
         function renderTable(filtered) {
-            const tbody = document.getElementById('tableBody');
-            tbody.innerHTML = '';
-            
+            const tbody = document.getElementById('tableBody')
+            tbody.innerHTML = ''
+
             if (filtered.length === 0) {
-                tbody.innerHTML = `<tr><td class="no-results" colspan="3">Nenhum posto encontrado.</td></tr>`;
-                return;
+                tbody.innerHTML = `<tr><td class="no-results" colspan="3">Nenhum posto encontrado.</td></tr>`
+                return
             }
-            
+
             filtered.forEach(req => {
-                const tr = document.createElement('tr');
+                const tr = document.createElement('tr')
+
                 tr.innerHTML = `
                 <td class="font-medium">${req.nome}</td>
                 <td>${req.endereco}</td>
                 <td>
-                <div class="actions">
-                <button class="btn-icon btn-view" title="Ver combustíveis">
-                ${icons.fuel}
-                </button>
-                <button onclick='excluirPosto(${req.idposto})' class="btn-icon btn-deny" title="Excluir">
-                ${icons.x}
-                            </button>
-                            </div>
-                            </td>
-                            `;
-                            tbody.appendChild(tr);
-                            
-                            document.querySelectorAll(".btn-view").forEach(el => el.addEventListener("click", () => {
-                                abrirModalCombustiveis(req.combustiveis, req.idposto)
-                            }))
-                        });
-                    }
-                    
-                    renderTable(Object.values(requests));
-                    
-                    function pegarCombustivel(tipo){
-                        switch (tipo) {
-                            case '1':
-                                return 'Diesel';
-                                break;
-                                case '2':
-                                    return 'Etanol';
-                                    break;
-                                    case '3':
-                                        return 'Gasolina';
-                                        break;
-                                        case '4':
-                                            return 'Gasolina Aditivada';
-                                            break;
-                                            case '5':
-                                                return 'Diesel S10';
-                                                break;
-                                                default:
-                                                    return 'Desconhecido';
-                                                }
-                                            }
-                                            
-                                            const searchInput = document.getElementById('searchInput');
-                                            searchInput.addEventListener('input', () => {
-                                                const term = searchInput.value.toLowerCase();
-                                                const filtered = requests.filter(r =>
+                    <div class="actions">
+                        <button class="btn-icon btn-view" title="Ver combustíveis" data-idposto="${req.idposto}">
+                            ${icons.fuel}
+                        </button>
+                        <button onclick='excluirPosto(${req.idposto})' class="btn-icon btn-deny" title="Excluir">
+                            ${icons.x}
+                        </button>
+                    </div>
+                </td>
+                `
+
+                tbody.appendChild(tr)
+            })
+
+            // Agora associamos cada botão ao seu posto correspondente
+            document.querySelectorAll(".btn-view").forEach(el => {
+                const idposto = el.getAttribute("data-idposto")
+                el.addEventListener("click", () => {
+                    abrirModalCombustiveis(requests[idposto].combustiveis, idposto)
+                })
+            })
+        }
+                
+        renderTable(Object.values(requests))
+            
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', () => {
+            const term = searchInput.value.toLowerCase()
+            const filtered = Object.values(requests).filter(r =>
                 r.nome.toLowerCase().includes(term) ||
                 r.endereco.toLowerCase().includes(term)
-            );
-            renderTable(filtered);
-        });
+            )
+            renderTable(filtered)
+        })
+
         
-                function fecharModalCombustivel(){
-                    document.getElementById('modalAdicionarCombustivel').style.display = 'none'
-                }
-        </script>
+        function fecharModalCombustivel(){
+            document.getElementById('modalAdicionarCombustivel').style.display = 'none'
+        }
+        
+        function pegarCombustivel(tipo){
+            switch (tipo) {
+                case '1':
+                    return 'Diesel';
+                    break;
+                case '2':
+                    return 'Etanol';
+                    break;
+                case '3':
+                    return 'Gasolina';
+                    break;
+                case '4':
+                    return 'Gasolina Aditivada';
+                    break;
+                case '5':
+                    return 'Diesel S10';
+                    break;
+                default:
+                    return 'Desconhecido';
+            }
+        }
+
+    </script>
   </body>
   </html>

@@ -193,11 +193,20 @@ svg.icon {
   margin-bottom: 0.25rem;
 }
 
-form input {
+form input, select {
   padding: 0.5rem;
   border: 1px solid #d1d5db;
   border-radius: 0.375rem;
   font-size: 1rem;
+  outline: none;
+  margin-bottom: 15px;
+}
+
+.modal input, select {
+  padding: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
   outline: none;
   margin-bottom: 15px;
 }
