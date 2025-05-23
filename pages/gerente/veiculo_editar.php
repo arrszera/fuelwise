@@ -1,7 +1,8 @@
 <?php
     include('autenticacaoGerente.php');
 	// echo var_dump($_POST); exit;
-	// TODO verificacoes
+
+	// TODO verificacoes de placa
 	if(isset($_POST['idveiculo']) && isset($_GET['idtransportadora'])){
 		include('../../elements/connection.php');
 

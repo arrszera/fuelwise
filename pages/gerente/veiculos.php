@@ -228,7 +228,7 @@
             tbody.innerHTML = ''
 
             if (filtered.length === 0) {
-                tbody.innerHTML = `<tr><td class="no-results" colspan="3">Nenhum integrante encontrado.</td></tr>`
+                tbody.innerHTML = `<tr><td class="no-results" colspan="3">Nenhum veículo encontrado.</td></tr>`
                 return
             }
 
