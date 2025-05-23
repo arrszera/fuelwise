@@ -23,7 +23,7 @@ if (isset($_SESSION['gerente']) && isset($_SESSION['adm']) && $_SESSION['gerente
     echo '
     <ul>
         <li class="mobile-menu-item"><a href="/FuelWise/pages/motorista/postos.php">Checar Postos</a></li>
-        <li class="mobile-menu-item"><a href="#" onclick="scrollIntoView()">Suporte &nbsp;<box-icon color="#ECEBE9" name="support"></box-icon></a></li>
+        <li class="mobile-menu-item"><a href="/FuelWise/pages/suporte.php" onclick="scrollIntoView()">Suporte &nbsp;<box-icon color="#ECEBE9" name="support"></box-icon></a></li>
         <li class="mobile-menu-item"><a href="/FuelWise/pages/logout.php">Logout</a></li>
     </ul>';
 } elseif (isset($_SESSION['gerente']) && $_SESSION['gerente'] == '1') {
@@ -33,16 +33,16 @@ if (isset($_SESSION['gerente']) && isset($_SESSION['adm']) && $_SESSION['gerente
         <li class="mobile-menu-item"><a href="/FuelWise/pages/gerente/integrantes.php?idtransportadora=' . $_SESSION['idtransportadora'] . '">Gerenciar integrantes</a></li>
         <li class="mobile-menu-item"><a href="/FuelWise/pages/gerente/veiculos.php?idtransportadora=' . $_SESSION['idtransportadora'] . '">Gerenciar caminhões</a></li>
         <li class="mobile-menu-item"><a href="/FuelWise/pages/gerente/viagens.php?idtransportadora=' . $_SESSION['idtransportadora'] . '">Viagens</a></li>
-        <li class="mobile-menu-item"><a href="#" onclick="scrollIntoView()">Suporte &nbsp;<box-icon color="black" name="support"></box-icon></a></li>
+        <li class="mobile-menu-item"><a href="/FuelWise/pages/suporte.php">Suporte &nbsp;<box-icon color="black" name="support"></box-icon></a></li>
         <li class="mobile-menu-item"><a href="/FuelWise/pages/logout.php">Logout</a></li>
     </ul>';
 } elseif ($_SESSION['adm'] == '1' || $_SESSION['role'] == 3) {
     // Menu para Administrador/Suporte
     echo '
     <ul>
-        <li class="mobile-menu-item"><a href="/FuelWise/pages/adm/solicitacoes.php">Aprovar Cadastros</a></li>
+        <li class="mobile-menu-item"><a href="/FuelWise/pages/adm/solicitacoes.php">Aprovar cadastros</a></li>
         <li class="mobile-menu-item"><a href="/FuelWise/pages/adm/postos.php">Gerenciar postos</a></li>
-        <li class="mobile-menu-item"><a href="#">Verificar Denúncias</a></li>
+        <li class="mobile-menu-item"><a href="#">Verificar chamados</a></li>
         <li class="mobile-menu-item"><a href="/FuelWise/pages/logout.php">Logout</a></li>
     </ul>';
 }

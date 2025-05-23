@@ -72,10 +72,10 @@ CREATE TABLE IF NOT EXISTS `combustivel` (
 
 CREATE TABLE IF NOT EXISTS `denuncia` (
   `iddenuncia` INT NOT NULL AUTO_INCREMENT,
-  `idposto` INT NOT NULL,
+  `idusuario` INT NOT NULL,
   `motivo` VARCHAR(250) NOT NULL,
   PRIMARY KEY (`iddenuncia`),
-  FOREIGN KEY (`idposto`) REFERENCES `posto` (`idposto`)
+  FOREIGN KEY (`idusuario`) REFERENCES `usuario` (`idusuario`)
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS `anexos` (

@@ -23,16 +23,6 @@ body.body {
   margin-bottom: 2rem;
 }
 
-.logo-circle {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 3rem;
-  height: 3rem;
-  border-radius: 9999px;
-  margin: 0 auto;
-}
-
 .title {
   text-align: center;
   margin-top: 1rem;
