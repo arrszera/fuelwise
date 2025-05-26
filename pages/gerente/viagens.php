@@ -192,23 +192,22 @@
                 <span onclick="fecharModal()" class="close">&times;</span>
             </div>
             <form method="POST" action="viagem_editar.php?idtransportadora=<?php echo $_GET['idtransportadora']; ?>">
-                            <div class="form-group">
-                <label for="nome">Motorista</label>
-                <?php 
-                    $sql3 = "SELECT idusuario, nome FROM usuario";
-                    $motoristas = $conn->query($sql3);
-                    if ($motoristas->num_rows > 0) {
-                        echo '<select name="idusuario" id="idusuario">';
-                        while ($row = $motoristas->fetch_assoc()) {
-                            echo '<option value="' . $row['idusuario'] . '">' . $row['nome'] . '</option>';
+                <div class="form-group">
+                    <label for="nome">Motorista</label>
+                    <?php 
+                        $sql3 = "SELECT idusuario, nome FROM usuario";
+                        $motoristas = $conn->query($sql3);
+                        if ($motoristas->num_rows > 0) {
+                            echo '<select name="idusuario" id="idusuario">';
+                            while ($row = $motoristas->fetch_assoc()) {
+                                echo '<option value="' . $row['idusuario'] . '">' . $row['nome'] . '</option>';
+                            }
+                            echo '</select>';
+                        } else {
+                            echo "Nenhum motorista encontrado";
                         }
-                        echo '</select>';
-                    } else {
-                        echo "Nenhum motorista encontrado";
-                    }
-                ?>
-            </div>
-
+                    ?>
+                </div>
                 <div class="form-group">
                     <label for="peso">Peso</label>
                     <input placeholder="Escreva o peso da carga" type="text" id="peso" name="peso" required>
@@ -221,13 +220,18 @@
                     <label for="data_inicio">Data Início</label>
                     <input id="data_inicio" name="data_inicio" type="datetime-local" class="form-control">
                 </div>
+                <div class="form-group">
+                    <label for="data_termino">Data Término</label>
+                    <small>Opcional, pode ser editao ou preenchido a qualquer momento.</small>
+                    <input id="data_termino" name="data_termino" type="datetime-local" class="form-control">
+                </div>
+                
                 <input type="hidden" name="idviagem">
 
                 <div class="modal-footer">
                     <button type="button" class="btn secondary" onclick="fecharModal()">Cancelar</button>
                     <button type="submit" class="btn primary">Salvar</button>
                 </div>
-
             </form>
         </div>
     </div>
@@ -267,6 +271,7 @@
             form.querySelector('[name="peso"]').value = dados.peso || ''
             form.querySelector('[name="obs"]').value = dados.obs || ''
             form.querySelector('[name="data_inicio"]').value = dados.data_inicio || ''
+            form.querySelector('[name="data_termino"]').value = dados.data_termino || ''
             
             let hiddenId = form.querySelector('input[name="idviagem"]')
             hiddenId.value = dados.idviagem

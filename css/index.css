@@ -104,6 +104,12 @@ h3{
 #modalAdicionarIntegrante .modal-content{
     margin: 6% auto;
 }
+#modalEditarVeiculo .modal-content{
+    margin: 4% auto;
+}
+#modalAdicionarVeiculo .modal-content{
+    margin: 4% auto;
+}
 
 .file-list {
   margin-top: 10px;
