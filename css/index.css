@@ -110,6 +110,12 @@ h3{
 #modalAdicionarVeiculo .modal-content{
     margin: 4% auto;
 }
+#modalEditarViagem .modal-content{
+    margin: 4% auto;
+}
+#modalAdicionarViagem .modal-content{
+    margin: 2% auto;
+}
 
 .file-list {
   margin-top: 10px;

@@ -70,18 +70,23 @@ CREATE TABLE IF NOT EXISTS `combustivel` (
   FOREIGN KEY (`idposto`) REFERENCES `posto` (`idposto`)
 ) ENGINE=InnoDB;
 
+DROP TABLE denuncia;
+
 CREATE TABLE IF NOT EXISTS `denuncia` (
   `iddenuncia` INT NOT NULL AUTO_INCREMENT,
   `idusuario` INT NOT NULL,
   `motivo` VARCHAR(250) NOT NULL,
+  `titulo` VARCHAR(50) NOT NULL,
+  `data_criacao` DATE NOT NULL,
   PRIMARY KEY (`iddenuncia`),
   FOREIGN KEY (`idusuario`) REFERENCES `usuario` (`idusuario`)
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS `anexos` (
-  `idanexos` INT NOT NULL,
+  `idanexos` INT NOT NULL AUTO_INCREMENT,
   `iddenuncia` INT NOT NULL,
   `path` VARCHAR(100) NOT NULL,
+  `nome_arquivo` VARCHAR(100) NOT NULL,
   PRIMARY KEY (`idanexos`),
   FOREIGN KEY (`iddenuncia`) REFERENCES `denuncia` (`iddenuncia`)
 ) ENGINE=InnoDB;

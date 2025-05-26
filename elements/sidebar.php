@@ -42,7 +42,7 @@ if (isset($_SESSION['gerente']) && isset($_SESSION['adm']) && $_SESSION['gerente
     <ul>
         <li class="mobile-menu-item"><a href="/FuelWise/pages/adm/solicitacoes.php">Aprovar cadastros</a></li>
         <li class="mobile-menu-item"><a href="/FuelWise/pages/adm/postos.php">Gerenciar postos</a></li>
-        <li class="mobile-menu-item"><a href="#">Verificar chamados</a></li>
+        <li class="mobile-menu-item"><a href="/FuelWise/pages/adm/denuncias.php">Verificar chamados</a></li>
         <li class="mobile-menu-item"><a href="/FuelWise/pages/logout.php">Logout</a></li>
     </ul>';
 }

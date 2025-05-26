@@ -300,7 +300,8 @@
                 if (result.isConfirmed) {
                     window.location.href = `combustivel_deletar.php?id=${idposto}`;
                 }
-            });        }
+            });        
+        }
         
         function abrirModalAdicionarCombustivel(botao){
             const idposto = botao.id

@@ -40,13 +40,20 @@
 			<h2>Suporte</h2>
 		</div>
 
-		<form class="form" method="POST" action="cadastro_transportadora_php.php" enctype="multipart/form-data">
+		<form class="form" method="POST" action="suporte_php.php" enctype="multipart/form-data">
 			<div class="card-body">
 
 			<div class="tab-content" id="empresa">
 				<div class="form-group">
+					<label>Título</label>
+					<p class="hint">Curto e sucinto</p>
+					<input value="<?php echo(isset($_SESSION['form_data']) ? $_SESSION['form_data']['titulo'] : ''); ?>" name="titulo"/>
+				</div>
+				<div class="form-group">
 					<label>Motivo</label>
-					<textarea maxlength="250" style="height: 150px" oninput="atualizarContador()" placeholder="Detalhe aqui o motivo de sua chamada" id="motivo" name="motivo"> </textarea>
+					<textarea maxlength="250" style="height: 150px" oninput="atualizarContador()" placeholder="Detalhe aqui o motivo de sua chamada" id="motivo" name="motivo">
+						<?php echo(isset($_SESSION['form_data']) ? $_SESSION['form_data']['motivo'] : ''); ?>
+					</textarea>
 					<p class="hint">Explique detalhadamente o ocorrido para receber o suporte mais eficiente. (<span id="contador">Caracteres restantes: 250</span>)</p>
 				</div>
 				<br>
@@ -62,7 +69,7 @@
 				</div>
 				
 				<div class="form-actions right">
-				<button class="btn primary" type="button" onclick="alterarAba('empresa', 'pessoal')">Enviar chamado</button>
+				<button class="btn primary" type="submit">Enviar chamado</button>
 				</div>
 
 			</div>
@@ -136,6 +143,8 @@
 			contador.style.color = "#333"
 		}
 	}
+
+	atualizarContador();
   </script>
 </body>
 </html>
