@@ -163,7 +163,7 @@
                 <div class="form-group">
                     <label for="tipoCombustivel">Tipo de combustível</label>
                     <select name="tipoCombustivel" required>
-                        <option value="0" selected disabled>Selecione um tipo de combustível</option>
+                        <option value="" selected disabled>Selecione um tipo de combustível</option>
                         <option value="1">Diesel</option>
                         <option value="2">Etanol</option>
                         <option value="3">Gasolina</option>
@@ -173,7 +173,7 @@
                 </div>
                 <div class="form-group">
                     <label for="precoCombustivel">Preço</label>
-                    <input plaecholder="Escreva o preço do combustível" type="number" step="0.01" id="precoCombustivel" name="precoCombustivel" required>
+                    <input placeholder="Escreva o preço do combustível" type="number" step="0.01" id="precoCombustivel" name="precoCombustivel" required>
                 </div>
                 <input type="hidden" name="idposto" id="idposto">
                 <div class="modal-footer">
@@ -296,8 +296,11 @@
                 showCancelButton: true,
                 confirmButtonText: 'Sim, excluir',
                 cancelButtonText: 'Não, cancelar',
-            }).then((result) => window.location.href = `combustivel_deletar.php?idcombustivel=${idcombustivel}`)
-        }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = `combustivel_deletar.php?id=${idposto}`;
+                }
+            });        }
         
         function abrirModalAdicionarCombustivel(botao){
             const idposto = botao.id

@@ -319,7 +319,7 @@
                 <td>${req.data_termino == 0 || !req.data_termino ? 'Em andamento' : req.data_termino}</td>
                 <td>
                     <div class="actions">
-                        <button class="btn-icon btn-edit" title="Editar viagme" data-idviagem="${req.idviagem}">
+                        <button class="btn-icon btn-edit" title="Editar viagem" data-idviagem="${req.idviagem}">
                             ${icons.edit}
                         </button>
                 
