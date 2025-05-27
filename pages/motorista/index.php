@@ -59,6 +59,14 @@ if ($result->num_rows > 0) {
 }
 
 ?>
+<?php if ($viagemAtual) { ?>
+    <script>
+        const destinoViagem = {
+            latitude: <?= json_encode($viagemAtual['latitudeDestino']) ?>,
+            longitude: <?= json_encode($viagemAtual['longitudeDestino']) ?>
+        };
+    </script>
+<?php } ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -212,7 +220,7 @@ if ($result->num_rows > 0) {
     <script src="../../js/index.js"></script>
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
 <script>
-    mapboxgl.accessToken = 'pk.eyJ1IjoibHVjYXM1NTVhbmRyaWFuaSIsImEiOiJjbWI2dWI5MTAwMDNkMm9wdDY4N2VwZW9lIn0.51UoNwyRk5FfYtAslMGyMg';
+    mapboxgl.accessToken = 'pk.eyJ1IjoibHVjYXM1NTVhbmRyaWFuaSIsImEiOiJjbWI2eXhlbmowNGs0MnFxNWxyOTdxbWVkIn0.16A1c8XvHsVgUK8cs9CtqA';
 
     if ("geolocation" in navigator) {
         navigator.geolocation.getCurrentPosition(async function(position) {
@@ -281,7 +289,49 @@ if ($result->num_rows > 0) {
                             .addTo(map);
                     });
                 })()
+                if (typeof destinoViagem !== 'undefined') {
+                    const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${longitude},${latitude};${destinoViagem.longitude},${destinoViagem.latitude}?geometries=geojson&access_token=${mapboxgl.accessToken}`;
 
+                    fetch(url)
+                        .then(response => response.json())
+                        .then(data => {
+                            const route = data.routes[0].geometry;
+
+                            map.addSource('route', {
+                                type: 'geojson',
+                                data: {
+                                    type: 'Feature',
+                                    geometry: {
+                                        type: 'LineString',
+                                        coordinates: route.coordinates
+                                    }
+                                }
+                            });
+
+                            map.addLayer({
+                                id: 'route',
+                                type: 'line',
+                                source: 'route',
+                                layout: {
+                                    'line-join': 'round',
+                                    'line-cap': 'round'
+                                },
+                                paint: {
+                                    'line-color': '#0074D9',
+                                    'line-width': 4
+                                }
+                            });
+
+                            // Adiciona marcador no destino
+                            new mapboxgl.Marker({ color: 'green' })
+                                .setLngLat([destinoViagem.longitude, destinoViagem.latitude])
+                                .setPopup(new mapboxgl.Popup().setHTML("<strong>Destino da viagem</strong>"))
+                                .addTo(map);
+                        })
+                        .catch(error => {
+                            console.error('Erro ao buscar rota:', error);
+                        });
+                }
             })
             
 

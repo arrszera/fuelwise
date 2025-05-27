@@ -131,3 +131,10 @@ CREATE TABLE IF NOT EXISTS `transportadora_usuario` (
   FOREIGN KEY (`idusuario`) REFERENCES `usuario` (`idusuario`),
   FOREIGN KEY (`idtransportadora`) REFERENCES `transportadora` (`idtransportadora`)
 ) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `pagamento` (
+  `idpagamento` INT NOT NULL AUTO_INCREMENT,
+  `idusuario` INT NOT NULL,
+  `idtransportadora` INT NOT NULL,
+  FOREIGN KEY (`idusuario`) REFERENCES 
+)
