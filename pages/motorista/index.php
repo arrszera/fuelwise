@@ -3,7 +3,60 @@
 
     include('../../elements/connection.php');
 
-    $sql = "SELECT * FROM viagem WHERE idusuario = ". $_SESSION['id'];
+    $sql = "SELECT * FROM viagem WHERE idusuario = ". $_SESSION['id'] . " AND status = 0 ORDER BY data_inicio ASC";
+    $agora = new DateTime('now', new DateTimeZone('America/Sao_Paulo'));
+    $requests = [];
+    $viagemAtual = null;
+    $proximaViagem = null;
+    $result = $conn->query($sql);
+if ($result->num_rows > 0) {
+    $viagensFuturas = [];
+    
+    while ($row = $result->fetch_assoc()) {
+        $idviagem = (int)$row['idviagem'];
+
+        $requests[$idviagem] = [
+            'idviagem' => $idviagem,
+            'idveiculo' => $row['idveiculo'],
+            'data_inicio' => $row['data_inicio'],
+            'enderecoOrigem' => $row['endereco_origem'],
+            'latitudeOrigem' => $row['latitude_origem'],
+            'longitudeOrigem' => $row['longitude_origem'],
+            'enderecoDestino' => $row['endereco_destino'],
+            'latitudeDestino' => $row['latitude_destino'],
+            'longitudeDestino' => $row['longitude_destino'],
+            'carga' => $row['carga'],
+            'obs' => $row['obs'],
+            'status' => $row['status'],
+        ];
+        if ($row['data_inicio'] <= $agora) {
+            $viagensFuturas[] = [
+                'idviagem' => $idviagem,
+                'idveiculo' => $row['idveiculo'],
+                'data_inicio' => $row['data_inicio'],
+                'enderecoOrigem' => $row['endereco_origem'],
+                'latitudeOrigem' => $row['latitude_origem'],
+                'longitudeOrigem' => $row['longitude_origem'],
+                'enderecoDestino' => $row['endereco_destino'],
+                'latitudeDestino' => $row['latitude_destino'],
+                'longitudeDestino' => $row['longitude_destino'],
+                'carga' => $row['carga'],
+                'obs' => $row['obs'],
+                'status' => $row['status'],
+            ];
+        }
+
+    }
+
+    if (count($viagensFuturas) > 0) {
+        $viagemAtual = $viagensFuturas[0];
+    }
+
+    if (count($viagensFuturas) > 1) {
+        $proximaViagem = $viagensFuturas[1];
+    }
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -49,48 +102,43 @@
             </header>
             <div class="map-container">
                 <div class="map" id="map"></div>
-                <div>
+                <div class="cards">
                 <div class="card">
                     <div class="card-header">
-                        <h2>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" 
-                                stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-navigation">
-                                <polygon points="3 11 22 2 13 21 11 13 3 11" />
-                            </svg>
-                            Viagem atual
-                        </h2>
-                        <p></p>
+                        <h2>Viagem atual</h2>
                     </div>
                     <div class="card-body">
-                        <h4>Origem</h4>
-                        <p name="cardOrigem"></p>
-                        <h4>Destino</h4>
-                        <p name="cardDestino"></p>
+                        <?php if ($viagemAtual) { ?>
+                            <h4>Origem</h4>
+                            <p><?= htmlspecialchars($viagemAtual['enderecoOrigem']) ?></p>
+                            <h4>Destino</h4>
+                            <p><?= htmlspecialchars($viagemAtual['enderecoDestino']) ?></p>
+                            <h4>Data</h4>
+                            <p><?= date('d/m/Y H:i', strtotime($viagemAtual['data_inicio'])) ?></p>
+                        <?php } else { ?>
+                            <p>Nenhuma viagem atual encontrada.</p>
+                        <?php } ?>
                     </div>
                 </div>
-                <div class="card">
-                    <div class="card-header">
-                        <h2>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                    class="lucide lucide-calendar">
-                                <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
-                                <line x1="16" y1="2" x2="16" y2="6" />
-                                <line x1="8" y1="2" x2="8" y2="6" />
-                                <line x1="3" y1="10" x2="21" y2="10" />
-                            </svg>
 
-                            Viagens agendadas
-                        </h2>
-                        <p></p>
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Próxima viagem</h2>
                     </div>
                     <div class="card-body">
-                        <h4>Data</h4>
-                        <p name="cardData"></p>
-                        <h4>Destino</h4>
-                        <p name="cardDestinoAgendada"></p>
+                        <?php if ($proximaViagem) { ?>
+                            <h4>Origem</h4>
+                            <p><?= htmlspecialchars($proximaViagem['enderecoOrigem']) ?></p>
+                            <h4>Destino</h4>
+                            <p><?= htmlspecialchars($proximaViagem['enderecoDestino']) ?></p>
+                            <h4>Data</h4>
+                            <p><?= date('d/m/Y H:i', strtotime($proximaViagem['data_inicio'])) ?></p>
+                        <?php } else { ?>
+                            <p>Nenhuma próxima viagem encontrada.</p>
+                        <?php } ?>
                     </div>
                 </div>
+
                 </div>
             </div>
         </div>
