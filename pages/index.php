@@ -13,6 +13,12 @@
   <?php 
     include('../elements/header.php');
     include('../elements/alert.php');
+
+    if (isset($_SESSION['id'])){
+      if ($_SESSION['adm'] == 0 && $_SESSION['gerente'] == 0){
+        header("Location: motorista/index.php?idtransportadora=".$_SESSION['idtransportadora']); exit;
+      }
+    }
   ?>
 
   <section class="hero">

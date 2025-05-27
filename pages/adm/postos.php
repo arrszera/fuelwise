@@ -6,7 +6,7 @@
     }
     include('../../elements/connection.php');
     
-    $sql = "SELECT p.idposto, p.nome, p.endereco, c.idcombustivel, c.tipo, c.preco 
+    $sql = "SELECT p.idposto, p.nome, p.endereco, c.idcombustivel, p.latitude, p.longitude, c.tipo, c.preco 
             FROM posto p    
             LEFT JOIN combustivel c ON p.idposto = c.idposto 
             ORDER BY p.idposto DESC";
@@ -22,6 +22,8 @@
                     'idposto' => $idposto,
                     'nome' => $row['nome'],
                     'endereco' => $row['endereco'],
+                    'latitude' => $row['latitude'],
+                    'longitude' => $row['longitude'],
                     'combustiveis' => []
                 ];
             }
@@ -83,6 +85,7 @@
                         <tr>
                             <th>Nome</th>
                             <th>Endereço</th>
+                            <th>Coordenadas</th>
                             <th class="w-120px">Ações</th>
                         </tr>
                     </thead>
@@ -109,6 +112,10 @@
                     <label for="endereco">Endereço</label>
                     <input placeholder="Escreva o endereço do posto" type="text" id="enderecoPosto" name="enderecoPosto" required>
                 </div>
+                <div class="form-group">
+                    <label for="coordenadas">Coordenadas</label>
+                    <input placeholder="Escreva as coordenadas do posto (latitude, longitude)" type="text" id="coordenadasPosto" name="coordenadasPosto" required>
+                </div>
                 <div class="modal-footer">
                     <button type="button" class="btn secondary" onclick="fecharModal()">Cancelar</button>
                     <button type="submit" class="btn primary">Salvar</button>
@@ -131,6 +138,10 @@
                 <div class="form-group">
                     <label for="endereco">Endereço</label>
                     <input placeholder="Escreva o endereço do posto" type="text" id="enderecoPosto" name="enderecoPosto" required>
+                </div>
+                <div class="form-group">
+                    <label for="coordenadas">Coordenadas</label>
+                    <input placeholder="Escreva as coordenadas do posto (latitude, longitude)" type="text" id="coordenadasPosto" name="coordenadasPosto" required>
                 </div>
                 <input type="hidden" name="idposto">
                 <div class="modal-footer">
@@ -214,6 +225,7 @@
 
             modal.querySelector('#nomePosto').value = dados.nome
             modal.querySelector('#enderecoPosto').value = dados.endereco
+            modal.querySelector('[name="coordenadasPosto"]').value = dados.latitude + ', ' + dados.longitude
             modal.querySelector('[name="idposto"]').value = dados.idposto
 
             modal.style.display = 'block'
@@ -349,6 +361,7 @@
                 tr.innerHTML = `
                 <td class="font-medium">${req.nome}</td>
                 <td>${req.endereco}</td>
+                <td>${req.latitude}, ${req.longitude}</td>
                 <td>
                     <div class="actions">
                         <button class="btn-icon btn-view" title="Ver combustíveis" data-idposto="${req.idposto}">

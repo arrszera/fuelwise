@@ -146,3 +146,8 @@ h3{
   overflow: hidden;
   text-align: center;
 }
+
+#map::before,
+#map::after {
+  content: none !important;
+}

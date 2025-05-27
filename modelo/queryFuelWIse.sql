@@ -20,8 +20,11 @@ CREATE TABLE IF NOT EXISTS `posto` (
   `idposto` INT NOT NULL AUTO_INCREMENT,
   `endereco` VARCHAR(100) NOT NULL,
   `nome` VARCHAR(45) NOT NULL,
+  `latitude` DECIMAL(10, 2) NOT NULL,
+  `longitude` DECIMAL(10, 2) NOT NULL,
   PRIMARY KEY (`idposto`)
 ) ENGINE=InnoDB;
+
 CREATE TABLE IF NOT EXISTS `usuario` (
   `idusuario` INT NOT NULL AUTO_INCREMENT,
   `email` VARCHAR(255) NOT NULL,

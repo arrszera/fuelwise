@@ -11,7 +11,9 @@
         include("../../elements/connection.php");
         $nomePosto = $_POST["nomePosto"];
         $enderecoPosto = $_POST["enderecoPosto"];
-        $sql = "INSERT INTO posto (nome, endereco) VALUES ('$nomePosto', '$enderecoPosto')";
+        $coordenadas = $_POST["coordenadasPosto"];
+        list($latitude, $longitude) = explode(", ", $coordenadas);
+        $sql = "INSERT INTO posto (nome, endereco, latitude, longitude) VALUES ('$nomePosto', '$enderecoPosto', $latitude, $longitude)";
         if ($result = $conn->query($sql)){
             $_SESSION['alert'] = [
                 'title' => 'Sucesso!',
@@ -28,7 +30,6 @@
                 'confirmButtonColor' => '#2563eb',
             ];
             header("location: postos.php"); exit;
-            exit;
         }
     }
     $_SESSION['alert'] = [
