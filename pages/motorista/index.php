@@ -34,6 +34,7 @@ if ($result->num_rows > 0) {
                 'idviagem' => $idviagem,
                 'idveiculo' => $row['idveiculo'],
                 'data_inicio' => $row['data_inicio'],
+                'data_termino' => $row['data_termino'],
                 'enderecoOrigem' => $row['endereco_origem'],
                 'latitudeOrigem' => $row['latitude_origem'],
                 'longitudeOrigem' => $row['longitude_origem'],
@@ -73,7 +74,7 @@ if ($result->num_rows > 0) {
     <style>
         #map {
             height: 400px;
-            width: 70%;
+            width: 60%;
             border-radius: 8px;
         }
 
@@ -82,8 +83,46 @@ if ($result->num_rows > 0) {
             justify-content: space-around;
         }
 
+        .card{
+            border: 1px solid #ddd;
+            padding: 0px
+        }
+
+        .cards{
+            display: flex;
+            flex-direction: column;
+            width: 35%;
+            gap: 10px;
+        }
+        .card-body{
+            padding: 10px 15px;
+        }
+        .card-header{
+            padding: 10px;
+        }
+
         h2{
             font-weight: 400;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        p{
+            font-size: 0.9rem;
+            font-weight: 200;
+            color: #777;
+        }
+        .row{
+            margin-top: 15px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+        .buttons{
+            margin-top: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
         }
     </style>
 </head>
@@ -97,7 +136,7 @@ if ($result->num_rows > 0) {
         <?php include('../../elements/header.php'); ?>
         <div class="content">
             <header class="page-header">
-                <h1>Mapa</h1>
+                <h1>Início</h1>
                 <p>Visualize sua localização no mapa, assim como postos próximos.</p>
             </header>
             <div class="map-container">
@@ -105,7 +144,10 @@ if ($result->num_rows > 0) {
                 <div class="cards">
                 <div class="card">
                     <div class="card-header">
-                        <h2>Viagem atual</h2>
+                        <h2><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" 
+                                stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-navigation">
+                                <polygon points="3 11 22 2 13 21 11 13 3 11" />
+                            </svg> Viagem atual</h2>
                     </div>
                     <div class="card-body">
                         <?php if ($viagemAtual) { ?>
@@ -113,8 +155,24 @@ if ($result->num_rows > 0) {
                             <p><?= htmlspecialchars($viagemAtual['enderecoOrigem']) ?></p>
                             <h4>Destino</h4>
                             <p><?= htmlspecialchars($viagemAtual['enderecoDestino']) ?></p>
-                            <h4>Data</h4>
-                            <p><?= date('d/m/Y H:i', strtotime($viagemAtual['data_inicio'])) ?></p>
+                            <div class="row">
+                                <div>
+                                    <h4>Início</h4>
+                                    <p><?= date('d/m/Y', strtotime($viagemAtual['data_inicio'])) ?></p>
+                                </div>
+                                <div>
+                                    <h4>Término</h4>
+                                    <p><?= !empty($viagemAtual['data_termino']) ? date('d/m/Y', strtotime($viagemAtual['data_termino'])) : 'Indefinido' ?></p>
+                                </div>
+                            </div>
+                            <div class="buttons">
+                                <button class="btn primary">
+                                    Registrar pagamento
+                                </button>
+                                <button class="btn">
+                                    Finalizar Viagem
+                                </button>
+                            </div>
                         <?php } else { ?>
                             <p>Nenhuma viagem atual encontrada.</p>
                         <?php } ?>
@@ -123,7 +181,14 @@ if ($result->num_rows > 0) {
 
                 <div class="card">
                     <div class="card-header">
-                        <h2>Próxima viagem</h2>
+                        <h2><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                    class="lucide lucide-calendar">
+                                <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
+                                <line x1="16" y1="2" x2="16" y2="6" />
+                                <line x1="8" y1="2" x2="8" y2="6" />
+                                <line x1="3" y1="10" x2="21" y2="10" />
+                            </svg> Próxima viagem</h2>
                     </div>
                     <div class="card-body">
                         <?php if ($proximaViagem) { ?>
@@ -147,7 +212,7 @@ if ($result->num_rows > 0) {
     <script src="../../js/index.js"></script>
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
 <script>
-    mapboxgl.accessToken = '';
+    mapboxgl.accessToken = 'pk.eyJ1IjoibHVjYXM1NTVhbmRyaWFuaSIsImEiOiJjbWI2dWI5MTAwMDNkMm9wdDY4N2VwZW9lIn0.51UoNwyRk5FfYtAslMGyMg';
 
     if ("geolocation" in navigator) {
         navigator.geolocation.getCurrentPosition(async function(position) {

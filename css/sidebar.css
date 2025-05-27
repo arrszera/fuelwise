@@ -52,6 +52,7 @@ body{
 }
 
 .main{
+    overflow-y: hidden;
     padding: 0 !important;
     margin: 0 !important;
     flex-direction: column !important;
