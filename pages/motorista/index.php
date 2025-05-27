@@ -220,7 +220,7 @@ if ($result->num_rows > 0) {
     <script src="../../js/index.js"></script>
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
 <script>
-    mapboxgl.accessToken = 'pk.eyJ1IjoibHVjYXM1NTVhbmRyaWFuaSIsImEiOiJjbWI2eXhlbmowNGs0MnFxNWxyOTdxbWVkIn0.16A1c8XvHsVgUK8cs9CtqA';
+    mapboxgl.accessToken = '';
 
     if ("geolocation" in navigator) {
         navigator.geolocation.getCurrentPosition(async function(position) {
@@ -297,7 +297,7 @@ if ($result->num_rows > 0) {
                         posto.combustiveis.forEach(c => {
                             let tipo
                             switch (c.tipo) {
-                                case 1: tipo = 'Gasolina' break;
+                                case 1: tipo = 'Gasolina'; break;
                                 case 2: tipo = 'Etanol'; break;
                                 case 3: tipo = 'Diesel'; break;
                                 default: tipo = 'Outro';

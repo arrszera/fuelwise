@@ -52,17 +52,16 @@ body{
 }
 
 .main{
-    overflow-y: hidden;
     padding: 0 !important;
     margin: 0 !important;
     flex-direction: column !important;
-    min-height: 100vh;
     width: 100%;
+    overflow-y: auto;
 }
 .content{
+    overflow-y: hidden;
     display: block;
     padding: 20px;
-    height: 100%;
     padding-left: 270px;
 }
 
