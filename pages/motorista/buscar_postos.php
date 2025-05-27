@@ -1,12 +1,14 @@
 <?php
 include('../../elements/connection.php');
 session_start();
+
 $lat_usuario = (float) $_GET['lat'];
 $lng_usuario = (float) $_GET['lng'];
 $raio = 523;
 
+// consulta postos dentro do raio definido
 $sql = "
-    SELECT *,
+    SELECT * ,
         (
             6371 * acos(
                 cos(radians(?)) 
@@ -27,20 +29,33 @@ if (!$stmt) {
 }
 
 $stmt->bind_param("dddi", $lat_usuario, $lng_usuario, $lat_usuario, $raio);
-
-
 $stmt->execute();
-
 $result = $stmt->get_result();
 $postos = $result->fetch_all(MYSQLI_ASSOC);
 
-$sql = 'UPDATE viagem SET latitude_atual = ?, longitude_atual = ? WHERE idusuario = ' . $_SESSION['id']. ' AND status = 1';
+// pega os combustíveis para cada posto
+foreach ($postos as &$posto) {
+    $idposto = $posto['idposto'];
+    $sql_comb = "SELECT idcombustivel, tipo, preco FROM combustivel WHERE idposto = ?";
+    $stmt_comb = $conn->prepare($sql_comb);
+    if (!$stmt_comb) {
+        die("Erro no prepare de combustíveis: " . $conn->error);
+    }
+    $stmt_comb->bind_param("i", $idposto);
+    $stmt_comb->execute();
+    $result_comb = $stmt_comb->get_result();
+    $combustiveis = $result_comb->fetch_all(MYSQLI_ASSOC);
+
+    $posto['combustiveis'] = $combustiveis;
+}
+
+// atualiza posição atual da viagem
+$sql = 'UPDATE viagem SET latitude_atual = ?, longitude_atual = ? WHERE idusuario = ? AND status = 1';
 $stmt = $conn->prepare($sql);
 if (!$stmt) {
-    die("Erro no prepare: " . $conn->error);
+    die("Erro no prepare da viagem: " . $conn->error);
 }
-$stmt->bind_param("dd", $lat_usuario, $lng_usuario);
-
+$stmt->bind_param("ddi", $lat_usuario, $lng_usuario, $_SESSION['id']);
 $stmt->execute();
 
 echo json_encode($postos);

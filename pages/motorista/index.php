@@ -283,14 +283,53 @@ if ($result->num_rows > 0) {
 
                     postos.forEach(posto => {
                         const svgElement = createSVGElementFromString(svgPosto);
+                        let tabelaCombustiveis = `
+                            <table style="width:100%; border-collapse: collapse; font-size: 12px;">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align:left; padding: 4px;">Tipo</th>
+                                        <th style="text-align:right; padding: 4px;">Preço</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                        `
+
+                        posto.combustiveis.forEach(c => {
+                            let tipo
+                            switch (c.tipo) {
+                                case 1: tipo = 'Gasolina' break;
+                                case 2: tipo = 'Etanol'; break;
+                                case 3: tipo = 'Diesel'; break;
+                                default: tipo = 'Outro';
+                            }
+
+                            tabelaCombustiveis += `
+                                <tr>
+                                    <td style="padding: 4px;">${tipo}</td>
+                                    <td style="text-align:right; padding: 4px;">R$ ${parseFloat(c.preco).toFixed(2)}</td>
+                                </tr>
+                            `
+                        });
+
+                        tabelaCombustiveis += `
+                                </tbody>
+                            </table>
+                        `
+
+                        const popupHTML = `
+                            <strong>${posto.nome}</strong><br>
+                            Distância: ${posto.distancia.toFixed(2)} km
+                            <hr style="margin: 8px 0;">
+                            ${tabelaCombustiveis}
+                        `
                         new mapboxgl.Marker({ element: svgElement, anchor: "bottom" })
-                            .setLngLat([posto.longitude, posto.latitude])
-                            .setPopup(new mapboxgl.Popup().setHTML(`<strong>${posto.nome}</strong><br>Distância: ${posto.distancia.toFixed(2)} km`))
-                            .addTo(map);
-                    });
+                        .setLngLat([posto.longitude, posto.latitude])
+                        .setPopup(new mapboxgl.Popup().setHTML(popupHTML))
+                        .addTo(map);
+                    })
                 })()
                 if (typeof destinoViagem !== 'undefined') {
-                    const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${longitude},${latitude};${destinoViagem.longitude},${destinoViagem.latitude}?geometries=geojson&access_token=${mapboxgl.accessToken}`;
+                    const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${longitude},${latitude};${destinoViagem.longitude},${destinoViagem.latitude}?geometries=geojson&access_token=${mapboxgl.accessToken}`
 
                     fetch(url)
                         .then(response => response.json())
