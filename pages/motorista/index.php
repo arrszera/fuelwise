@@ -147,7 +147,7 @@ if ($result->num_rows > 0) {
     <script src="../../js/index.js"></script>
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
 <script>
-    mapboxgl.accessToken = 'pk.eyJ1IjoibHVjYXM1NTVhbmRyaWFuaSIsImEiOiJjbWI1cXJudm0xZWtvMmpwdmRhcmc5OGt3In0.qF39HycbR3Vw_FiBRnqs_Q';
+    mapboxgl.accessToken = '';
 
     if ("geolocation" in navigator) {
         navigator.geolocation.getCurrentPosition(async function(position) {
