@@ -179,3 +179,34 @@ h3{
 #map::after {
   content: none !important;
 }
+
+.card {
+  background: #fff;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.card-header, .card-footer {
+  padding: 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.card-footer {
+  border-top: 1px solid #e5e7eb;
+  font-size: 0.875rem;
+  color: #4b5563;
+}
+
+.card-footer a {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+.card-body {
+  padding: 1.5rem;
+}
+
+h4{
+    font-weight: 400;
+}

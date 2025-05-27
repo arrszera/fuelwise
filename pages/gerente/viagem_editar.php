@@ -1,7 +1,7 @@
 <?php
     include('autenticacaoGerente.php');
 	// echo var_dump($_POST); exit;
-
+	// TODO, atualizar conforme as mudancas na pagina inicial de viagens
 	// TODO verificacoes de placa
 	if(isset($_POST['idviagem']) && isset($_GET['idtransportadora'])){
 		include('../../elements/connection.php');

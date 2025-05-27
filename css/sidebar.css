@@ -86,4 +86,8 @@ body{
     .header{
         margin: none;
     }
+    .content{
+        display: block;
+        padding: 20px;
+    }
 }

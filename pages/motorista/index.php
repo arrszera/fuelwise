@@ -1,5 +1,9 @@
 <?php 
     include('autenticarMotorista.php');
+
+    include('../../elements/connection.php');
+
+    $sql = "SELECT * FROM viagem WHERE idusuario = ". $_SESSION['id'];
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -16,8 +20,17 @@
     <style>
         #map {
             height: 400px;
-            width: 100%;
+            width: 70%;
             border-radius: 8px;
+        }
+
+        .map-container{
+            display: flex;
+            justify-content: space-around;
+        }
+
+        h2{
+            font-weight: 400;
         }
     </style>
 </head>
@@ -34,15 +47,59 @@
                 <h1>Mapa</h1>
                 <p>Visualize sua localização no mapa, assim como postos próximos.</p>
             </header>
+            <div class="map-container">
+                <div class="map" id="map"></div>
+                <div>
+                <div class="card">
+                    <div class="card-header">
+                        <h2>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" 
+                                stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-navigation">
+                                <polygon points="3 11 22 2 13 21 11 13 3 11" />
+                            </svg>
+                            Viagem atual
+                        </h2>
+                        <p></p>
+                    </div>
+                    <div class="card-body">
+                        <h4>Origem</h4>
+                        <p name="cardOrigem"></p>
+                        <h4>Destino</h4>
+                        <p name="cardDestino"></p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h2>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                    class="lucide lucide-calendar">
+                                <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
+                                <line x1="16" y1="2" x2="16" y2="6" />
+                                <line x1="8" y1="2" x2="8" y2="6" />
+                                <line x1="3" y1="10" x2="21" y2="10" />
+                            </svg>
 
-            <div class="map" id="map"></div>
+                            Viagens agendadas
+                        </h2>
+                        <p></p>
+                    </div>
+                    <div class="card-body">
+                        <h4>Data</h4>
+                        <p name="cardData"></p>
+                        <h4>Destino</h4>
+                        <p name="cardDestinoAgendada"></p>
+                    </div>
+                </div>
+                </div>
+            </div>
         </div>
     </div>
 
     <script src="../../js/index.js"></script>
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
 <script>
-    mapboxgl.accessToken = '';
+    mapboxgl.accessToken = 'pk.eyJ1IjoibHVjYXM1NTVhbmRyaWFuaSIsImEiOiJjbWI1cXJudm0xZWtvMmpwdmRhcmc5OGt3In0.qF39HycbR3Vw_FiBRnqs_Q';
 
     if ("geolocation" in navigator) {
         navigator.geolocation.getCurrentPosition(async function(position) {

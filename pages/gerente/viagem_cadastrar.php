@@ -12,7 +12,12 @@ if (isset($_GET['idtransportadora']) && isset($_SESSION['idtransportadora'])
     $peso = $_POST["peso"];
     $obs = $_POST["obs"];
     $data_inicio = $_POST["data_inicio"];
-    $data_termino = $_POST["data_termino"];
+    $enderecoOrigem = $_POST["enderecoOrigem"];
+    $coordenadasOrigem = $_POST["coordenadasOrigem"];
+    list($latitudeOrigem, $longitudeOrigem) = explode(", ", $coordenadasOrigem);
+    $enderecoDestino = $_POST["enderecoDestino"];
+    $coordenadasDestino = $_POST["coordenadasDestino"];
+    list($latitudeDestino, $longitudeDestino) = explode(", ", $coordenadasDestino);
     $idtransportadora = $_GET["idtransportadora"];
 
     $result = $conn->query("SELECT * FROM viagem WHERE idveiculo = '$idveiculo'");
@@ -24,13 +29,39 @@ if (isset($_GET['idtransportadora']) && isset($_SESSION['idtransportadora'])
             'icon' => 'warning', 
             'confirmButtonColor' => '#2563eb',
         ];
-        header("location: viageNS.php?idtransportadora=".$_SESSION['idtransportadora']); exit;
+        header("location: viagens.php?idtransportadora=".$_SESSION['idtransportadora']); exit;
     }
 
-
-
-    $sql = "INSERT INTO viagem (idusuario, idveiculo, carga, peso, obs, data_inicio) 
-            VALUES ('$idusuario', '$idveiculo', '$carga', '$peso', '$obs', '$data_inicio')";
+    $sql = "INSERT INTO viagem (
+                idusuario, 
+                idveiculo, 
+                carga, 
+                peso, 
+                obs, 
+                data_inicio, 
+                endereco_origem, 
+                latitude_origem, 
+                longitude_origem, 
+                endereco_destino, 
+                latitude_destino, 
+                longitude_destino,
+                status
+                ) 
+            VALUES (
+                '$idusuario', 
+                '$idveiculo', 
+                '$carga', 
+                '$peso', 
+                '$obs', 
+                '$data_inicio', 
+                '$enderecoOrigem', 
+                $latitudeOrigem, 
+                $longitudeOrigem, 
+                '$enderecoDestino',
+                $latitudeDestino, 
+                $longitudeDestino,
+                0
+            )";
 
     if ($conn->query($sql)) {
         $idviagem = $conn->insert_id;

@@ -34,6 +34,12 @@
                     'nome' => $row['nome'],
                     'placa' => $row['placa'],
                     'modelo' => $row['modelo'],
+                    'enderecoOrigem' => $row['endereco_origem'],
+                    'latitudeOrigem' => $row['latitude_origem'],
+                    'longitudeOrigem' => $row['longitude_origem'],
+                    'enderecoDestino' => $row['endereco_destino'],
+                    'latitudeDestino' => $row['latitude_destino'],
+                    'longitudeDestino' => $row['longitude_destino'],
                 ];
             }
         }
@@ -127,7 +133,7 @@
                         }
                         echo '</select>';
                     } else {
-                        echo "Nenhum motorista encontrado";
+                        echo "<small>Nenhum motorista encontrado</small>";
                     }
                 ?>
             </div>
@@ -147,7 +153,7 @@
                         }
                         echo '</select>';
                     } else {
-                        echo "Nenhum veículo encontrado";
+                        echo "<small>Nenhum veículo encontrado</small>";
                     }
                 ?>
             </div>
@@ -167,14 +173,33 @@
                     <label for="data_inicio">Data Início</label>
                     <input id="data_inicio" name="data_inicio" type="datetime-local" class="form-control">
                 </div>
-
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="enderecoOrigem">Endereço de origem</label>
+                        <input id="enderecoOrigem" placeholder="Rua, Estado, Bairro, País" name="enderecoOrigem" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="coordenadasOrigem">Coordenadas de origem</label>
+                        <input id="coordenadasOrigem" name="coordenadasOrigem" placeholder="-123.123123, 123.123123123" class="form-control">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="enderecoDestino">Endereço do destino</label>
+                        <input id="enderecoDestino" name="enderecoDestino" placeholder="Rua, Estado, Bairro, País" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="coordenadasDestino">Coordenadas do destino</label>
+                        <input id="coordenadasDestino" name="coordenadasDestino" placeholder="-123.123123, 123.123123123" class="form-control">
+                    </div>
+                </div>
                 <div class="modal-footer">
                     <button type="button" class="btn secondary" onclick="fecharModal()">Cancelar</button>
                     <button type="submit" class="btn primary">Salvar</button>
                 </div>
             </form>
         </div>
-            <script>
+    <script>
         function getDateInSaoPaulo() {
             const date = new Date();
             const saoPauloOffset = -6 * 60;  
@@ -192,6 +217,7 @@
 
     </div>
     
+    <!-- TODO, permitir editar veiculo -->
     <div id="modalEditarViagem" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -232,6 +258,26 @@
                     <small>Opcional, pode ser editao ou preenchido a qualquer momento.</small>
                     <input id="data_termino" name="data_termino" type="datetime-local" class="form-control">
                 </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="enderecoOrigem">Endereço de origem</label>
+                        <input id="enderecoOrigem" name="enderecoOrigem" placeholder="Rua, Estado, Bairro, País" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="coordenadasOrigem">Coordenadas do destino</label>
+                        <input id="coordenadasOrigem" name="coordenadasOrigem" placeholder="-123.123123, 123.123123123" class="form-control">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="enderecoDestino">Endereço do destino</label>
+                        <input id="enderecoDestino" name="enderecoDestino" placeholder="Rua, Estado, Bairro, País" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="coordenadasDestino">Coordenadas do destino</label>
+                        <input id="coordenadasDestino" name="coordenadasDestino" placeholder="-123.123123, 123.123123123" class="form-control">
+                    </div>
+                </div>
                 
                 <input type="hidden" name="idviagem">
 
@@ -271,6 +317,81 @@
             document.getElementById('modalAdicionarViagem').style.display = 'block'
         }
 
+        const modalAdicionar = document.querySelector('#modalAdicionarViagem')
+        modalAdicionar.querySelector('[name="enderecoOrigem"]').addEventListener('blur', () => {
+            const endereco = document.querySelector('[name="enderecoOrigem"]').value;
+
+            fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(endereco)}&format=json&limit=1`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.length > 0) {
+                        const { lat, lon, display_name } = data[0];
+                        console.log("Endereço encontrado:", display_name);
+                        console.log("Latitude:", lat);
+                        console.log("Longitude:", lon);
+                        modalAdicionar.querySelector('[name="coordenadasOrigem"]').value = lat + ', ' + lon
+                    } else {
+                        console.log("Endereço não encontrado");
+                    }
+                })
+                .catch(err => console.error("Erro:", err));
+        });
+        modalAdicionar.querySelector('[name="enderecoDestino"]').addEventListener('blur', () => {
+            const endereco = modalAdicionar.querySelector('[name="enderecoDestino"]').value;
+
+            fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(endereco)}&format=json&limit=1`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.length > 0) {
+                        const { lat, lon, display_name } = data[0];
+                        console.log("Endereço encontrado:", display_name);
+                        console.log("Latitude:", lat);
+                        console.log("Longitude:", lon);
+                        modalAdicionar.querySelector('[name="coordenadasDestino"]').value = lat + ', ' + lon
+                    } else {
+                        console.log("Endereço não encontrado");
+                    }
+                })
+                .catch(err => console.error("Erro:", err));
+        });
+        const modalEditar = document.querySelector('#modalEditarViagem')
+        modalEditar.querySelector('[name="enderecoOrigem"]').addEventListener('blur', () => {
+            const endereco = modalEditar.querySelector('[name="enderecoOrigem"]').value;
+
+            fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(endereco)}&format=json&limit=1`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.length > 0) {
+                        const { lat, lon, display_name } = data[0];
+                        console.log("Endereço encontrado:", display_name);
+                        console.log("Latitude:", lat);
+                        console.log("Longitude:", lon);
+                        modalEditar.querySelector('[name="coordenadasOrigem"]').value = lat + ', ' + lon
+                    } else {
+                        console.log("Endereço não encontrado");
+                    }
+                })
+                .catch(err => console.error("Erro:", err));
+        });
+        modalEditar.querySelector('[name="enderecoDestino"]').addEventListener('blur', () => {
+            const endereco = modalEditar.querySelector('[name="enderecoDestino"]').value;
+
+            fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(endereco)}&format=json&limit=1`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.length > 0) {
+                        const { lat, lon, display_name } = data[0];
+                        console.log("Endereço encontrado:", display_name);
+                        console.log("Latitude:", lat);
+                        console.log("Longitude:", lon);
+                        modalEditar.querySelector('[name="coordenadasDestino"]').value = lat + ', ' + lon
+                    } else {
+                        console.log("Endereço não encontrado");
+                    }
+                })
+                .catch(err => console.error("Erro:", err));
+        });
+
         function abrirModalEditarViagem(dados) {
             const form = document.querySelector('#modalEditarViagem form')
             
@@ -279,6 +400,10 @@
             form.querySelector('[name="obs"]').value = dados.obs || ''
             form.querySelector('[name="data_inicio"]').value = dados.data_inicio || ''
             form.querySelector('[name="data_termino"]').value = dados.data_termino || ''
+            form.querySelector('[name="enderecoOrigem"]').value = dados.enderecoOrigem || ''
+            form.querySelector('[name="coordenadasOrigem"]').value = dados.latitudeOrigem + ', ' + dados.longitudeOrigem || ''
+            form.querySelector('[name="enderecoDestino"]').value = dados.enderecoDestino || ''
+            form.querySelector('[name="coordenadasDestino"]').value = dados.latitudeDestino + ', ' + dados.longitudeDestino || ''
             
             let hiddenId = form.querySelector('input[name="idviagem"]')
             hiddenId.value = dados.idviagem
