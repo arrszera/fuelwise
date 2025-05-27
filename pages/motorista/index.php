@@ -132,6 +132,50 @@ if ($result->num_rows > 0) {
             flex-direction: column;
             gap: 5px;
         }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden !important;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+        }
+
+        .modal-content h3 {
+            margin-top: 0;
+        }
+
+        .modal-content input {
+            width: 100%;
+            margin-top: 10px;
+            padding: 8px;
+        }
+
+        .modal-buttons {
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .modal-buttons button {
+            padding: 8px 12px;
+        }
     </style>
 </head>
 <body>
@@ -217,9 +261,71 @@ if ($result->num_rows > 0) {
         </div>
     </div>
 
-    <script src="../../js/index.js"></script>
-    <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
-<script>
+    <div id="qrModal" class="modal">
+        <div class="modal-content">
+            <h3>Registrar Pagamento</h3>
+            <div id="qr-reader"></div>
+                <input type="number" id="valorPago" placeholder="Valor pago (R$)" />
+                <div class="modal-buttons">
+                    <button onclick="enviarPagamento()">Confirmar</button>
+                    <button onclick="fecharModal()">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+<script src="../../js/index.js"></script>
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+<script src="https://unpkg.com/html5-qrcode"></script>
+<script type="module">
+    import { parsePix } from 'https://cdn.skypack.dev/pix-utils'
+
+    const modal = document.getElementById("qrModal")
+
+    function abrirModal() {
+        modal.style.display = "flex";
+        startQR();
+    }
+
+    function fecharModal() {
+        modal.style.display = "none";
+        html5QrCode.stop().then(() => {}).catch(err => {});
+    }
+
+    let html5QrCode;
+
+    function startQR() {
+        html5QrCode = new Html5Qrcode("qr-reader");
+        Html5Qrcode.getCameras().then(cameras => {
+            if (cameras && cameras.length) {
+                html5QrCode.start(
+                    cameras[0].id,
+                    { fps: 10, qrbox: 250 },
+                    qrCodeMessage => {
+                        console.log(parsePix(qrCodeMessage))
+                        html5QrCode.stop();
+                    },
+                    errorMessage => {}
+                ).catch(err => {
+                    alert("Erro ao iniciar câmera.");
+                });
+            }
+        }).catch(err => {
+            alert("Nenhuma câmera disponível.");
+        });
+    }
+
+
+    function enviarPagamento() {
+        const valor = document.getElementById('valorPago').value;
+        if (valor) {
+            alert("Pagamento de R$ " + valor + " registrado com sucesso!");
+            fecharModal();
+        } else {
+            alert("Informe o valor do pagamento.");
+        }
+    }
+    document.querySelector('.btn.primary').addEventListener('click', abrirModal);
+
     mapboxgl.accessToken = '';
 
     if ("geolocation" in navigator) {
