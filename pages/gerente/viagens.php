@@ -114,7 +114,11 @@
             <div class="form-group">
                 <label for="nome">Motorista</label>
                 <?php 
-                    $sql3 = "SELECT idusuario, nome FROM usuario";
+                    $id = (int)$_GET['idtransportadora'];
+                    $sql3 = "SELECT usuario.idusuario, usuario.nome 
+                            FROM usuario 
+                            JOIN transportadora_usuario ON usuario.idusuario = transportadora_usuario.idusuario 
+                            WHERE transportadora_usuario.idtransportadora = $id";
                     $motoristas = $conn->query($sql3);
                     if ($motoristas->num_rows > 0) {
                         echo '<select name="idusuario" id="idusuario">';
@@ -131,7 +135,10 @@
             <div class="form-group">
                 <label for="veiculo">Veículo</label>
                 <?php 
-                    $sql4 = "SELECT idveiculo, placa, modelo FROM veiculo";
+                    $id = (int)$_GET['idtransportadora'];
+                    $sql4 = "SELECT idveiculo, placa, modelo 
+                            FROM veiculo 
+                            WHERE idtransportadora = $id";
                     $veiculos = $conn->query($sql4);
                     if ($veiculos->num_rows > 0) {
                         echo '<select name="idveiculo" id="idveiculo">';
@@ -154,7 +161,7 @@
                 </div>
                 <div class="form-group">
                     <label for="obs">Observação</label>
-                    <input placeholder="Escreva uma observação da viagem" type="text" id="obs" name="obs" required>
+                    <input placeholder="Escreva uma observação da viagem" type="text" id="obs" name="obs">
                 </div>
                 <div class="form-group">
                     <label for="data_inicio">Data Início</label>

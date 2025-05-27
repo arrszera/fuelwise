@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cadastro de Empresa</title>
+  <title>Login</title>
   <link rel="stylesheet" href="../css/index.css">
   <link rel="stylesheet" href="../css/cadastro.css">
   <link rel="stylesheet" href="../css/header.css">
@@ -37,7 +37,6 @@
         <p class="subtitle">Digite suas credenciais para acessar sua conta</p>
       </div>
       <form class="card-body" action="login_php.php" method="POST">
-        <form id="loginForm" action="" method="POST" novalidate>
           <div class='form-row'>
             <div class="form-group">
               <label for="email">E-mail</label>
@@ -64,9 +63,8 @@
             </div>
           </div>
           <div class="form-actions right">
-            <button class="btn primary" type="button" onclick="validarLogin(event, this)">Entrar</button>
+            <button class="btn primary" type="submit" onclick="validarLogin(event, this)">Entrar</button>
           </div>
-        </form>
       </form>
       <div class="card-footer">
         <a href="#" class="btn-link">Esqueceu sua senha?</a>
