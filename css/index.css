@@ -146,3 +146,29 @@ h3{
   overflow: hidden;
   text-align: center;
 }
+
+/* Dashboard Informações Gerente */
+
+.dashboards{
+    display: flex;
+    gap: 2%;
+}
+
+.dashboard{
+    padding: 10px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    border: solid #DDDDDD 1px;
+    width: 20vw;
+    height: 10vh;
+}
+
+.dashboard p{
+    font-size: 0.8rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+/* Dashboard Informações Gerente */
