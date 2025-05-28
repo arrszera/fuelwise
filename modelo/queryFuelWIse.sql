@@ -136,5 +136,8 @@ CREATE TABLE IF NOT EXISTS `pagamento` (
   `idpagamento` INT NOT NULL AUTO_INCREMENT,
   `idusuario` INT NOT NULL,
   `idtransportadora` INT NOT NULL,
+  `litragem` DECIMAL(10,2),
+  `valor` DECIMAL(10,2) NOT NULL,
+  `destinatario` VARCHAR(90),
   FOREIGN KEY (`idusuario`) REFERENCES 
 )

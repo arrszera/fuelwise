@@ -80,8 +80,12 @@ if ($result->num_rows > 0) {
     <link href="../../css/footer.css" rel="stylesheet">
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
     <style>
-        #dadosExibidos{
-            margin-bottom: 8px;
+        #dadosExibidos, #dadosExibidos2{
+            margin-bottom: 12px;
+        }
+
+        #dadosExibidos2{
+            justify-content: center;
         }
 
         #map {
@@ -129,6 +133,7 @@ if ($result->num_rows > 0) {
             width: 100%;
             display: flex;
             justify-content: space-between;
+            padding: 0 20px 0 10px;
         }
         .buttons{
             margin-top: 8px;
@@ -165,9 +170,9 @@ if ($result->num_rows > 0) {
             margin-top: 0;
         }
 
-        .modal-content input {
+        .modal-content input, select {
             width: 100%;
-            margin-top: 10px;
+            margin-top: 0px;
             padding: 8px;
         }
 
@@ -267,24 +272,36 @@ if ($result->num_rows > 0) {
 
     <div id="qrModal" class="modal">
         <div class="modal-content">
-            <h3>Registrar Pagamento</h3>
+            <h3 style="font-weight: 600; color: #2563eb; font-size: 1.3rem">Registrar Pagamento</h3>
             <div id="qr-reader"></div>
             <div class="hidden" id="dadosExibidos">
-                <div>
-                    <p style="font-weight: 400; color: #333">Valor</p>
-                    <p name="valorLido" id=""></p>
-                </div>
                 <div>
                     <p style="font-weight: 400; color: #333">Destinatário</p>
                     <p name="destinatario" id=""></p>
                 </div>
+                <div>
+                    <p style="font-weight: 400; color: #333">Valor</p>
+                    <p name="valorLido" id=""></p>
+                </div>
             </div>
+            <!-- <div class="hidden" id="dadosExibidos2"> -->
+                <!-- <div>
+                    <p style="font-weight: 400; color: #333">Cidade da conta</p>
+                    <p name="cidade" id=""></p>
+                </div> -->
+                <!-- <div>
+                    <p style="font-weight: 400; color: #333">PIX</p>
+                    <p name="chavePIX" id=""></p>
+                </div> -->
+            <!-- </div> -->
             <div id="postForm" class="hidden">
                 <form>
+                    <label>Posto</label>
                     <select name="postoSelecionado">
                         <option value="0" disabled selected>Selecione o posto em que vai ser realizado o pagamento</option>
                     </select>
-                    <input placeholder="Coloque a litragem">
+                    <label>Litragem</label>
+                    <input style="margin-top: 0px" placeholder="Coloque a litragem" name="litragem">
                 </form>
             </div>
             <div class="modal-buttons">
@@ -315,10 +332,14 @@ if ($result->num_rows > 0) {
             modal.style.display = "none";
             document.querySelector('[name="destinatario"]').textContent = ''
             document.querySelector('[name="valorLido"]').textContent = ''
+            // document.querySelector('[name="cidade"]').textContent = ''
+            // document.querySelector('[name="chavePIX"]').textContent = ''
             document.querySelector('#postForm').classList.add('hidden')
             document.querySelector('#confirmar').classList.add('hidden')
             document.querySelector('#dadosExibidos').classList.remove('row')
+            // document.querySelector('#dadosExibidos2').classList.remove('row')
             document.querySelector('#dadosExibidos').classList.add('hidden')
+            // document.querySelector('#dadosExibidos2').classList.add('hidden')
             html5QrCode.stop().then(() => {}).catch(err => {})
         }
         document.querySelector('#cancelar').addEventListener('click', () => {
@@ -335,9 +356,12 @@ if ($result->num_rows > 0) {
                         html5QrCode.stop();
                         document.querySelector('[name="destinatario"]').textContent = dados.merchantName
                         document.querySelector('[name="valorLido"]').textContent = dados.transactionAmount
+                        // document.querySelector('[name="cidade"]').textContent = dados.merchantCity
+                        // document.querySelector('[name="chavePIX"]').textContent = dados.pixKey
                         document.querySelector('#postForm').classList.remove('hidden')
                         document.querySelector('#confirmar').classList.remove('hidden')
                         document.querySelector('#dadosExibidos').classList.add('row')
+                        // document.querySelector('#dadosExibidos2').classList.add('row')
                     },
                     errorMessage => {}
                 ).catch(err => {
