@@ -297,13 +297,14 @@ if ($result->num_rows > 0) {
             <div id="postForm" class="hidden">
                 <form>
                     <label>Posto</label>
-                    <select name="postoSelecionado">
-                        <option value="0" disabled selected>Selecione o posto em que vai ser realizado o pagamento</option>
+                    <select name="postoSelecionado" id="postoSelecionado">
+                        <option value="0" disabled selected>Carregando postos próximos...</option>
                     </select>
                     <label>Litragem</label>
                     <input style="margin-top: 0px" placeholder="Coloque a litragem" name="litragem">
                 </form>
             </div>
+
             <div class="modal-buttons">
                 <button id="cancelar" class="btn">Cancelar</button>
                 <button id="confirmar" class="btn primary hidden" onclick="enviarPagamento()">Confirmar</button>
@@ -384,7 +385,7 @@ if ($result->num_rows > 0) {
     }
     document.querySelector('.btn.primary').addEventListener('click', abrirModal);
 
-    mapboxgl.accessToken = '';
+    mapboxgl.accessToken = 'pk.eyJ1IjoibHVjYXM1NTVhbmRyaWFuaSIsImEiOiJjbWI3ejE1OWgwMGJ2MmlvaHVueGt5dmw2In0.8O_Ktwd4H7ZVliNYv30hsw';
 
     if ("geolocation" in navigator) {
         navigator.geolocation.getCurrentPosition(async function(position) {
@@ -415,6 +416,29 @@ if ($result->num_rows > 0) {
                     }
                     const postos = await response.json();
                     console.log(postos)
+                    
+                    // renderizar lista select
+                    const selectElement = document.getElementById('postoSelecionado');
+                    selectElement.innerHTML = ''; // limpa as opções anteriores
+
+                    if (postos.length === 0) {
+                        selectElement.innerHTML = '<option value="0" disabled selected>Nenhum posto próximo encontrado</option>';
+                    } else {
+                        const defaultOption = document.createElement('option');
+                        defaultOption.value = '0';
+                        defaultOption.disabled = true;
+                        defaultOption.selected = true;
+                        defaultOption.textContent = 'Selecione o posto em que vai ser realizado o pagamento';
+                        selectElement.appendChild(defaultOption);
+
+                        postos.forEach(posto => {
+                            const option = document.createElement('option');
+                            option.value = posto.id;
+                            option.textContent = posto.nome + ' - ' + posto.endereco;
+                            selectElement.appendChild(option);
+                        });
+                    }
+
                     const svgPosto = `<svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="40"
