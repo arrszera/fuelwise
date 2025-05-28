@@ -210,3 +210,7 @@ h3{
 h4{
     font-weight: 400;
 }
+
+.hidden{
+    display: none;
+}

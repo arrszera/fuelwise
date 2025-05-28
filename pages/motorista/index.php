@@ -80,6 +80,10 @@ if ($result->num_rows > 0) {
     <link href="../../css/footer.css" rel="stylesheet">
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
     <style>
+        #dadosExibidos{
+            margin-bottom: 8px;
+        }
+
         #map {
             height: 400px;
             width: 60%;
@@ -265,14 +269,31 @@ if ($result->num_rows > 0) {
         <div class="modal-content">
             <h3>Registrar Pagamento</h3>
             <div id="qr-reader"></div>
-                <input type="number" id="valorPago" placeholder="Valor pago (R$)" />
-                <div class="modal-buttons">
-                    <button onclick="enviarPagamento()">Confirmar</button>
-                    <button onclick="fecharModal()">Cancelar</button>
+            <div class="hidden" id="dadosExibidos">
+                <div>
+                    <p style="font-weight: 400; color: #333">Valor</p>
+                    <p name="valorLido" id=""></p>
                 </div>
+                <div>
+                    <p style="font-weight: 400; color: #333">Destinatário</p>
+                    <p name="destinatario" id=""></p>
+                </div>
+            </div>
+            <div id="postForm" class="hidden">
+                <form>
+                    <select name="postoSelecionado">
+                        <option value="0" disabled selected>Selecione o posto em que vai ser realizado o pagamento</option>
+                    </select>
+                    <input placeholder="Coloque a litragem">
+                </form>
+            </div>
+            <div class="modal-buttons">
+                <button id="cancelar" class="btn">Cancelar</button>
+                <button id="confirmar" class="btn primary hidden" onclick="enviarPagamento()">Confirmar</button>
             </div>
         </div>
     </div>
+
 <script src="../../js/index.js"></script>
 <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
 <script src="https://unpkg.com/html5-qrcode"></script>
@@ -285,24 +306,38 @@ if ($result->num_rows > 0) {
         modal.style.display = "flex";
         startQR();
     }
-
-    function fecharModal() {
-        modal.style.display = "none";
-        html5QrCode.stop().then(() => {}).catch(err => {});
-    }
-
+    
     let html5QrCode;
 
     function startQR() {
         html5QrCode = new Html5Qrcode("qr-reader");
+        function fecharModal() {
+            modal.style.display = "none";
+            document.querySelector('[name="destinatario"]').textContent = ''
+            document.querySelector('[name="valorLido"]').textContent = ''
+            document.querySelector('#postForm').classList.add('hidden')
+            document.querySelector('#confirmar').classList.add('hidden')
+            document.querySelector('#dadosExibidos').classList.remove('row')
+            document.querySelector('#dadosExibidos').classList.add('hidden')
+            html5QrCode.stop().then(() => {}).catch(err => {})
+        }
+        document.querySelector('#cancelar').addEventListener('click', () => {
+            fecharModal()
+        })
         Html5Qrcode.getCameras().then(cameras => {
             if (cameras && cameras.length) {
                 html5QrCode.start(
                     cameras[0].id,
                     { fps: 10, qrbox: 250 },
                     qrCodeMessage => {
-                        console.log(parsePix(qrCodeMessage))
+                        const dados = parsePix(qrCodeMessage)
+                        console.log(dados)
                         html5QrCode.stop();
+                        document.querySelector('[name="destinatario"]').textContent = dados.merchantName
+                        document.querySelector('[name="valorLido"]').textContent = dados.transactionAmount
+                        document.querySelector('#postForm').classList.remove('hidden')
+                        document.querySelector('#confirmar').classList.remove('hidden')
+                        document.querySelector('#dadosExibidos').classList.add('row')
                     },
                     errorMessage => {}
                 ).catch(err => {
@@ -313,7 +348,6 @@ if ($result->num_rows > 0) {
             alert("Nenhuma câmera disponível.");
         });
     }
-
 
     function enviarPagamento() {
         const valor = document.getElementById('valorPago').value;
