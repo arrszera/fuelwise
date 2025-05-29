@@ -202,7 +202,123 @@
 
             document.getElementById('modalEditarIntegrante').style.display = 'block'
         }
-        const modalEditar = 
+
+        const modalEditar = document.getElementById('modalEditarIntegrante');
+
+        modalEditar.querySelector('form').addEventListener('submit', function(event) {
+            const nomeElement = modalEditar.querySelector('[name="nome_usuario"]')
+            const cpfElement = modalEditar.querySelector('[name="cpf"]')
+            const emailElement = modalEditar.querySelector('[name="email"]')
+            const telefoneElement = modalEditar.querySelector('[name="telefone_usuario"]')
+
+            const nome = nomeElement.value.trim()
+            const cpf = cpfElement.value.trim()
+            const email = emailElement.value.trim()
+            const telefone = telefoneElement.value.trim()
+
+            if (nome.length < 2 || nome.length > 90) {
+                event.preventDefault()
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Nome inválido',
+                    text: 'O nome deve ter entre 2 e 90 caracteres.',
+                    confirmButtonColor: '#2563eb'
+                }).then(() => nomeElement.focus())
+                return
+            }
+
+            if (!/^\d{11}$/.test(cpf)) {
+                event.preventDefault()
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'CPF inválido',
+                    text: 'O CPF deve conter exatamente 11 dígitos numéricos.',
+                    confirmButtonColor: '#2563eb'
+                }).then(() => cpfElement.focus())
+                return
+            }
+
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                event.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'E-mail inválido',
+                    text: 'Informe um e-mail válido.',
+                    confirmButtonColor: '#2563eb'
+                }).then(() => emailElement.focus())
+                return
+            }
+
+            if (telefone.lenght > 15 || telefone.length < 11) {
+                event.preventDefault()
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Telefone inválido',
+                    text: 'Informe um telefone válido (somente números, entre 10 e 15 dígitos).',
+                    confirmButtonColor: '#2563eb'
+                }).then(() => telefoneElement.focus())
+                return
+            }
+        })
+        
+        const modalAdicionar = document.getElementById('modalAdicionarIntegrante');
+
+        modalAdicionar.querySelector('form').addEventListener('submit', function(event) {
+            const nomeElement = modalAdicionar.querySelector('[name="nome_usuario"]')
+            const cpfElement = modalAdicionar.querySelector('[name="cpf"]')
+            const emailElement = modalAdicionar.querySelector('[name="email"]')
+            const telefoneElement = modalAdicionar.querySelector('[name="telefone_usuario"]')
+
+            const nome = nomeElement.value.trim()
+            const cpf = cpfElement.value.trim()
+            const email = emailElement.value.trim()
+            const telefone = telefoneElement.value.trim()
+
+            if (nome.length < 2 || nome.length > 90) {
+                event.preventDefault()
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Nome inválido',
+                    text: 'O nome deve ter entre 2 e 90 caracteres.',
+                    confirmButtonColor: '#2563eb'
+                }).then(() => nomeElement.focus())
+                return
+            }
+
+            if (!/^\d{11}$/.test(cpf)) {
+                event.preventDefault()
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'CPF inválido',
+                    text: 'O CPF deve conter exatamente 11 dígitos numéricos.',
+                    confirmButtonColor: '#2563eb'
+                }).then(() => cpfElement.focus())
+                return
+            }
+
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                event.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'E-mail inválido',
+                    text: 'Informe um e-mail válido.',
+                    confirmButtonColor: '#2563eb'
+                }).then(() => emailElement.focus())
+                return
+            }
+
+            if (telefone.lenght > 15 || telefone.length < 11) {
+                event.preventDefault()
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Telefone inválido',
+                    text: 'Informe um telefone válido (somente números, entre 10 e 15 dígitos).',
+                    confirmButtonColor: '#2563eb'
+                }).then(() => telefoneElement.focus())
+                return
+            }
+        })
+
 
         function excluirIntegrante(idusuario) {
             Swal.fire({
