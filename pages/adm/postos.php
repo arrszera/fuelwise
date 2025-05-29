@@ -270,7 +270,43 @@
 
             modal.style.display = 'block'
         }
-  
+        const modaEditar = document.querySelector('#modalEditarPosto')
+        const elemento = modaEditar.querySelector('[name="enderecoPosto"]')
+        elemento.addEventListener('blur', () => {
+            fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(elemento.value)}&format=json&limit=1`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.length > 0) {
+                        const { lat, lon, display_name } = data[0];
+                        modaEditar.querySelector('[name="coordenadasPosto"]').value = lat + ', ' + lon
+                        console.log("Endereço encontrado:", display_name);
+                        console.log("Latitude:", lat);
+                        console.log("Longitude:", lon);
+                    } else {
+                        console.log("Endereço não encontrado");
+                    }
+                })
+                .catch(err => console.error("Erro:", err));
+        })
+        const modalAdicionar = document.querySelector('#modalAdicionarPosto')
+        const elemento2 = modalAdicionar.querySelector('[name="enderecoPosto"]')
+        elemento2.addEventListener('blur', () => {
+            fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(elemento2.value)}&format=json&limit=1`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.length > 0) {
+                        const { lat, lon, display_name } = data[0];
+                        modalAdicionar.querySelector('[name="coordenadasPosto"]').value = lat + ', ' + lon
+                        console.log("Endereço encontrado:", display_name);
+                        console.log("Latitude:", lat);
+                        console.log("Longitude:", lon);
+                    } else {
+                        console.log("Endereço não encontrado");
+                    }
+                })
+                .catch(err => console.error("Erro:", err));
+        })
+        
         function abrirModalCombustiveis(combustiveis, idposto) {
             const modal = document.getElementById('modalCombustiveis')
             const modalAdicionar = document.getElementById('modalAdicionarCombustivel')
