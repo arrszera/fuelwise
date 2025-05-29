@@ -10,6 +10,7 @@
         $nomePosto = $_POST["nomePosto"];
         $enderecoPosto = $_POST["enderecoPosto"];
         $coordenadas = $_POST["coordenadasPosto"];
+        list($latitude, $longitude) = explode(", ", $coordenadas);
 
         if (strlen($nomePosto) < 2 || strlen($nomePosto) > 45) {
             $_SESSION['alert'] = [
@@ -22,7 +23,7 @@
             exit;
         }
         
-        if (strlen($enderecoPosto) < 7 || strlen($enderecoPosto) > 100) {
+        if (strlen($enderecoPosto) < 5 || strlen($enderecoPosto) > 100) {
             $_SESSION['alert'] = [
                 'title' => 'Erro!',
                 'text' => 'Endereço inválido.',
@@ -33,10 +34,10 @@
             exit;
         }
 
-        if ($latitude < 7 || $enderecoPosto > 100) {
+        if ((!($latitude <= 90 && $latitude >= -90)) || (!($longitude <= 180 && $longitude >= -180))) {
             $_SESSION['alert'] = [
                 'title' => 'Erro!',
-                'text' => 'Endereço inválido.',
+                'text' => 'Insira coordenadas válidas.',
                 'icon' => 'warning',
                 'confirmButtonColor' => '#2563eb',
             ];
@@ -44,7 +45,6 @@
             exit;
         }
 
-        list($latitude, $longitude) = explode(", ", $coordenadas);
         $sql = "INSERT INTO posto (nome, endereco, latitude, longitude) VALUES ('$nomePosto', '$enderecoPosto', $latitude, $longitude)";
         if ($result = $conn->query($sql)){
             $_SESSION['alert'] = [

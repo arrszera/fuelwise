@@ -217,25 +217,29 @@
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-    const form = document.querySelector('form');
-    if (!form) return;
+    const modalAdicionar = document.querySelector('#modalAdicionarPosto');
+    if (!modalAdicionar) return;
 
-    form.addEventListener('submit', function(event) {
-        const nome = document.getElementById('nome');
-        const endereco = document.getElementById('enderecoPosto');
+    modalAdicionar.querySelector('form').addEventListener('submit', function(event) {
+        const nome = modalAdicionar.querySelector('#nome');
+        const endereco = modalAdicionar.querySelector('#enderecoPosto');
+        const coordenadasInput = modalAdicionar.querySelector('#coordenadasPosto');
 
         const nomeValor = nome.value.trim();
         const enderecoValor = endereco.value.trim();
+        const coordenadasTexto = coordenadasInput.value.trim();
+
+        const coordenadas = coordenadasTexto.split(',').map(coord => parseFloat(coord.trim()));
 
         if (nomeValor.length < 2 || nomeValor.length > 45) {
-            event.preventDefault(); // Impede o envio do formulário
+            event.preventDefault()
             Swal.fire({
                 icon: 'warning',
                 title: 'Nome inválido',
                 text: 'O nome do posto deve ter entre 2 e 45 caracteres.',
                 confirmButtonColor: '#2563eb'
             }).then(() => {
-                nome.focus();
+                nome.focus()
             });
             return;
         }
@@ -248,12 +252,87 @@
                 text: 'Digite um endereço válido.',
                 confirmButtonColor: '#2563eb'
             }).then(() => {
-                endereco.focus();
+                endereco.focus()
             });
             return;
         }
-    });
-});
+
+        if (
+            coordenadas.length !== 2 ||
+            isNaN(coordenadas[0]) || isNaN(coordenadas[1]) ||
+            coordenadas[0] > 90 || coordenadas[0] < -90 ||
+            coordenadas[1] > 180 || coordenadas[1] < -180
+        ) {
+            event.preventDefault()
+            Swal.fire({
+                icon: 'warning',
+                title: 'Coordenadas inválidas',
+                text: 'Digite no formato: latitude, longitude.',
+                confirmButtonColor: '#2563eb'
+            }).then(() => {
+                coordenadasInput.focus()
+            });
+            return;
+        }
+    })
+
+    const formEditar = document.querySelector('#modalEditarPosto')
+    formEditar.querySelector('form').addEventListener('submit', function(event) {
+        const nome = formEditar.querySelector('#nome');
+        const endereco = formEditar.querySelector('#enderecoPosto');
+        const coordenadasInput = formEditar.querySelector('#coordenadasPosto');
+
+        const nomeValor = nome.value.trim();
+        const enderecoValor = endereco.value.trim();
+        const coordenadasTexto = coordenadasInput.value.trim();
+
+        const coordenadas = coordenadasTexto.split(', ').map(coord => parseFloat(coord.trim()));
+
+        if (nomeValor.length < 2 || nomeValor.length > 45) {
+            event.preventDefault()
+            Swal.fire({
+                icon: 'warning',
+                title: 'Nome inválido',
+                text: 'O nome do posto deve ter entre 2 e 45 caracteres.',
+                confirmButtonColor: '#2563eb'
+            }).then(() => {
+                nome.focus()
+            });
+            return;
+        }
+
+        if (enderecoValor.length < 7 || enderecoValor.length > 100) {
+            event.preventDefault();
+            Swal.fire({
+                icon: 'warning',
+                title: 'Endereço inválido',
+                text: 'Digite um endereço válido.',
+                confirmButtonColor: '#2563eb'
+            }).then(() => {
+                endereco.focus()
+            });
+            return;
+        }
+
+        if (
+            coordenadas.length !== 2 ||
+            isNaN(coordenadas[0]) || isNaN(coordenadas[1]) ||
+            coordenadas[0] > 90 || coordenadas[0] < -90 ||
+            coordenadas[1] > 180 || coordenadas[1] < -180
+        ) {
+            event.preventDefault()
+            Swal.fire({
+                icon: 'warning',
+                title: 'Coordenadas inválidas',
+                text: 'Digite no formato: latitude, longitude.',
+                confirmButtonColor: '#2563eb'
+            }).then(() => {
+                coordenadasInput.focus()
+            });
+            return;
+        }
+    })
+})
 
 
         function ModalAdicionarPosto() {
@@ -262,8 +341,9 @@
 
         function abrirModalEditarPosto(dados){
             const modal = document.getElementById('modalEditarPosto')
+            console.log(modal)
 
-            modal.querySelector('#nomePosto').value = dados.nome
+            modal.querySelector('#nome').value = dados.nome
             modal.querySelector('#enderecoPosto').value = dados.endereco
             modal.querySelector('[name="coordenadasPosto"]').value = dados.latitude + ', ' + dados.longitude
             modal.querySelector('[name="idposto"]').value = dados.idposto
