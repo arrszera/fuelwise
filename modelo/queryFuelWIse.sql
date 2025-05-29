@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS `usuario` (
 CREATE TABLE IF NOT EXISTS `veiculo` (
   `idveiculo` INT NOT NULL AUTO_INCREMENT,
   `idtransportadora` INT NOT NULL,
-  `placa` VARCHAR(10) NOT NULL,
+  `placa` VARCHAR(7) NOT NULL,
   `modelo` VARCHAR(45) NOT NULL,
   `eixos` TINYINT NOT NULL,
   `litragem` FLOAT NOT NULL,

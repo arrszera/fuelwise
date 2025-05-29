@@ -278,6 +278,139 @@
             renderTable(filtered)
         })
 
+    document.addEventListener('DOMContentLoaded', function() {
+    const modalAdicionar = document.querySelector('#modalAdicionarVeiculo');
+    if (!modalAdicionar) return;
+
+    modalAdicionar.querySelector('form').addEventListener('submit', function(event) {
+        const placa = modalAdicionar.querySelector('#placa');
+        const modelo = modalAdicionar.querySelector('#modelo');
+        const eixos = modalAdicionar.querySelector('#eixos');
+        const litragem = modalAdicionar.querySelector('#litragem');
+
+        const placaValor = placa.value.trim();
+        const modeloValor = modelo.value.trim();
+        const eixosValor = eixos.value.trim();
+        const litragemValor = litragem.value.trim();
+
+        if (placaValor.length != 7) {
+            event.preventDefault()
+            Swal.fire({
+                icon: 'warning',
+                title: 'Placa inválida',
+                text: 'Placa inválida.',
+                confirmButtonColor: '#2563eb'
+            }).then(() => {
+                placa.focus()
+            });
+            return;
+        }
+
+        if (modeloValor.length < 3 || modeloValor.length > 45) {
+            event.preventDefault();
+            Swal.fire({
+                icon: 'warning',
+                title: 'Modelo inválido',
+                text: 'O modelo deve conter de 3 a 45 caracteres.',
+                confirmButtonColor: '#2563eb'
+            }).then(() => {
+                modelo.focus()
+            });
+            return;
+        }
+
+        if (eixosValor != int  || eixosValor.length > 3) {
+            event.preventDefault();
+            Swal.fire({
+                icon: 'warning',
+                title: 'Eixo inválido',
+                text: 'Número de eixos inválido.',
+                confirmButtonColor: '#2563eb'
+            }).then(() => {
+                eixos.focus()
+            });
+            return;
+        }
+
+        if (litragemValor.length <= 2) {
+            event.preventDefault();
+            Swal.fire({
+                icon: 'warning',
+                title: 'Litragem inválida',
+                text: 'Litragem inválido.',
+                confirmButtonColor: '#2563eb'
+            }).then(() => {
+                litragem.focus()
+            });
+            return;
+        }
+    })
+
+    const formEditar = document.querySelector('#modalEditarPosto')
+    formEditar.querySelector('form').addEventListener('submit', function(event) {
+        const placa = modalAdicionar.querySelector('#placa');
+        const modelo = modalAdicionar.querySelector('#modelo');
+        const eixos = modalAdicionar.querySelector('#eixos');
+        const litragem = modalAdicionar.querySelector('#litragem');
+
+        const placaValor = placa.value.trim();
+        const modeloValor = modelo.value.trim();
+        const eixosValor = eixos.value.trim();
+        const litragemValor = litragem.value.trim();
+
+        if (placaValor.length != 7) {
+            event.preventDefault()
+            Swal.fire({
+                icon: 'warning',
+                title: 'Placa inválida',
+                text: 'Placa inválida.',
+                confirmButtonColor: '#2563eb'
+            }).then(() => {
+                placa.focus()
+            });
+            return;
+        }
+
+        if (modeloValor.length < 3 || modeloValor.length > 45) {
+            event.preventDefault();
+            Swal.fire({
+                icon: 'warning',
+                title: 'Modelo inválido',
+                text: 'O modelo deve conter de 3 a 45 caracteres.',
+                confirmButtonColor: '#2563eb'
+            }).then(() => {
+                modelo.focus()
+            });
+            return;
+        }
+
+        if (eixosValor != int  || eixosValor.length > 3) {
+            event.preventDefault();
+            Swal.fire({
+                icon: 'warning',
+                title: 'Eixo inválido',
+                text: 'Número de eixos inválido.',
+                confirmButtonColor: '#2563eb'
+            }).then(() => {
+                eixos.focus()
+            });
+            return;
+        }
+
+        if (litragemValor.length <= 2) {
+            event.preventDefault();
+            Swal.fire({
+                icon: 'warning',
+                title: 'Litragem inválida',
+                text: 'Litragem inválido.',
+                confirmButtonColor: '#2563eb'
+            }).then(() => {
+                litragem.focus()
+            });
+            return;
+        }
+    })
+})
     </script>
   </body>
   </html>   
