@@ -50,7 +50,7 @@ foreach ($postos as &$posto) {
 }
 
 // atualiza posição atual da viagem
-$sql = 'UPDATE viagem SET latitude_atual = ?, longitude_atual = ? WHERE idusuario = ? AND status = 1';
+$sql = 'UPDATE viagem SET latitude_atual = ?, longitude_atual = ? WHERE idusuario = ? AND status = 0';
 $stmt = $conn->prepare($sql);
 if (!$stmt) {
     die("Erro no prepare da viagem: " . $conn->error);

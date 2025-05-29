@@ -124,11 +124,20 @@
                     $sql3 = "SELECT usuario.idusuario, usuario.nome 
                             FROM usuario 
                             JOIN transportadora_usuario ON usuario.idusuario = transportadora_usuario.idusuario 
-                            WHERE transportadora_usuario.idtransportadora = $id";
+                            WHERE transportadora_usuario.idtransportadora = $id
+                            AND NOT EXISTS (
+                            SELECT 1 FROM viagem 
+                            WHERE viagem.idusuario = usuario.idusuario AND viagem.status = 0
+                        )
+                    ";
                     $motoristas = $conn->query($sql3);
                     if ($motoristas->num_rows > 0) {
                         echo '<select name="idusuario" id="idusuario">';
                         while ($row = $motoristas->fetch_assoc()) {
+                            if ($row['idusuario'] == $_SESSION['id']){
+                                echo '<option value="' . $row['idusuario'] . '">' . $row['nome'] . ' - Você</option>';
+                                continue;
+                            }
                             echo '<option value="' . $row['idusuario'] . '">' . $row['nome'] . '</option>';
                         }
                         echo '</select>';
@@ -144,7 +153,11 @@
                     $id = (int)$_GET['idtransportadora'];
                     $sql4 = "SELECT idveiculo, placa, modelo 
                             FROM veiculo 
-                            WHERE idtransportadora = $id";
+                            WHERE idtransportadora = $id
+                            AND NOT EXISTS (
+                            SELECT 1 FROM viagem 
+                            WHERE viagem.idveiculo = veiculo.idveiculo AND viagem.status = 0
+                        )";
                     $veiculos = $conn->query($sql4);
                     if ($veiculos->num_rows > 0) {
                         echo '<select name="idveiculo" id="idveiculo">';

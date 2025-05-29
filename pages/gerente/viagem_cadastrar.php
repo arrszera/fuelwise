@@ -57,6 +57,17 @@ if (isset($_GET['idtransportadora']) && isset($_SESSION['idtransportadora'])
         ];
         header("location: viagens.php?idtransportadora=".$_SESSION['idtransportadora']); exit;
     }
+    $result = $conn->query("SELECT * FROM viagem WHERE idusuario = '$idusuario'");
+
+    if ($result && $result->num_rows > 0) {
+        $_SESSION['alert'] = [
+            'title' => 'Erro!',
+            'text' => 'Esse usuário já está atrelado a uma viagem!',
+            'icon' => 'warning', 
+            'confirmButtonColor' => '#2563eb',
+        ];
+        header("location: viagens.php?idtransportadora=".$_SESSION['idtransportadora']); exit;
+    }
 
     $sql = "INSERT INTO viagem (
                 idusuario, 

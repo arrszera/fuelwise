@@ -51,6 +51,12 @@ function excluirTransportadora($idsolicitacao) {
         $stmt->bind_param("s", $cnpj);
         $stmt->execute();
         $stmt->close();
+		
+        $sql = "DELETE FROM pagamento WHERE idtransportadora IN (SELECT idtransportadora FROM transportadora WHERE cnpj = ?)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("s", $cnpj);
+        $stmt->execute();
+        $stmt->close();
 
         $sql = "DELETE FROM transportadora_usuario WHERE idtransportadora IN (SELECT idtransportadora FROM transportadora WHERE cnpj = ?)";
         $stmt = $conn->prepare($sql);

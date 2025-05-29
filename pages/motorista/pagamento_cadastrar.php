@@ -10,12 +10,17 @@ if (isset($_GET['idtransportadora']) && isset($_SESSION['idtransportadora'])
     $idposto = $_POST["postoSelecionado"];
     $idviagem = $_POST["idviagem"];
     $litragem = $_POST["litragem"];
-    $valor = $_POST["valorLido"];
-    $destinatario = $_POST["destinatarioLido"];
+    $valor = $_POST["valor"];
+    $latitude = $_POST["latitude"];
+    $longitude = $_POST["longitude"];
+    $destinatario = $_POST["destinatarioLidoInput"];
     $idtransportadora = $_GET["idtransportadora"];
 
-    $sql = "INSERT INTO pagamento (idtransportadora, idusuario, idposto, idviagem, litragem, valor, destinatario) 
-            VALUES ('$idtransportadora', '$idusuario', '$idposto', '$idviagem', '$litragem', '$valor', '$destinatario')";
+    $query = 'SELECT cpf FROM usuario WHERE idusuario = ' . $idusuario;
+    $cpf = $conn->query($query)->fetch_object()->cpf;
+
+    $sql = "INSERT INTO pagamento (idtransportadora, idusuario, idposto, idviagem, litragem, valor, destinatario, cpfPagador, latitudePagamento, longitudePagamento) 
+            VALUES ('$idtransportadora', '$idusuario', '$idposto', '$idviagem', '$litragem', '$valor', '$destinatario', '$cpf', $latitude, $longitude)";
 
     if ($conn->query($sql)) {
         $idveiculo = $conn->insert_id;

@@ -22,6 +22,7 @@ if (isset($_SESSION['gerente']) && isset($_SESSION['adm']) && $_SESSION['gerente
     // Menu para Motorista
     echo '
     <ul>
+        <li class="mobile-menu-item"><a href="index.php">Início</a></li>
         <li class="mobile-menu-item"><a href="/FuelWise/pages/motorista/postos.php">Checar Postos</a></li>
         <li class="mobile-menu-item"><a href="/FuelWise/pages/suporte.php" onclick="scrollIntoView()">Suporte &nbsp;<box-icon color="#ECEBE9" name="support"></box-icon></a></li>
         <li class="mobile-menu-item"><a href="/FuelWise/pages/logout.php">Logout</a></li>
@@ -30,6 +31,7 @@ if (isset($_SESSION['gerente']) && isset($_SESSION['adm']) && $_SESSION['gerente
     // Menu para Gerente
     echo '
     <ul>
+        <li class="mobile-menu-item"><a href="index.php">Início</a></li>
         <li class="mobile-menu-item"><a href="/FuelWise/pages/gerente/integrantes.php?idtransportadora=' . $_SESSION['idtransportadora'] . '">Gerenciar integrantes</a></li>
         <li class="mobile-menu-item"><a href="/FuelWise/pages/gerente/veiculos.php?idtransportadora=' . $_SESSION['idtransportadora'] . '">Gerenciar caminhões</a></li>
         <li class="mobile-menu-item"><a href="/FuelWise/pages/gerente/viagens.php?idtransportadora=' . $_SESSION['idtransportadora'] . '">Viagens</a></li>
@@ -40,6 +42,7 @@ if (isset($_SESSION['gerente']) && isset($_SESSION['adm']) && $_SESSION['gerente
     // Menu para Administrador/Suporte
     echo '
     <ul>
+        <li class="mobile-menu-item"><a href="index.php">Início</a></li>
         <li class="mobile-menu-item"><a href="/FuelWise/pages/adm/solicitacoes.php">Aprovar cadastros</a></li>
         <li class="mobile-menu-item"><a href="/FuelWise/pages/adm/postos.php">Gerenciar postos</a></li>
         <li class="mobile-menu-item"><a href="/FuelWise/pages/adm/denuncias.php">Verificar chamados</a></li>

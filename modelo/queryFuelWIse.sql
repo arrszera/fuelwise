@@ -57,13 +57,13 @@ CREATE TABLE IF NOT EXISTS `viagem` (
   `data_inicio` DATETIME NOT NULL,
   `data_termino` DATETIME,
   `endereco_origem` VARCHAR(150),
-  `latitude_origem` DECIMAL(10, 2),
-  `longitude_origem` DECIMAL(10, 2),
+  `latitude_origem`DECIMAL(10, 7),
+  `longitude_origem` DECIMAL(10, 7),
   `endereco_destino` VARCHAR(150),
-  `latitude_destino` DECIMAL(10, 2),
-  `longitude_destino` DECIMAL(10, 2),
-  `latitude_atual` DECIMAL(10, 2),
-  `longitude_atual` DECIMAL(10, 2),
+  `latitude_destino` DECIMAL(10, 7),
+  `longitude_destino` DECIMAL(10, 7),
+  `latitude_atual` DECIMAL(10, 7),
+  `longitude_atual` DECIMAL(10, 7),
   `carga` VARCHAR(100) NOT NULL,
   `peso` FLOAT(10,2) NOT NULL,
   `obs` VARCHAR(100),
@@ -140,10 +140,10 @@ CREATE TABLE IF NOT EXISTS `pagamento` (
   `litragem` DECIMAL(10,2) NOT NULL,
   `valor` DECIMAL(10,2) NOT NULL,
   `destinatario` VARCHAR(90) NOT NULL,
-  PRIMARY KEY (`idpagamento`),
-  FOREIGN KEY (`idusuario`) REFERENCES `usuario` (`idusuario`),
-  FOREIGN KEY (`idposto`) REFERENCES `posto` (`idposto`),
-  FOREIGN KEY (`idviagem`) REFERENCES `viagem` (`idviagem`),
+  `latitudePagamento` DECIMAL(10, 7) NOT NULL,
+  `longitudePagamento` DECIMAL(10, 7) NOT NULL,
+  `cpfPagador` VARCHAR(11) NOT NULL, -- Em caso de exclusao de usuario, mantem seu cpf salvo em caso de necessidade
+  PRIMARY KEY (`idpagamento`), -- sem FOREIGN KEYS pois se um posto ou usuario for excluido, não dependencia entre ambos 
   FOREIGN KEY (`idtransportadora`) REFERENCES `transportadora` (`idtransportadora`)
   ) ENGINE=InnoDB;
 
