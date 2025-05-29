@@ -280,7 +280,6 @@
 
     document.addEventListener('DOMContentLoaded', function() {
     const modalAdicionar = document.querySelector('#modalAdicionarVeiculo');
-    if (!modalAdicionar) return;
 
     modalAdicionar.querySelector('form').addEventListener('submit', function(event) {
         const placa = modalAdicionar.querySelector('#placa');
@@ -319,7 +318,7 @@
             return;
         }
 
-        if (eixosValor != int  || eixosValor.length > 3) {
+        if (!/^\d{1,2}$/.test(eixosValor)) {
             event.preventDefault();
             Swal.fire({
                 icon: 'warning',
@@ -332,7 +331,7 @@
             return;
         }
 
-        if (litragemValor.length <= 2) {
+        if (litragemValor <= 0 || isNaN(litragemValor)) {
             event.preventDefault();
             Swal.fire({
                 icon: 'warning',
@@ -384,7 +383,7 @@
             return;
         }
 
-        if (eixosValor != int  || eixosValor.length > 3) {
+        if (!/^\d{1,2}$/.test(eixosValor)) {
             event.preventDefault();
             Swal.fire({
                 icon: 'warning',
@@ -397,7 +396,7 @@
             return;
         }
 
-        if (litragemValor.length <= 2) {
+        if (litragemValor <= 0 || isNaN(litragemValor)) {
             event.preventDefault();
             Swal.fire({
                 icon: 'warning',

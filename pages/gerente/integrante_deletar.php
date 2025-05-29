@@ -4,10 +4,15 @@
 	if(isset($_GET['idusuario']) && isset($_GET['idtransportadora'])){
 		include('../../elements/connection.php');
 
-		$tabelas = ["transportadora_usuario", "viagem", "usuario"]; // adicionar Denuncia posteriormente
+		$idusuario = $_GET['idusuario'];
+
+		$sql = "DELETE FROM anexos WHERE iddenuncia IN (SELECT iddenuncia FROM denuncia WHERE idusuario = $idusuario)";
+		$conn->query($sql);
+
+		$tabelas = ["transportadora_usuario", "viagem", "denuncia", "usuario"]; 
 
 		foreach ($tabelas as $tabela){
-			$query = "DELETE FROM $tabela WHERE idusuario = ".$_GET['idusuario'];
+			$query = "DELETE FROM $tabela WHERE idusuario = $idusuario";
 			$conn->query($query);
 		}
 		

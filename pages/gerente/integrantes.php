@@ -216,7 +216,7 @@
             const email = emailElement.value.trim()
             const telefone = telefoneElement.value.trim().replace(/\D/g, '')
 
-            if (nome.length < 2 || nome.length > 90) {
+            if (nome.length <= 2 || nome.length > 90) {
                 event.preventDefault()
                 Swal.fire({
                     icon: 'warning',
@@ -249,7 +249,7 @@
                 return
             }
 
-            if (telefone.lenght > 15 || telefone.length < 11) {
+            if (telefone.lenght >= 11 || telefone.length <= 15) {
                 event.preventDefault()
                 Swal.fire({
                     icon: 'warning',

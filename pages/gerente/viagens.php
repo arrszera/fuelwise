@@ -199,6 +199,7 @@
                 </div>
             </form>
         </div>
+    </div>
     <script>
         function getDateInSaoPaulo() {
             const date = new Date();
@@ -214,8 +215,6 @@
 
         window.onload = getDateInSaoPaulo;
     </script>
-
-    </div>
     
     <!-- TODO, permitir editar veiculo -->
     <div id="modalEditarViagem" class="modal">
@@ -228,7 +227,10 @@
                 <div class="form-group">
                     <label for="nome">Motorista</label>
                     <?php 
-                        $sql3 = "SELECT idusuario, nome FROM usuario";
+                        $sql3 = "SELECT usuario.idusuario, usuario.nome 
+                            FROM usuario 
+                            JOIN transportadora_usuario ON usuario.idusuario = transportadora_usuario.idusuario 
+                            WHERE transportadora_usuario.idtransportadora = $id";
                         $motoristas = $conn->query($sql3);
                         if ($motoristas->num_rows > 0) {
                             echo '<select name="idusuario" id="idusuario">';
@@ -473,7 +475,322 @@
                 })
             })
         }
-                
+
+        // Verificacoes
+        modalAdicionar.querySelector('form').addEventListener('submit', function(event) {
+            const idusuario = modalAdicionar.querySelector('#idusuario');
+            const idveiculo = modalAdicionar.querySelector('#idveiculo');
+            const carga = modalAdicionar.querySelector('#carga');
+            const peso = modalAdicionar.querySelector('#peso');
+            const obs = modalAdicionar.querySelector('#obs');
+            const dataInicio = modalAdicionar.querySelector('#data_inicio');
+            const enderecoOrigem = modalAdicionar.querySelector('#enderecoOrigem');
+            const coordenadasOrigem = modalAdicionar.querySelector('#coordenadasOrigem');
+            const enderecoDestino = modalAdicionar.querySelector('#enderecoDestino');
+            const coordenadasDestino = modalAdicionar.querySelector('#coordenadasDestino');
+
+            const idusuarioValor = idusuario.value.trim();
+            const idveiculoValor = idveiculo.value.trim();
+            const cargaValor = carga.value.trim();
+            const pesoValor = peso.value.trim();
+            const obsValor = obs.value.trim();
+            const dataInicioValor = dataInicio.value.trim();
+            const enderecoOrigemValor = enderecoOrigem.value.trim();
+            const coordenadasOrigemValor = coordenadasOrigem.value.trim();
+            const enderecoDestinoValor = enderecoDestino.value.trim();
+            const coordenadasDestinoValor = coordenadasDestino.value.trim();
+
+            if (!/^\d+$/.test(idusuarioValor)) {
+                event.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Usuário inválido',
+                    text: 'ID do usuário deve ser numérico.',
+                    confirmButtonColor: '#2563eb'
+                }).then(() => {
+                    idusuario.focus();
+                });
+                return;
+            }
+
+            if (!/^\d+$/.test(idveiculoValor)) {
+                event.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Veículo inválido',
+                    text: 'ID do veículo deve ser numérico.',
+                    confirmButtonColor: '#2563eb'
+                }).then(() => {
+                    idveiculo.focus();
+                });
+                return;
+            }
+
+            if (cargaValor.length === 0 || cargaValor.length > 100) {
+                event.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Carga inválida',
+                    text: 'A carga deve conter entre 1 e 100 caracteres.',
+                    confirmButtonColor: '#2563eb'
+                }).then(() => {
+                    carga.focus();
+                });
+                return;
+            }
+
+            if (isNaN(pesoValor) || parseFloat(pesoValor) <= 0) {
+                event.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Peso inválido',
+                    text: 'Informe um peso válido e positivo.',
+                    confirmButtonColor: '#2563eb'
+                }).then(() => {
+                    peso.focus();
+                });
+                return;
+            }
+
+            if (obsValor.length > 100) {
+                event.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Observação inválida',
+                    text: 'Observação deve ter no máximo 100 caracteres.',
+                    confirmButtonColor: '#2563eb'
+                }).then(() => {
+                    obs.focus();
+                });
+                return;
+            }
+
+            if (!dataInicioValor || isNaN(Date.parse(dataInicioValor))) {
+                event.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Data inválida',
+                    text: 'Informe uma data de início válida.',
+                    confirmButtonColor: '#2563eb'
+                }).then(() => {
+                    dataInicio.focus();
+                });
+                return;
+            }
+
+            if (!coordenadasOrigemValor.includes(',') || coordenadasOrigemValor.split(',').length !== 2) {
+                event.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Coordenadas de origem inválidas',
+                    text: 'Informe latitude e longitude separados por vírgula.',
+                    confirmButtonColor: '#2563eb'
+                }).then(() => {
+                    coordenadasOrigem.focus();
+                });
+                return;
+            }
+
+            if (!coordenadasDestinoValor.includes(',') || coordenadasDestinoValor.split(',').length !== 2) {
+                event.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Coordenadas de destino inválidas',
+                    text: 'Informe latitude e longitude separados por vírgula.',
+                    confirmButtonColor: '#2563eb'
+                }).then(() => {
+                    coordenadasDestino.focus();
+                });
+                return;
+            }
+
+            const [latOrigem, longOrigem] = coordenadasOrigemValor.split(',').map(val => val.trim());
+            const [latDestino, longDestino] = coordenadasDestinoValor.split(',').map(val => val.trim());
+
+            if (isNaN(latOrigem) || isNaN(longOrigem)) {
+                event.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Latitude/Longitude de origem inválida',
+                    text: 'As coordenadas de origem devem ser números válidos.',
+                    confirmButtonColor: '#2563eb'
+                }).then(() => {
+                    coordenadasOrigem.focus();
+                });
+                return;
+            }
+
+            if (isNaN(latDestino) || isNaN(longDestino)) {
+                event.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Latitude/Longitude de destino inválida',
+                    text: 'As coordenadas de destino devem ser números válidos.',
+                    confirmButtonColor: '#2563eb'
+                }).then(() => {
+                    coordenadasDestino.focus();
+                });
+                return;
+            }
+        });
+
+        modalEditar.querySelector('form').addEventListener('submit', function(event) {
+            const idusuario = modalEditar.querySelector('#idusuario');
+            const idveiculo = modalEditar.querySelector('#idveiculo');
+            const carga = modalEditar.querySelector('#carga');
+            const peso = modalEditar.querySelector('#peso');
+            const obs = modalEditar.querySelector('#obs');
+            const dataInicio = modalEditar.querySelector('#data_inicio');
+            const enderecoOrigem = modalEditar.querySelector('#enderecoOrigem');
+            const coordenadasOrigem = modalEditar.querySelector('#coordenadasOrigem');
+            const enderecoDestino = modalEditar.querySelector('#enderecoDestino');
+            const coordenadasDestino = modalEditar.querySelector('#coordenadasDestino');
+
+            const idusuarioValor = idusuario.value.trim();
+            const idveiculoValor = idveiculo.value.trim();
+            const cargaValor = carga.value.trim();
+            const pesoValor = peso.value.trim();
+            const obsValor = obs.value.trim();
+            const dataInicioValor = dataInicio.value.trim();
+            const enderecoOrigemValor = enderecoOrigem.value.trim();
+            const coordenadasOrigemValor = coordenadasOrigem.value.trim();
+            const enderecoDestinoValor = enderecoDestino.value.trim();
+            const coordenadasDestinoValor = coordenadasDestino.value.trim();
+
+            if (!/^\d+$/.test(idusuarioValor)) {
+                event.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Usuário inválido',
+                    text: 'ID do usuário deve ser numérico.',
+                    confirmButtonColor: '#2563eb'
+                }).then(() => {
+                    idusuario.focus();
+                });
+                return;
+            }
+
+            if (!/^\d+$/.test(idveiculoValor)) {
+                event.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Veículo inválido',
+                    text: 'ID do veículo deve ser numérico.',
+                    confirmButtonColor: '#2563eb'
+                }).then(() => {
+                    idveiculo.focus();
+                });
+                return;
+            }
+
+            if (cargaValor.length === 0 || cargaValor.length > 100) {
+                event.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Carga inválida',
+                    text: 'A carga deve conter entre 1 e 100 caracteres.',
+                    confirmButtonColor: '#2563eb'
+                }).then(() => {
+                    carga.focus();
+                });
+                return;
+            }
+
+            if (isNaN(pesoValor) || parseFloat(pesoValor) <= 0) {
+                event.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Peso inválido',
+                    text: 'Informe um peso válido e positivo.',
+                    confirmButtonColor: '#2563eb'
+                }).then(() => {
+                    peso.focus();
+                });
+                return;
+            }
+
+            if (obsValor.length > 100) {
+                event.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Observação inválida',
+                    text: 'Observação deve ter no máximo 100 caracteres.',
+                    confirmButtonColor: '#2563eb'
+                }).then(() => {
+                    obs.focus();
+                });
+                return;
+            }
+
+            if (!dataInicioValor || isNaN(Date.parse(dataInicioValor))) {
+                event.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Data inválida',
+                    text: 'Informe uma data de início válida.',
+                    confirmButtonColor: '#2563eb'
+                }).then(() => {
+                    dataInicio.focus();
+                });
+                return;
+            }
+
+            if (!coordenadasOrigemValor.includes(',') || coordenadasOrigemValor.split(',').length !== 2) {
+                event.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Coordenadas de origem inválidas',
+                    text: 'Informe latitude e longitude separados por vírgula.',
+                    confirmButtonColor: '#2563eb'
+                }).then(() => {
+                    coordenadasOrigem.focus();
+                });
+                return;
+            }
+
+            if (!coordenadasDestinoValor.includes(',') || coordenadasDestinoValor.split(',').length !== 2) {
+                event.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Coordenadas de destino inválidas',
+                    text: 'Informe latitude e longitude separados por vírgula.',
+                    confirmButtonColor: '#2563eb'
+                }).then(() => {
+                    coordenadasDestino.focus();
+                });
+                return;
+            }
+
+            const [latOrigem, longOrigem] = coordenadasOrigemValor.split(',').map(val => val.trim());
+            const [latDestino, longDestino] = coordenadasDestinoValor.split(',').map(val => val.trim());
+
+            if (isNaN(latOrigem) || isNaN(longOrigem)) {
+                event.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Latitude/Longitude de origem inválida',
+                    text: 'As coordenadas de origem devem ser números válidos.',
+                    confirmButtonColor: '#2563eb'
+                }).then(() => {
+                    coordenadasOrigem.focus();
+                });
+                return;
+            }
+
+            if (isNaN(latDestino) || isNaN(longDestino)) {
+                event.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Latitude/Longitude de destino inválida',
+                    text: 'As coordenadas de destino devem ser números válidos.',
+                    confirmButtonColor: '#2563eb'
+                }).then(() => {
+                    coordenadasDestino.focus();
+                });
+                return;
+            }
+        });
+      
         renderTable(Object.values(requests))
             
         const searchInput = document.getElementById('searchInput')

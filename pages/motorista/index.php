@@ -230,7 +230,7 @@ if ($result->num_rows > 0) {
                                 </div>
                             </div>
                             <div class="buttons">
-                                <button class="btn primary">
+                                <button id="registrarPagamento" class="btn primary">
                                     Registrar pagamento
                                 </button>
                                 <button class="btn">
@@ -275,7 +275,7 @@ if ($result->num_rows > 0) {
 
     <div id="qrModal" class="modal">
         <div class="modal-content">
-        <form onsubmit="return enviarPagamento()" method="POST" action="pagamento_cadastrar.php?idtransportadora=<?php echo $_GET['idtransportadora']; ?>"> 
+        <form onsubmit="cadastrarPagamento()" method="POST" action="pagamento_cadastrar.php?idtransportadora=<?php echo $_GET['idtransportadora']; ?>"> 
 
             <h3 style="font-weight: 600; color: #2563eb; font-size: 1.3rem">Registrar Pagamento</h3>
             <div id="qr-reader"></div>
@@ -304,18 +304,20 @@ if ($result->num_rows > 0) {
                 <input type="hidden" id="idusuario" name="idusuario" value="">
                 <input type="hidden" id="idviagem" name="idviagem" value="">
                 <input type="hidden" id="valor" name="valor" value="">
-                <input type="hidden" id="destinatarioLido" name="destinatarioLido" value="">
+                <input type="hidden" id="destinatarioLidoInput" name="destinatarioLidoInput" value="">
+                <input type="hidden" id="latitude" name="latitude" value="">
+                <input type="hidden" id="longitude" name="longitude" value="">
                 <label>Posto</label>
-                    <select name="postoSelecionado" id="postoSelecionado">
-                        <option value="0" disabled selected>Carregando postos próximos...</option>
-                    </select>
-                    <label>Litragem</label>
-                    <input style="margin-top: 0px" placeholder="Coloque a litragem" name="litragem">
-                
+                <select name="postoSelecionado" id="postoSelecionado">
+                    <option value="0" disabled selected>Carregando postos próximos...</option>
+                </select>
+                <label>Litragem</label>
+                <input style="margin-top: 0px" placeholder="Coloque a litragem" name="litragem"><br>
+                <small id="coordenadasTexto" style="font-weight: 400; color: #333">Coordenadas: </small>
             </div>
 
             <div class="modal-buttons">
-                <button id="cancelar" class="btn">Cancelar</button>
+                <button id="cancelar" type="button" class="btn">Cancelar</button>
                 <button type="submit" id="confirmar" class="btn primary hidden">Confirmar</button>
             </div>
             </form>
@@ -330,37 +332,32 @@ if ($result->num_rows > 0) {
 
     const modal = document.getElementById("qrModal")
 
-function abrirModal() {
-    modal.style.display = "flex";
-    document.getElementById('idusuario').value = <?= json_encode($_SESSION['id']) ?>;
-    document.getElementById('idviagem').value = <?= json_encode($viagemAtual ? $viagemAtual['idviagem'] : null) ?>;
+    function abrirModal() {
+        modal.style.display = "flex";
 
-    startQR();
-}
+        startQR();
+    }
 
-    
     let html5QrCode;
 
     function startQR() {
         html5QrCode = new Html5Qrcode("qr-reader");
+
         function fecharModal() {
             modal.style.display = "none";
             document.querySelector('[name="destinatarioLido"]').textContent = ''
             document.querySelector('[name="valorLido"]').textContent = ''
-            
-            // document.querySelector('[name="cidade"]').textContent = ''
-            // document.querySelector('[name="chavePIX"]').textContent = ''
             document.querySelector('#postForm').classList.add('hidden')
             document.querySelector('#confirmar').classList.add('hidden')
             document.querySelector('#dadosExibidos').classList.remove('row')
-            // document.querySelector('#dadosExibidos2').classList.remove('row')
             document.querySelector('#dadosExibidos').classList.add('hidden')
-            // document.querySelector('#dadosExibidos2').classList.add('hidden')
             html5QrCode.stop().then(() => {}).catch(err => {})
         }
+
         document.querySelector('#cancelar').addEventListener('click', () => {
             fecharModal()
         })
+
         Html5Qrcode.getCameras().then(cameras => {
             if (cameras && cameras.length) {
                 html5QrCode.start(
@@ -370,38 +367,62 @@ function abrirModal() {
                         const dados = parsePix(qrCodeMessage)
                         console.log(dados)
                         html5QrCode.stop();
+
+                        if (!dados.merchantName) {
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'QR code inválido',
+                                text: 'O QR code não corresponde a um payload PIX.',
+                                confirmButtonColor: '#2563eb'
+                            })
+                            fecharModal()
+                            return
+                        }
+
                         document.querySelector('[name="destinatarioLido"]').textContent = dados.merchantName
                         document.querySelector('[name="valorLido"]').textContent = dados.transactionAmount
+                        document.getElementById('idviagem').value = <?= json_encode($viagemAtual ? $viagemAtual['idviagem'] : null) ?>;
+                        document.querySelector('[name="idusuario"]').value = <?= $_SESSION['id'] ?>;
+                        document.querySelector('[name="valor"]').value = dados.transactionAmount
+                        document.querySelector('[name="destinatarioLidoInput"]').value = dados.merchantName
 
-                        // document.querySelector('[name="cidade"]').textContent = dados.merchantCity
-                        // document.querySelector('[name="chavePIX"]').textContent = dados.pixKey
+                        if (navigator.geolocation) {
+                            navigator.geolocation.getCurrentPosition(position => {
+                                const lat = position.coords.latitude.toFixed(6);
+                                const lng = position.coords.longitude.toFixed(6);
+
+                                document.querySelector('[name="latitude"]').value = lat;
+                                document.querySelector('[name="longitude"]').value = lng;
+
+                                document.querySelector('#coordenadasTexto').textContent += `${lat}, ${lng}`;
+                            }, error => {
+                                console.error("Erro ao obter localização:", error);
+                                Swal.fire({
+                                    icon: 'warning',
+                                    title: 'Localização indisponível',
+                                    text: 'Não foi possível obter sua localização.',
+                                    confirmButtonColor: '#2563eb'
+                                });
+                            });
+                        }
+
                         document.querySelector('#postForm').classList.remove('hidden')
                         document.querySelector('#confirmar').classList.remove('hidden')
                         document.querySelector('#dadosExibidos').classList.add('row')
-                        // document.querySelector('#dadosExibidos2').classList.add('row')
                     },
                     errorMessage => {}
                 ).catch(err => {
-                    alert("Erro ao iniciar câmera.");
-                });
+                    alert("Erro ao iniciar câmera.")
+                })
             }
         }).catch(err => {
-            alert("Nenhuma câmera disponível.");
-        });
+            alert("Nenhuma câmera disponível.")
+        })
     }
 
-    function enviarPagamento() {
-        const valor = document.getElementById('valorPago').value;
-        if (valor) {
-            alert("Pagamento de R$ " + valor + " registrado com sucesso!");
-            fecharModal();
-        } else {
-            alert("Informe o valor do pagamento.");
-        }
-    }
-    document.querySelector('.btn.primary').addEventListener('click', abrirModal);
+    document.querySelector('#registrarPagamento').addEventListener('click', abrirModal);
                             
-    mapboxgl.accessToken = 'pk.eyJ1IjoibHVjYXM1NTVhbmRyaWFuaSIsImEiOiJjbWI3ejE1OWgwMGJ2MmlvaHVueGt5dmw2In0.8O_Ktwd4H7ZVliNYv30hsw';
+    mapboxgl.accessToken = 'pk.eyJ1IjoibHVjYXM1NTVhbmRyaWFuaSIsImEiOiJjbWI5ZXd0MGwwd296MmlxNW5hNW1lem1yIn0.zG-JOd-ohRVzVYfOsHXVuw';
 
     if ("geolocation" in navigator) {
         navigator.geolocation.getCurrentPosition(async function(position) {
@@ -583,6 +604,59 @@ function abrirModal() {
         });
     } else {
         alert("Geolocalização não suportada pelo navegador.");
+    }
+
+    function validarFormularioPagamento() {
+        const form = document.querySelector('#qrModal form');
+        const postoSelecionado = document.getElementById('postoSelecionado');
+        const litragemInput = form.querySelector('input[name="litragem"]');
+        const destinatario = document.getElementById('destinatarioLido');
+        const valor = document.getElementById('valorLido');
+
+        const postoValor = postoSelecionado.value;
+        const litragemValor = litragemInput.value.trim();
+        const destinatarioTexto = destinatario.textContent.trim();
+        const valorTexto = valor.textContent.trim();
+
+        if (!destinatarioTexto) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'QR code não lido',
+                text: 'Você precisa escanear um QR code válido antes de confirmar.',
+                confirmButtonColor: '#2563eb'
+            });
+            return false;
+        }
+
+        if (!valorTexto) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Valor não detectado',
+                text: 'O valor do pagamento não foi identificado.',
+                confirmButtonColor: '#2563eb'
+            });
+            return false;
+        }
+
+        if (!postoValor || postoValor === '0') {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Posto não selecionado',
+                text: 'Por favor, selecione um posto antes de confirmar.',
+                confirmButtonColor: '#2563eb'
+            });
+            return false;
+        }
+
+        if (isNaN(litragemValor) || Number(litragemValor) <= 0) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Litragem inválida',
+                text: 'Insira uma litragem válida maior que 0.',
+                confirmButtonColor: '#2563eb'
+            });
+            return false;
+        }
     }
 </script>
 

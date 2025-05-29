@@ -4,7 +4,7 @@
 	if(isset($_GET['idveiculo']) && isset($_GET['idtransportadora'])){
 		include('../../elements/connection.php');
 
-		$tabelas = ["viagem", "veiculo"]; // adicionar Denuncia posteriormente
+		$tabelas = ["viagem", "veiculo"];
 
 		foreach ($tabelas as $tabela){
 			$query = "DELETE FROM $tabela WHERE idveiculo = ".$_GET['idveiculo'];
