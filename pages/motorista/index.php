@@ -400,7 +400,7 @@ function abrirModal() {
         }
     }
     document.querySelector('.btn.primary').addEventListener('click', abrirModal);
-
+                            
     mapboxgl.accessToken = 'pk.eyJ1IjoibHVjYXM1NTVhbmRyaWFuaSIsImEiOiJjbWI3ejE1OWgwMGJ2MmlvaHVueGt5dmw2In0.8O_Ktwd4H7ZVliNYv30hsw';
 
     if ("geolocation" in navigator) {

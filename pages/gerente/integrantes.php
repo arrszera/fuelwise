@@ -212,9 +212,9 @@
             const telefoneElement = modalEditar.querySelector('[name="telefone_usuario"]')
 
             const nome = nomeElement.value.trim()
-            const cpf = cpfElement.value.trim()
+            const cpf = cpfElement.value.trim().replace(/\D/g, '')
             const email = emailElement.value.trim()
-            const telefone = telefoneElement.value.trim()
+            const telefone = telefoneElement.value.trim().replace(/\D/g, '')
 
             if (nome.length < 2 || nome.length > 90) {
                 event.preventDefault()
@@ -260,7 +260,7 @@
                 return
             }
         })
-        
+
         const modalAdicionar = document.getElementById('modalAdicionarIntegrante');
 
         modalAdicionar.querySelector('form').addEventListener('submit', function(event) {
@@ -270,9 +270,9 @@
             const telefoneElement = modalAdicionar.querySelector('[name="telefone_usuario"]')
 
             const nome = nomeElement.value.trim()
-            const cpf = cpfElement.value.trim()
+            const cpf = cpfElement.value.trim().replace(/\D/g, '')
             const email = emailElement.value.trim()
-            const telefone = telefoneElement.value.trim()
+            const telefone = telefoneElement.value.trim().replace(/\D/g, '')
 
             if (nome.length < 2 || nome.length > 90) {
                 event.preventDefault()
@@ -318,7 +318,6 @@
                 return
             }
         })
-
 
         function excluirIntegrante(idusuario) {
             Swal.fire({

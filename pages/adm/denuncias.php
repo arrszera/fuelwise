@@ -112,6 +112,7 @@ if ($result->num_rows > 0) {
         </div>
     </div>
 
+    <script src="../../js/index.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         const denuncias = <?php echo json_encode($denuncias); ?>;
