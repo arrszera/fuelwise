@@ -8,6 +8,7 @@
     $requests = [];
     $viagemAtual = null;
     $proximaViagem = null;
+    
     $result = $conn->query($sql);
 if ($result->num_rows > 0) {
     $viagensFuturas = [];
@@ -18,6 +19,7 @@ if ($result->num_rows > 0) {
         $requests[$idviagem] = [
             'idviagem' => $idviagem,
             'idveiculo' => $row['idveiculo'],
+            'idusuario' => $row['idusuario'],
             'data_inicio' => $row['data_inicio'],
             'enderecoOrigem' => $row['endereco_origem'],
             'latitudeOrigem' => $row['latitude_origem'],
@@ -33,6 +35,7 @@ if ($result->num_rows > 0) {
             $viagensFuturas[] = [
                 'idviagem' => $idviagem,
                 'idveiculo' => $row['idveiculo'],
+                'idusuario' => $row['idusuario'],
                 'data_inicio' => $row['data_inicio'],
                 'data_termino' => $row['data_termino'],
                 'enderecoOrigem' => $row['endereco_origem'],
@@ -272,16 +275,19 @@ if ($result->num_rows > 0) {
 
     <div id="qrModal" class="modal">
         <div class="modal-content">
+        <form onsubmit="return enviarPagamento()" method="POST" action="pagamento_cadastrar.php?idtransportadora=<?php echo $_GET['idtransportadora']; ?>"> 
+
             <h3 style="font-weight: 600; color: #2563eb; font-size: 1.3rem">Registrar Pagamento</h3>
             <div id="qr-reader"></div>
             <div class="hidden" id="dadosExibidos">
                 <div>
                     <p style="font-weight: 400; color: #333">Destinatário</p>
-                    <p name="destinatario" id=""></p>
+                    <p name="destinatarioLido" id="destinatarioLido"></p>
+                    
                 </div>
                 <div>
                     <p style="font-weight: 400; color: #333">Valor</p>
-                    <p name="valorLido" id=""></p>
+                    <p name="valorLido" id="valorLido"></p>
                 </div>
             </div>
             <!-- <div class="hidden" id="dadosExibidos2"> -->
@@ -295,20 +301,24 @@ if ($result->num_rows > 0) {
                 </div> -->
             <!-- </div> -->
             <div id="postForm" class="hidden">
-                <form>
-                    <label>Posto</label>
+                <input type="hidden" id="idusuario" name="idusuario" value="">
+                <input type="hidden" id="idviagem" name="idviagem" value="">
+                <input type="hidden" id="valor" name="valor" value="">
+                <input type="hidden" id="destinatarioLido" name="destinatarioLido" value="">
+                <label>Posto</label>
                     <select name="postoSelecionado" id="postoSelecionado">
                         <option value="0" disabled selected>Carregando postos próximos...</option>
                     </select>
                     <label>Litragem</label>
                     <input style="margin-top: 0px" placeholder="Coloque a litragem" name="litragem">
-                </form>
+                
             </div>
 
             <div class="modal-buttons">
                 <button id="cancelar" class="btn">Cancelar</button>
-                <button id="confirmar" class="btn primary hidden" onclick="enviarPagamento()">Confirmar</button>
+                <button type="submit" id="confirmar" class="btn primary hidden">Confirmar</button>
             </div>
+            </form>
         </div>
     </div>
 
@@ -320,10 +330,14 @@ if ($result->num_rows > 0) {
 
     const modal = document.getElementById("qrModal")
 
-    function abrirModal() {
-        modal.style.display = "flex";
-        startQR();
-    }
+function abrirModal() {
+    modal.style.display = "flex";
+    document.getElementById('idusuario').value = <?= json_encode($_SESSION['id']) ?>;
+    document.getElementById('idviagem').value = <?= json_encode($viagemAtual ? $viagemAtual['idviagem'] : null) ?>;
+
+    startQR();
+}
+
     
     let html5QrCode;
 
@@ -331,8 +345,9 @@ if ($result->num_rows > 0) {
         html5QrCode = new Html5Qrcode("qr-reader");
         function fecharModal() {
             modal.style.display = "none";
-            document.querySelector('[name="destinatario"]').textContent = ''
+            document.querySelector('[name="destinatarioLido"]').textContent = ''
             document.querySelector('[name="valorLido"]').textContent = ''
+            
             // document.querySelector('[name="cidade"]').textContent = ''
             // document.querySelector('[name="chavePIX"]').textContent = ''
             document.querySelector('#postForm').classList.add('hidden')
@@ -355,8 +370,9 @@ if ($result->num_rows > 0) {
                         const dados = parsePix(qrCodeMessage)
                         console.log(dados)
                         html5QrCode.stop();
-                        document.querySelector('[name="destinatario"]').textContent = dados.merchantName
+                        document.querySelector('[name="destinatarioLido"]').textContent = dados.merchantName
                         document.querySelector('[name="valorLido"]').textContent = dados.transactionAmount
+
                         // document.querySelector('[name="cidade"]').textContent = dados.merchantCity
                         // document.querySelector('[name="chavePIX"]').textContent = dados.pixKey
                         document.querySelector('#postForm').classList.remove('hidden')
@@ -433,7 +449,7 @@ if ($result->num_rows > 0) {
 
                         postos.forEach(posto => {
                             const option = document.createElement('option');
-                            option.value = posto.id;
+                            option.value = posto.idposto;
                             option.textContent = posto.nome + ' - ' + posto.endereco;
                             selectElement.appendChild(option);
                         });

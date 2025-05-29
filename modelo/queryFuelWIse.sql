@@ -82,7 +82,6 @@ CREATE TABLE IF NOT EXISTS `combustivel` (
   FOREIGN KEY (`idposto`) REFERENCES `posto` (`idposto`)
 ) ENGINE=InnoDB;
 
-DROP TABLE denuncia;
 
 CREATE TABLE IF NOT EXISTS `denuncia` (
   `iddenuncia` INT NOT NULL AUTO_INCREMENT,
@@ -135,9 +134,16 @@ CREATE TABLE IF NOT EXISTS `transportadora_usuario` (
 CREATE TABLE IF NOT EXISTS `pagamento` (
   `idpagamento` INT NOT NULL AUTO_INCREMENT,
   `idusuario` INT NOT NULL,
+  `idposto` INT NOT NULL,
+  `idviagem` INT NOT NULL,
   `idtransportadora` INT NOT NULL,
-  `litragem` DECIMAL(10,2),
+  `litragem` DECIMAL(10,2) NOT NULL,
   `valor` DECIMAL(10,2) NOT NULL,
-  `destinatario` VARCHAR(90),
-  FOREIGN KEY (`idusuario`) REFERENCES 
-)
+  `destinatario` VARCHAR(90) NOT NULL,
+  PRIMARY KEY (`idpagamento`),
+  FOREIGN KEY (`idusuario`) REFERENCES `usuario` (`idusuario`),
+  FOREIGN KEY (`idposto`) REFERENCES `posto` (`idposto`),
+  FOREIGN KEY (`idviagem`) REFERENCES `viagem` (`idviagem`),
+  FOREIGN KEY (`idtransportadora`) REFERENCES `transportadora` (`idtransportadora`)
+  ) ENGINE=InnoDB;
+
