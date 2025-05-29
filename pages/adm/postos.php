@@ -466,7 +466,7 @@
                 cancelButtonText: 'Não, cancelar',
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = `combustivel_deletar.php?id=${idposto}`;
+                    window.location.href = `combustivel_deletar.php?idcombustivel=${idcombustivel}`;
                 }
             });        
         }

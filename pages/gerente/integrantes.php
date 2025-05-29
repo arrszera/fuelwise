@@ -202,6 +202,7 @@
 
             document.getElementById('modalEditarIntegrante').style.display = 'block'
         }
+        const modalEditar = 
 
         function excluirIntegrante(idusuario) {
             Swal.fire({
