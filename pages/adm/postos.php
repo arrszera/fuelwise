@@ -133,11 +133,11 @@
             <form method="POST" action="posto_alterar.php">
                 <div class="form-group">
                     <label for="nome">Nome do Posto</label>
-                    <input placeholder="Escreva o nome do Posto" type="text" id="nomePosto" name="nomePosto" required>
+                    <input placeholder="Escreva o nome do Posto" type="text" id="nome" name="nomePosto" required minlength="2" maxlength="45">
                 </div>
                 <div class="form-group">
                     <label for="endereco">Endereço</label>
-                    <input placeholder="Escreva o endereço do posto" type="text" id="enderecoPosto" name="enderecoPosto" required>
+                    <input placeholder="Escreva o endereço do posto" type="text" id="enderecoPosto" name="enderecoPosto" required minlength="7" maxlength="100">
                 </div>
                 <div class="form-group">
                     <label for="coordenadas">Coordenadas</label>
@@ -215,6 +215,46 @@
                     </svg>
                     `
         }
+
+        document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('form');
+    if (!form) return;
+
+    form.addEventListener('submit', function(event) {
+        const nome = document.getElementById('nome');
+        const endereco = document.getElementById('enderecoPosto');
+
+        const nomeValor = nome.value.trim();
+        const enderecoValor = endereco.value.trim();
+
+        if (nomeValor.length < 2 || nomeValor.length > 45) {
+            event.preventDefault(); // Impede o envio do formulário
+            Swal.fire({
+                icon: 'warning',
+                title: 'Nome inválido',
+                text: 'O nome do posto deve ter entre 2 e 45 caracteres.',
+                confirmButtonColor: '#2563eb'
+            }).then(() => {
+                nome.focus();
+            });
+            return;
+        }
+
+        if (enderecoValor.length < 7 || enderecoValor.length > 100) {
+            event.preventDefault();
+            Swal.fire({
+                icon: 'warning',
+                title: 'Endereço inválido',
+                text: 'Digite um endereço válido.',
+                confirmButtonColor: '#2563eb'
+            }).then(() => {
+                endereco.focus();
+            });
+            return;
+        }
+    });
+});
+
 
         function ModalAdicionarPosto() {
             document.getElementById('modalAdicionarPosto').style.display = 'block';
