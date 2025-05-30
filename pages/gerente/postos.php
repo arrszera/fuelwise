@@ -1,5 +1,6 @@
 <?php 
-    session_start(); 
+
+    include('autenticacaoGerente.php');
 
     include('../../elements/connection.php');
     

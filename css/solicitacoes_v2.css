@@ -210,3 +210,17 @@ form input, select {
   outline: none;
   margin-bottom: 15px;
 }
+
+.nested-combustiveis {
+  padding: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
+  outline: none;
+  margin-bottom: 15px;
+  font-size: 0.75rem;
+}
+
+.nested-combustiveis li {
+    margin-bottom: 4px;
+}
