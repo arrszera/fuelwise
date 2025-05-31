@@ -596,7 +596,7 @@ if ($viagemAtual) { ?>
                 })()
                 if (typeof destinoViagem !== 'undefined') {
                     const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${longitude},${latitude};${destinoViagem.longitude},${destinoViagem.latitude}?geometries=geojson&access_token=${mapboxgl.accessToken}`
-
+//
                     fetch(url)
                         .then(response => response.json())
                         .then(data => {

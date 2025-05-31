@@ -42,7 +42,7 @@ if (isset($_GET['idtransportadora']) && isset($_SESSION['idtransportadora'])
         header("location: index.php?idtransportadora=".$_SESSION['idtransportadora']); 
         exit;
     }
-
+//
     exit;
 }
 ?>

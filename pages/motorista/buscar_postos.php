@@ -27,7 +27,7 @@ $stmt = $conn->prepare($sql);
 if (!$stmt) {
     die("Erro no prepare: " . $conn->error);
 }
-
+//
 $stmt->bind_param("dddi", $lat_usuario, $lng_usuario, $lat_usuario, $raio);
 $stmt->execute();
 $result = $stmt->get_result();

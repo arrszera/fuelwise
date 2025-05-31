@@ -12,7 +12,7 @@
         $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
         return ($raioTerra * $c) <= $raioKm;
     }
-
+//
     $sql = 'SELECT * FROM viagem WHERE viagem.idusuario = '.$_SESSION['id'].' AND status = 0';
     $result = $conn->query($sql);
     $row = $result->fetch_assoc();
