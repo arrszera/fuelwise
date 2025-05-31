@@ -4,7 +4,7 @@ session_start();
 
 $lat_usuario = (float) $_GET['lat'];
 $lng_usuario = (float) $_GET['lng'];
-$raio = 523;
+$raio = isset($_GET['raio']) ? $_GET['raio'] : 100;
 
 // consulta postos dentro do raio definido
 $sql = "

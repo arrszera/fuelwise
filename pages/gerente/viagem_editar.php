@@ -5,8 +5,19 @@
 	// TODO verificacoes de placa
 	if(isset($_POST['idviagem']) && isset($_GET['idtransportadora'])){
 		include('../../elements/connection.php');
+		list($latitudeDestino, $longitudeDestino) = explode(", ", $_POST['coordenadasDestino']);
 
-		$sql = "UPDATE viagem SET idusuario = '".$_POST['idusuario']."', peso = '".$_POST['peso']."', obs = '".$_POST['obs']."', data_inicio = '".$_POST['data_inicio']."', data_termino ='".$_POST['data_termino']."' WHERE idviagem = ".$_POST['idviagem'];
+		$sql = "UPDATE viagem 
+		SET idusuario = '".$_POST['idusuario']."', 
+		peso = '".$_POST['peso']."', 
+		obs = '".$_POST['obs']."', 
+		data_inicio = '".$_POST['data_inicio']."', 
+		data_termino ='".$_POST['data_termino']."', 
+		endereco_destino = '".$_POST['enderecoDestino']."', 
+		latitude_destino = ".$latitudeDestino.", 
+		longitude_destino = ".$longitudeDestino." 
+		WHERE idviagem = ".$_POST['idviagem'];
+
         if (!$result = $conn->query($sql)){
             $_SESSION['alert'] = [
 				'title' => 'Erro!',

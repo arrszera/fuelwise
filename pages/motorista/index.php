@@ -61,8 +61,7 @@ if ($result->num_rows > 0) {
     }
 }
 
-?>
-<?php if ($viagemAtual) { ?>
+if ($viagemAtual) { ?>
     <script>
         const destinoViagem = {
             latitude: <?= json_encode($viagemAtual['latitudeDestino']) ?>,
@@ -233,7 +232,7 @@ if ($result->num_rows > 0) {
                                 <button id="registrarPagamento" class="btn primary">
                                     Registrar pagamento
                                 </button>
-                                <button class="btn">
+                                <button id="finalizarViagem" class="btn">
                                     Finalizar Viagem
                                 </button>
                             </div>
@@ -338,6 +337,57 @@ if ($result->num_rows > 0) {
         startQR();
     }
 
+    function finalizarViagem() {
+        Swal.fire({
+            title: "Tem certeza?",
+            text: "Esta ação irá encerrar a viagem atual!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            cancelButtonText: "Cancelar",
+            confirmButtonText: "Sim, finalizar!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function(position) {
+                        const latitude = position.coords.latitude;
+                        const longitude = position.coords.longitude;
+
+                        const form = document.createElement("form");
+                        form.method = "POST";
+                        form.action = "finalizar_viagem.php";
+
+                        const inputs = {
+                            idtransportadora: "<?php echo $_GET['idtransportadora']; ?>",
+                            latitude: latitude,
+                            longitude: longitude
+                        };
+
+                        for (const key in inputs) {
+                            const input = document.createElement("input");
+                            input.type = "hidden";
+                            input.name = key;
+                            input.value = inputs[key];
+                            form.appendChild(input);
+                        }
+
+                        document.body.appendChild(form);
+                        form.submit();
+                    }, function(error) {
+                        Swal.fire("Erro", "Não foi possível obter sua localização.", "error");
+                    });
+                } else {
+                    Swal.fire("Erro", "Geolocalização não é suportada neste navegador.", "error");
+                }
+            }
+        });
+    }
+
+    document.querySelector('#finalizarViagem').addEventListener('click', () =>{
+        finalizarViagem()
+    })
+
     let html5QrCode;
 
     function startQR() {
@@ -422,7 +472,7 @@ if ($result->num_rows > 0) {
 
     document.querySelector('#registrarPagamento').addEventListener('click', abrirModal);
                             
-    mapboxgl.accessToken = 'pk.eyJ1IjoibHVjYXM1NTVhbmRyaWFuaSIsImEiOiJjbWI5ZXd0MGwwd296MmlxNW5hNW1lem1yIn0.zG-JOd-ohRVzVYfOsHXVuw';
+    mapboxgl.accessToken = 'pk.eyJ1IjoibHVjYXM1NTVhbmRyaWFuaSIsImEiOiJjbWJhMDBqYm0wNW5rMmxvbDl5eHcyYXRnIn0.PCgnmuGP-tgdJity6h2LUg';
 
     if ("geolocation" in navigator) {
         navigator.geolocation.getCurrentPosition(async function(position) {
@@ -445,20 +495,18 @@ if ($result->num_rows > 0) {
                 .setPopup(new mapboxgl.Popup().setHTML("<strong>Você está aqui</strong>"))
                 .addTo(map);
 
-                (async () =>{
-                    const response = await fetch(`buscar_postos.php?lat=${latitude}&lng=${longitude}`);
-                    if (!response.ok) {
-                        alert('Erro ao buscar postos.');
+                (async () => {
+                    const responseSelect = await fetch(`buscar_postos.php?lat=${latitude}&lng=${longitude}&raio=5`);
+                    if (!responseSelect.ok) {
+                        alert('Erro ao buscar postos para seleção.');
                         return;
                     }
-                    const postos = await response.json();
-                    console.log(postos)
-                    
-                    // renderizar lista select
+                    const postosSelect = await responseSelect.json();
+
                     const selectElement = document.getElementById('postoSelecionado');
                     selectElement.innerHTML = ''; // limpa as opções anteriores
 
-                    if (postos.length === 0) {
+                    if (postosSelect.length === 0) {
                         selectElement.innerHTML = '<option value="0" disabled selected>Nenhum posto próximo encontrado</option>';
                     } else {
                         const defaultOption = document.createElement('option');
@@ -468,34 +516,20 @@ if ($result->num_rows > 0) {
                         defaultOption.textContent = 'Selecione o posto em que vai ser realizado o pagamento';
                         selectElement.appendChild(defaultOption);
 
-                        postos.forEach(posto => {
+                        postosSelect.forEach(posto => {
                             const option = document.createElement('option');
                             option.value = posto.idposto;
-                            option.textContent = posto.nome + ' - ' + posto.endereco;
+                            option.textContent = `${posto.nome} - ${posto.endereco}`;
                             selectElement.appendChild(option);
                         });
                     }
 
-                    const svgPosto = `<svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="40"
-                        height="40"
-                        viewBox="0 0 64 64"
-                        fill="none"
-                        stroke="#000000"
-                        stroke-width="2"
-                        stroke-linejoin="round"
-                        stroke-linecap="round"
-                        >
-                        <!-- Corpo da bomba -->
+                    // SVG do marcador
+                    const svgPosto = `<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 64 64" fill="none" stroke="#000000" stroke-width="2" stroke-linejoin="round" stroke-linecap="round">
                         <rect x="14" y="12" width="24" height="40" rx="4" ry="4" fill="#e63946" stroke="#000"/>
-                        <!-- Tela da bomba -->
                         <rect x="20" y="18" width="12" height="12" rx="2" ry="2" fill="#f1faee" stroke="#000"/>
-                        <!-- Mangueira -->
                         <path d="M38 14h6v24h-4" stroke="#000" fill="none"/>
-                        <!-- Bico -->
                         <rect x="42" y="36" width="6" height="8" rx="1" ry="1" fill="#1d3557" stroke="#000"/>
-                        <!-- Detalhes da bomba -->
                         <line x1="26" y1="38" x2="26" y2="46" stroke="#000"/>
                         <line x1="32" y1="38" x2="32" y2="46" stroke="#000"/>
                     </svg>`;
@@ -506,7 +540,14 @@ if ($result->num_rows > 0) {
                         return div.firstChild;
                     }
 
-                    postos.forEach(posto => {
+                    const responseMapa = await fetch(`buscar_postos.php?lat=${latitude}&lng=${longitude}`);
+                    if (!responseMapa.ok) {
+                        alert('Erro ao buscar postos para o mapa.');
+                        return;
+                    }
+                    const postosMapa = await responseMapa.json();
+
+                    postosMapa.forEach(posto => {
                         const svgElement = createSVGElementFromString(svgPosto);
                         let tabelaCombustiveis = `
                             <table style="width:100%; border-collapse: collapse; font-size: 12px;">
