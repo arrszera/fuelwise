@@ -13,15 +13,15 @@
         <ul class="footer-links">
           <li><a href="/about">Sobre nós</a></li>
           <li><a href="/contact">Contato</a></li>
-          <li><a href="/careers">Carreiras</a></li>
+          <li><a href="https://www.instagram.com/carreiras_pucpr/" target="_blank">Carreiras</a></li>
         </ul>
       </div>
 
       <div class="footer-section">
         <h3 class="footer-title">Recursos</h3>
         <ul class="footer-links">
-          <li><a href="/help">Central de Ajuda</a></li>
-          <li><a href="/blog">Blog</a></li>
+          <li><a href="../modelo/central_ajuda.php">Central de Ajuda</a></li>
+          <li><a href="https://www.pucpr.br/" target="_blank">Blog</a></li>
           <li><a href="/api">API</a></li>
         </ul>
       </div>
@@ -29,9 +29,9 @@
       <div class="footer-section">
         <h3 class="footer-title">Legal</h3>
         <ul class="footer-links">
-          <li><a href="/terms">Termos de Serviço</a></li>
-          <li><a href="/privacy">Política de Privacidade</a></li>
-          <li><a href="/cookies">Política de Cookies</a></li>
+          <li><a href="../modelo/termos_servico.php">Termos de Serviço</a></li>
+          <li><a href="../modelo/privacidade.php">Política de Privacidade</a></li>
+          <li><a href="../modelo/cookies.php">Política de Cookies</a></li>
         </ul>
       </div>
     </div>
@@ -39,9 +39,9 @@
     <div class="footer-bottom">
       <p>© 2025 FuelWise. Todos os direitos reservados.</p>
       <div class="footer-social">
-        <a href="#">Twitter</a>
-        <a href="#">LinkedIn</a>
-        <a href="#">Facebook</a>
+        <a href="https://www.instagram.com/pucproficial/" target="_blank">Instagram</a>
+        <a href="https://www.linkedin.com/school/pucproficial/posts/?feedView=all" target="_blank">LinkedIn</a>
+        <a href="https://github.com/arrszera/fuelwise" target= "blank">GitHub</a>
       </div>
     </div>
   </div>
