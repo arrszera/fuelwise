@@ -213,6 +213,7 @@ if ($viagemAtual) { ?>
             </header>
             <div class="map-container">
                 <div class="map" id="map"></div>
+                
                 <div class="cards">
                 <div class="card">
                     <div class="card-header">
@@ -484,176 +485,210 @@ if ($viagemAtual) { ?>
     mapboxgl.accessToken = 'pk.eyJ1IjoibHVjYXM1NTVhbmRyaWFuaSIsImEiOiJjbWJhMDBqYm0wNW5rMmxvbDl5eHcyYXRnIn0.PCgnmuGP-tgdJity6h2LUg';
 
     if ("geolocation" in navigator) {
-        navigator.geolocation.getCurrentPosition(async function(position) {
+        let ultimaLatitude = null;
+        let ultimaLongitude = null;
+        let mapInicializado = false;
+        let map, marcadorUsuario;
+
+        navigator.geolocation.watchPosition(async function(position) {
             const latitude = position.coords.latitude;
             const longitude = position.coords.longitude;
 
-            console.log(latitude,longitude)
+            const mudouPouco = ultimaLatitude && ultimaLongitude &&
+                Math.abs(latitude - ultimaLatitude) < 0.0005 &&
+                Math.abs(longitude - ultimaLongitude) < 0.0005;
 
-            const map = new mapboxgl.Map({
-                container: 'map',
-                style: 'mapbox://styles/mapbox/streets-v11',
-                center: [longitude, latitude],
-                zoom: 14
-            });
+            if (mudouPouco) return;
 
-            map.addControl(new mapboxgl.NavigationControl());
-            map.on('load', () => {
-                new mapboxgl.Marker({ color: 'red' })
-                .setLngLat([longitude, latitude])
-                .setPopup(new mapboxgl.Popup().setHTML("<strong>Você está aqui</strong>"))
-                .addTo(map);
+            ultimaLatitude = latitude;
+            ultimaLongitude = longitude;
 
-                (async () => {
-                    const responseSelect = await fetch(`buscar_postos.php?lat=${latitude}&lng=${longitude}&raio=5`);
-                    if (!responseSelect.ok) {
-                        alert('Erro ao buscar postos para seleção.');
-                        return;
-                    }
-                    const postosSelect = await responseSelect.json();
+            if (!mapInicializado) {
+                map = new mapboxgl.Map({
+                    container: 'map',
+                    style: 'mapbox://styles/mapbox/streets-v11',
+                    center: [longitude, latitude],
+                    zoom: 14
+                });
 
-                    const selectElement = document.getElementById('postoSelecionado');
-                    selectElement.innerHTML = ''; // limpa as opções anteriores
-
-                    if (postosSelect.length === 0) {
-                        selectElement.innerHTML = '<option value="0" disabled selected>Nenhum posto próximo encontrado</option>';
-                    } else {
-                        const defaultOption = document.createElement('option');
-                        defaultOption.value = '0';
-                        defaultOption.disabled = true;
-                        defaultOption.selected = true;
-                        defaultOption.textContent = 'Selecione o posto em que vai ser realizado o pagamento';
-                        selectElement.appendChild(defaultOption);
-
-                        postosSelect.forEach(posto => {
-                            const option = document.createElement('option');
-                            option.value = posto.idposto;
-                            option.textContent = `${posto.nome} - ${posto.endereco}`;
-                            selectElement.appendChild(option);
-                        });
-                    }
-
-                    // SVG do marcador
-                    const svgPosto = `<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 64 64" fill="none" stroke="#000000" stroke-width="2" stroke-linejoin="round" stroke-linecap="round">
-                        <rect x="14" y="12" width="24" height="40" rx="4" ry="4" fill="#e63946" stroke="#000"/>
-                        <rect x="20" y="18" width="12" height="12" rx="2" ry="2" fill="#f1faee" stroke="#000"/>
-                        <path d="M38 14h6v24h-4" stroke="#000" fill="none"/>
-                        <rect x="42" y="36" width="6" height="8" rx="1" ry="1" fill="#1d3557" stroke="#000"/>
-                        <line x1="26" y1="38" x2="26" y2="46" stroke="#000"/>
-                        <line x1="32" y1="38" x2="32" y2="46" stroke="#000"/>
-                    </svg>`;
-
-                    function createSVGElementFromString(svgString) {
-                        const div = document.createElement('div');
-                        div.innerHTML = svgString.trim();
-                        return div.firstChild;
-                    }
-
-                    const responseMapa = await fetch(`buscar_postos.php?lat=${latitude}&lng=${longitude}`);
-                    if (!responseMapa.ok) {
-                        alert('Erro ao buscar postos para o mapa.');
-                        return;
-                    }
-                    const postosMapa = await responseMapa.json();
-
-                    postosMapa.forEach(posto => {
-                        const svgElement = createSVGElementFromString(svgPosto);
-                        let tabelaCombustiveis = `
-                            <table style="width:100%; border-collapse: collapse; font-size: 12px;">
-                                <thead>
-                                    <tr>
-                                        <th style="text-align:left; padding: 4px;">Tipo</th>
-                                        <th style="text-align:right; padding: 4px;">Preço</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                        `
-
-                        posto.combustiveis.forEach(c => {
-                            let tipo
-                            switch (c.tipo) {
-                                case 1: tipo = 'Gasolina'; break;
-                                case 2: tipo = 'Etanol'; break;
-                                case 3: tipo = 'Diesel'; break;
-                                default: tipo = 'Outro';
-                            }
-
-                            tabelaCombustiveis += `
-                                <tr>
-                                    <td style="padding: 4px;">${tipo}</td>
-                                    <td style="text-align:right; padding: 4px;">R$ ${parseFloat(c.preco).toFixed(2)}</td>
-                                </tr>
-                            `
-                        });
-
-                        tabelaCombustiveis += `
-                                </tbody>
-                            </table>
-                        `
-
-                        const popupHTML = `
-                            <strong>${posto.nome}</strong><br>
-                            Distância: ${posto.distancia.toFixed(2)} km
-                            <hr style="margin: 8px 0;">
-                            ${tabelaCombustiveis}
-                        `
-                        new mapboxgl.Marker({ element: svgElement, anchor: "bottom" })
-                        .setLngLat([posto.longitude, posto.latitude])
-                        .setPopup(new mapboxgl.Popup().setHTML(popupHTML))
+                map.addControl(new mapboxgl.NavigationControl());
+                map.on('load', async () => {
+                    marcadorUsuario = new mapboxgl.Marker({ color: 'red' })
+                        .setLngLat([longitude, latitude])
+                        .setPopup(new mapboxgl.Popup().setHTML("<strong>Você está aqui</strong>"))
                         .addTo(map);
-                    })
-                })()
-                if (typeof destinoViagem !== 'undefined') {
-                    const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${longitude},${latitude};${destinoViagem.longitude},${destinoViagem.latitude}?geometries=geojson&access_token=${mapboxgl.accessToken}`
-//
-                    fetch(url)
-                        .then(response => response.json())
-                        .then(data => {
-                            const route = data.routes[0].geometry;
 
-                            map.addSource('route', {
-                                type: 'geojson',
-                                data: {
-                                    type: 'Feature',
-                                    geometry: {
-                                        type: 'LineString',
-                                        coordinates: route.coordinates
-                                    }
-                                }
-                            });
+                    await carregarPostos(latitude, longitude, map);
+                    await desenharRota(latitude, longitude, map);
+                });
 
-                            map.addLayer({
-                                id: 'route',
-                                type: 'line',
-                                source: 'route',
-                                layout: {
-                                    'line-join': 'round',
-                                    'line-cap': 'round'
-                                },
-                                paint: {
-                                    'line-color': '#0074D9',
-                                    'line-width': 4
-                                }
-                            });
-
-                            // Adiciona marcador no destino
-                            new mapboxgl.Marker({ color: 'green' })
-                                .setLngLat([destinoViagem.longitude, destinoViagem.latitude])
-                                .setPopup(new mapboxgl.Popup().setHTML("<strong>Destino da viagem</strong>"))
-                                .addTo(map);
-                        })
-                        .catch(error => {
-                            console.error('Erro ao buscar rota:', error);
-                        });
-                }
-            })
-            
-
+                mapInicializado = true;
+            } else {
+                marcadorUsuario.setLngLat([longitude, latitude]);
+                map.setCenter([longitude, latitude]);
+                await carregarPostos(latitude, longitude, map); // Pode ser otimizado mais ainda se quiser
+                await desenharRota(latitude, longitude, map);
+            }
         }, function(error) {
             alert("Erro ao obter localização: " + error.message);
+        }, {
+            enableHighAccuracy: true,
+            maximumAge: 10000,
+            timeout: 10000
         });
     } else {
         alert("Geolocalização não suportada pelo navegador.");
+    }
+
+    async function carregarPostos(latitude, longitude, map) {
+        const selectElement = document.getElementById('postoSelecionado');
+
+        try {
+            const responseSelect = await fetch(`buscar_postos.php?lat=${latitude}&lng=${longitude}&raio=5`);
+            if (!responseSelect.ok) throw new Error();
+            const postosSelect = await responseSelect.json();
+
+            selectElement.innerHTML = '';
+            if (postosSelect.length === 0) {
+                selectElement.innerHTML = '<option value="0" disabled selected>Nenhum posto próximo encontrado</option>';
+            } else {
+                const defaultOption = document.createElement('option');
+                defaultOption.value = '0';
+                defaultOption.disabled = true;
+                defaultOption.selected = true;
+                defaultOption.textContent = 'Selecione o posto em que vai ser realizado o pagamento';
+                selectElement.appendChild(defaultOption);
+
+                postosSelect.forEach(posto => {
+                    const option = document.createElement('option');
+                    option.value = posto.idposto;
+                    option.textContent = `${posto.nome} - ${posto.endereco}`;
+                    selectElement.appendChild(option);
+                });
+            }
+        } catch {
+            alert('Erro ao buscar postos para seleção.');
+        }
+
+        // Buscar para o mapa
+        try {
+            const responseMapa = await fetch(`buscar_postos.php?lat=${latitude}&lng=${longitude}`);
+            if (!responseMapa.ok) throw new Error();
+            const postosMapa = await responseMapa.json();
+
+            const svgPosto = `<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 64 64" fill="none" stroke="#000000" stroke-width="2" stroke-linejoin="round" stroke-linecap="round">
+                <rect x="14" y="12" width="24" height="40" rx="4" ry="4" fill="#e63946" stroke="#000"/>
+                <rect x="20" y="18" width="12" height="12" rx="2" ry="2" fill="#f1faee" stroke="#000"/>
+                <path d="M38 14h6v24h-4" stroke="#000" fill="none"/>
+                <rect x="42" y="36" width="6" height="8" rx="1" ry="1" fill="#1d3557" stroke="#000"/>
+                <line x1="26" y1="38" x2="26" y2="46" stroke="#000"/>
+                <line x1="32" y1="38" x2="32" y2="46" stroke="#000"/>
+            </svg>`;
+
+            function createSVGElementFromString(svgString) {
+                const div = document.createElement('div');
+                div.innerHTML = svgString.trim();
+                return div.firstChild;
+            }
+
+            postosMapa.forEach(posto => {
+                const svgElement = createSVGElementFromString(svgPosto);
+                let tabelaCombustiveis = `
+                    <table style="width:100%; border-collapse: collapse; font-size: 12px;">
+                        <thead>
+                            <tr>
+                                <th style="text-align:left; padding: 4px;">Tipo</th>
+                                <th style="text-align:right; padding: 4px;">Preço</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+                posto.combustiveis.forEach(c => {
+                    let tipo;
+                    switch (c.tipo) {
+                        case 1: tipo = 'Gasolina'; break;
+                        case 2: tipo = 'Etanol'; break;
+                        case 3: tipo = 'Diesel'; break;
+                        default: tipo = 'Outro';
+                    }
+                    tabelaCombustiveis += `
+                        <tr>
+                            <td style="padding: 4px;">${tipo}</td>
+                            <td style="text-align:right; padding: 4px;">R$ ${parseFloat(c.preco).toFixed(2)}</td>
+                        </tr>
+                    `;
+                });
+
+                tabelaCombustiveis += `</tbody></table>`;
+
+                const popupHTML = `
+                    <strong>${posto.nome}</strong><br>
+                    Distância: ${posto.distancia.toFixed(2)} km
+                    <hr style="margin: 8px 0;">
+                    ${tabelaCombustiveis}
+                `;
+                new mapboxgl.Marker({ element: svgElement, anchor: "bottom" })
+                    .setLngLat([posto.longitude, posto.latitude])
+                    .setPopup(new mapboxgl.Popup().setHTML(popupHTML))
+                    .addTo(map);
+            });
+        } catch {
+            alert('Erro ao buscar postos para o mapa.');
+        }
+    }
+
+    async function desenharRota(latitude, longitude, map) {
+        if (typeof destinoViagem === 'undefined') return;
+
+        const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${longitude},${latitude};${destinoViagem.longitude},${destinoViagem.latitude}?geometries=geojson&access_token=${mapboxgl.accessToken}`;
+
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            const route = data.routes[0].geometry;
+
+            if (map.getSource('route')) {
+                map.getSource('route').setData({
+                    type: 'Feature',
+                    geometry: {
+                        type: 'LineString',
+                        coordinates: route.coordinates
+                    }
+                });
+            } else {
+                map.addSource('route', {
+                    type: 'geojson',
+                    data: {
+                        type: 'Feature',
+                        geometry: {
+                            type: 'LineString',
+                            coordinates: route.coordinates
+                        }
+                    }
+                });
+
+                map.addLayer({
+                    id: 'route',
+                    type: 'line',
+                    source: 'route',
+                    layout: {
+                        'line-join': 'round',
+                        'line-cap': 'round'
+                    },
+                    paint: {
+                        'line-color': '#0074D9',
+                        'line-width': 4
+                    }
+                });
+
+                new mapboxgl.Marker({ color: 'green' })
+                    .setLngLat([destinoViagem.longitude, destinoViagem.latitude])
+                    .setPopup(new mapboxgl.Popup().setHTML("<strong>Destino da viagem</strong>"))
+                    .addTo(map);
+            }
+        } catch (error) {
+            console.error('Erro ao buscar rota:', error);
+        }
     }
 
     function validarFormularioPagamento() {
