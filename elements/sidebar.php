@@ -35,7 +35,6 @@ if (isset($_SESSION['gerente']) && isset($_SESSION['adm']) && $_SESSION['gerente
         <li class="mobile-menu-item"><a href="/FuelWise/pages/gerente/integrantes.php?idtransportadora=' . $_SESSION['idtransportadora'] . '">Gerenciar integrantes</a></li>
         <li class="mobile-menu-item"><a href="/FuelWise/pages/gerente/veiculos.php?idtransportadora=' . $_SESSION['idtransportadora'] . '">Gerenciar caminhões</a></li>
         <li class="mobile-menu-item"><a href="/FuelWise/pages/gerente/viagens.php?idtransportadora=' . $_SESSION['idtransportadora'] . '">Gerenciar viagens</a></li>
-        <li class="mobile-menu-item"><a href="/FuelWise/pages/gerente/pagamentos.php?idtransportadora=' . $_SESSION['idtransportadora'] . '">Gerenciar pagamentos</a></li>
         <li class="mobile-menu-item"><a href="/FuelWise/pages/suporte.php">Suporte &nbsp;<box-icon color="black" name="support"></box-icon></a></li>
         <li class="mobile-menu-item"><a href="/FuelWise/pages/logout.php">Logout</a></li>
     </ul>';
