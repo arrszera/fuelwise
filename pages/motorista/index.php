@@ -209,6 +209,10 @@ if ($viagemAtual) { ?>
     </style>
 </head>
 <body>
+    <div class="sidebar">
+        <?php include('../../elements/sidebar.php') ?>
+        <?php include('../../elements/alert.php'); ?>
+    </div>
 
 
     <div class="main">
