@@ -1,17 +1,16 @@
-
 <?php 
     include('autenticacaoGerente.php');
 
     include('../../elements/connection.php');
     
-            $query = "SELECT * FROM viagem 
-            JOIN usuario ON viagem.idusuario = usuario.idusuario
-            JOIN veiculo ON viagem.idveiculo = veiculo.idveiculo
-            JOIN transportadora_usuario ON usuario.idusuario = transportadora_usuario.idusuario
-            WHERE transportadora_usuario.idtransportadora = " . (int)$_GET['idtransportadora'] . "  ";  
-  
+    $query = "SELECT * FROM viagem 
+    JOIN usuario ON viagem.idusuario = usuario.idusuario
+    JOIN veiculo ON viagem.idveiculo = veiculo.idveiculo
+    JOIN transportadora_usuario ON usuario.idusuario = transportadora_usuario.idusuario
+    WHERE transportadora_usuario.idtransportadora = " . (int)$_GET['idtransportadora'] . "  ";  
 
-            $resultado = $conn->query($query);
+
+    $resultado = $conn->query($query);
 #    if ($resultado === false) {
 #       die("Erro na consulta: " . $conn->error);
 #    }
@@ -42,6 +41,31 @@
                     'longitudeDestino' => $row['longitude_destino'],
                 ];
             }
+
+            $queryPagamentos = "SELECT * FROM pagamento JOIN posto ON pagamento.idposto = posto.idposto WHERE idviagem = $idviagem";
+            $resultadoPagamentos = $conn->query($queryPagamentos);
+    
+            $pagamentos = [];
+            if ($resultadoPagamentos && $resultadoPagamentos->num_rows > 0) {
+                while($pagamento = $resultadoPagamentos->fetch_assoc()) {
+                    $pagamentos[] = [
+                        'idpagamento' => $pagamento['idpagamento'],
+                        'idusuario' => $pagamento['idusuario'],
+                        'idposto' => $pagamento['idposto'],
+                        'nome' => $requests[$idviagem]['nome'],
+                        'idtransportadora' => $pagamento['idtransportadora'],
+                        'litragem' => $pagamento['litragem'],
+                        'valor' => $pagamento['valor'],
+                        'destinatario' => $pagamento['destinatario'],
+                        'latitudePagamento' => $pagamento['latitudePagamento'],
+                        'longitudePagamento' => $pagamento['longitudePagamento'],
+                        'latitudePosto' => $pagamento['latitude'],
+                        'longitudePosto' => $pagamento['longitude'],
+                        'cpfPagador' => $pagamento['cpfPagador'],
+                    ];
+                }
+            }
+            $requests[$idviagem]['pagamentos'] = $pagamentos;
         }
     } 
 ?>
@@ -67,7 +91,7 @@
         <?php include('../../elements/header.php'); ?>
         <div class="content">
             <header class="page-header">
-                <h1>Viagens Iniciadas</h1>
+                <h1>Viagens</h1>
                 <p>Revise e gerencie as viagens da transportadora.</p>
             </header>
             <div class="search-wrapper">
@@ -213,6 +237,29 @@
             </form>
         </div>
     </div>
+
+    <div id="modalPagamentos" class="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.6); z-index:9999; justify-content:center; align-items:center;">
+        <div style="background:#fff; border-radius:8px; max-width:90%; width:1000px; padding:20px; position:relative; max-height:90vh; overflow-y:auto;">
+            <h2 style="margin-bottom:20px;">Pagamentos da Viagem</h2>
+            <button onclick="fecharModalPagamentos()" style="position:absolute; top:10px; right:10px; background:none; border:none; font-size:20px; cursor:pointer;">&times;</button>
+            <table class="styled-table" style="width:100%; border-collapse: collapse;">
+            <thead>
+                <tr>
+                <th>Nome do Usuário</th>
+                <th>Destinatário</th>
+                <th>Valor</th>
+                <th>Litragem</th>
+                <th>CPF</th>
+                <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="modalPagamentosBody">
+                <!-- Linhas vão ser adicionadas por JS -->
+            </tbody>
+            </table>
+        </div>
+    </div>
+
     <script>
         function getDateInSaoPaulo() {
             const date = new Date();
@@ -304,8 +351,20 @@
         </div>
     </div>
 
+    <div id="modalMapa" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Localização do Pagamento</h2>
+                <span onclick="fecharModalMapa()" class="close">&times;</span>
+            </div>
+            <div id="map" style="width: 100%; height: 400px;"></div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../../js/index.js"></script>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css" rel="stylesheet" />
 
     <script>
         const requests = <?php echo json_encode($requests); ?>;
@@ -319,7 +378,15 @@
             save: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#2563eb" viewBox="0 0 24 24">
                         <path d="M17 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7l-2-4zm-1 16h-8v-4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v4zm-1-10H9V5h6v4z"/>
                     </svg>
-                    `
+                    `,
+            eye: `<svg class="icon" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="3"></circle><path d="M2 12c2-4 6-7 10-7s8 3 10 7c-2 4-6 7-10 7s-8-3-10-7z"></path></svg>`,
+            map: `<svg width="24" height="24" viewBox="0 0 64 58" xmlns="http://www.w3.org/2000/svg" fill="green">
+                    <path d="M32 6C23.163 6 16 13.163 16 22c0 10.5 13.5 27 16 30 2.5-3 16-19.5 16-30 0-8.837-7.163-16-16-16zm0 22a6 6 0 1 1 0-12 6 6 0 0 1 0 12z"/>
+                </svg>`,
+        }
+
+        function fecharModalMapa() {
+            document.getElementById('modalMapa').style.display = 'none'
         }
 
         function fecharModal() {
@@ -442,7 +509,47 @@
                 }
             })
         }
-        
+
+        function abrirModalPagamentos(pagamentos) {
+            const tbody = document.getElementById('modalPagamentosBody');
+            tbody.innerHTML = '';
+
+            if (pagamentos.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;">Nenhum pagamento encontrado.</td></tr>`;
+            } else {
+                pagamentos.forEach(req => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td data-label="Nome do usuário" class="font-medium">${req.nome || '-'}</td>
+                        <td data-label="Nome do destinatário">${req.destinatario}</td>
+                        <td data-label="Valor">R$ ${parseFloat(req.valor).toFixed(2)}</td>
+                        <td data-label="Litragem">${parseFloat(req.litragem).toFixed(2)} L</td>
+                        <td data-label="CPF">${req.cpfPagador}</td>
+                        <td data-label="Ações">
+                            <div class="actions">
+                                <button onclick='abrirMapa(${req.latitudePagamento}, ${req.longitudePagamento}, ${req.latitudePosto}, ${req.longitudePosto}, ${JSON.stringify(req.nome_posto)}, ${JSON.stringify(req.endereco_posto)}, ${req.idposto})' class="btn-icon btn-map" title="Ver no Mapa">
+                                    ${icons.map}
+                                </button>
+                                <button class="btn-icon btn-eye" title="Ver detalhes do pagamento" data-idpagamento="${req.idpagamento}">
+                                    ${icons.eye}
+                                </button>
+                                <button onclick='excluirPagamento(${req.idpagamento})' class="btn-icon btn-deny" title="Excluir">
+                                    ${icons.x}
+                                </button>
+                            </div>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+
+            document.getElementById('modalPagamentos').style.display = 'flex';
+        }
+
+        function fecharModalPagamentos() {
+            document.getElementById('modalPagamentos').style.display = 'none';
+        }
+ 
         function renderTable(filtered) {
             const tbody = document.getElementById('tableBody')
             tbody.innerHTML = ''
@@ -469,11 +576,12 @@
                         <button class="btn-icon btn-edit" title="Editar viagem" data-idviagem="${req.idviagem}">
                             ${icons.edit}
                         </button>
-                
-                            <button onclick='excluirViagem(${req.idviagem})' class="btn-icon btn-deny" title="Excluir">
-                                ${icons.x}
-                            </button>
-                            
+                        <button onclick='abrirModalPagamentos(${JSON.stringify(req.pagamentos)})' class="btn-icon btn-view" title="Ver pagamentos da viagem" data-idviagem="${req.idviagem}">
+                            ${icons.eye}
+                        </button>
+                        <button onclick='excluirViagem(${req.idviagem})' class="btn-icon btn-deny" title="Excluir">
+                            ${icons.x}
+                        </button>
                     </div>
                 </td>
                 `
@@ -487,6 +595,68 @@
                     abrirModalEditarViagem(requests[idviagem])
                 })
             })
+        }
+
+        function abrirMapa(latitudePagamento, longitudePagamento, latitudePosto, longitudePosto, nomePosto, enderecoPosto, idposto) {
+            document.getElementById('modalMapa').style.display = 'block';
+
+            (async function () {
+                mapboxgl.accessToken = 'pk.eyJ1IjoibHVjYXM1NTVhbmRyaWFuaSIsImEiOiJjbWJhMDBqYm0wNW5rMmxvbDl5eHcyYXRnIn0.PCgnmuGP-tgdJity6h2LUg';
+
+                const map = new mapboxgl.Map({
+                    container: 'map',
+                    style: 'mapbox://styles/mapbox/streets-v11',
+                    center: [longitudePagamento, latitudePagamento],
+                    zoom: 14
+                });
+
+                map.addControl(new mapboxgl.NavigationControl());
+
+                const svgPosto =  `<svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="40"
+                                height="40"
+                                viewBox="0 0 64 64"
+                                fill="none"
+                                stroke="#000000"
+                                stroke-width="2"
+                                stroke-linejoin="round"
+                                stroke-linecap="round"
+                                >
+                                <!-- Corpo da bomba -->
+                                <rect x="14" y="12" width="24" height="40" rx="4" ry="4" fill="#e63946" stroke="#000"/>
+                                <!-- Tela da bomba -->
+                                <rect x="20" y="18" width="12" height="12" rx="2" ry="2" fill="#f1faee" stroke="#000"/>
+                                <!-- Mangueira -->
+                                <path d="M38 14h6v24h-4" stroke="#000" fill="none"/>
+                                <!-- Bico -->
+                                <rect x="42" y="36" width="6" height="8" rx="1" ry="1" fill="#1d3557" stroke="#000"/>
+                                <!-- Detalhes da bomba -->
+                                <line x1="26" y1="38" x2="26" y2="46" stroke="#000"/>
+                                <line x1="32" y1="38" x2="32" y2="46" stroke="#000"/>
+                            </svg>`
+                const svgPostoEl = document.createElement('div');
+                svgPostoEl.innerHTML = svgPosto;
+                const svgElement = svgPostoEl.firstElementChild;
+
+                new mapboxgl.Marker({ color: 'red' })
+                    .setLngLat([longitudePagamento, latitudePagamento])
+                    .setPopup(new mapboxgl.Popup().setHTML("<strong>Local do Pagamento</strong>"))
+                    .addTo(map);
+
+                new mapboxgl.Marker({ element: svgElement })
+                    .setLngLat([longitudePosto, latitudePosto])
+                    .setPopup(new mapboxgl.Popup().setHTML(`<strong>${nomePosto}</strong><br>${enderecoPosto}`))
+                    .addTo(map);
+
+                const bounds = new mapboxgl.LngLatBounds();
+                bounds.extend([longitudePagamento, latitudePagamento]);
+                bounds.extend([longitudePosto, latitudePosto]);
+                map.fitBounds(bounds, { padding: 20 });
+
+            })().catch(function (error) {
+                alert("Erro ao obter localização: " + error.message);
+            });
         }
 
         // Verificacoes

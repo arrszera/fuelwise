@@ -58,9 +58,9 @@
     <?php }else if (isset($_SESSION['gerente']) && $_SESSION['gerente'] == '1'){ ?> <!-- Gerente -->
         <li class="mobile-menu-item"><a href="/FuelWise/pages/gerente/index.php?idtransportadora=<?php echo $_SESSION['idtransportadora']?>">Início</a></li>
         <li class="mobile-menu-item"><a href="/FuelWise/pages/gerente/integrantes.php?idtransportadora=<?php echo $_SESSION['idtransportadora']?>">Gerenciar integrantes</a></li>
-        <li class="mobile-menu-item"><a href="/FuelWise/pages/gerente/integrantes.php?idtransportadora=<?php echo $_SESSION['idtransportadora']?>">Gerenciar integrantes</a></li>
         <li class="mobile-menu-item"><a href="/FuelWise/pages/gerente/veiculos.php?idtransportadora=<?php echo $_SESSION['idtransportadora']?>">Gerenciar caminhões</a></li>
-        <li class="mobile-menu-item"><a href="/FuelWise/pages/gerente/viagens.php?idtransportadora=<?php echo $_SESSION['idtransportadora']?>">Gerenciar Viagens</a></li>
+        <li class="mobile-menu-item"><a href="/FuelWise/pages/gerente/viagens.php?idtransportadora=<?php echo $_SESSION['idtransportadora']?>">Gerenciar viagens</a></li>
+        <li class="mobile-menu-item"><a href="/FuelWise/pages/gerente/pagamentos.php?idtransportadora=<?php echo $_SESSION['idtransportadora']?>">Gerenciar pagamentos</a></li>
         <li class="mobile-menu-item"><a href="/FuelWise/pages/gerente/postos.php?idtransportadora=<?php echo $_SESSION['idtransportadora']?>">Checar Postos</a></li>
         <li class="mobile-menu-item"><a href="/FuelWise/pages/suporte.php">Suporte &nbsp;<box-icon color="black" name="support"></box-icon></a></li>
         <li class="mobile-menu-item"><a href="/FuelWise/pages/logout.php">Logout</a></li>
