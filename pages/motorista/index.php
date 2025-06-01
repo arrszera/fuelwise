@@ -209,41 +209,6 @@ if ($viagemAtual) { ?>
     </style>
 </head>
 <body>
-    <div class="sidebar">
-        <?php include('../../elements/sidebar.php') ?>
-        <?php include('../../elements/alert.php'); ?>
-    </div>
-
-    <?php while ($row = $resultado->fetch_assoc()): ?>
-    <tr>
-        <td><?= htmlspecialchars($row['idveiculo']) ?></td>
-        <td><?= htmlspecialchars($row['placa']) ?></td>
-        <td><?= htmlspecialchars($row['modelo']) ?></td>
-        <td><?= htmlspecialchars($row['litragem']) ?></td>
-        <!-- Adicione outros campos conforme necessário -->
-    </tr>
-<?php endwhile; ?>
-
-        <table>
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Placa</th>
-            <th>Modelo</th>
-            <th>Litragem</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php while ($row = $resultado->fetch_assoc()): ?>
-            <tr>
-                <td><?= htmlspecialchars($row['idveiculo']) ?></td>
-                <td><?= htmlspecialchars($row['placa']) ?></td>
-                <td><?= htmlspecialchars($row['modelo']) ?></td>
-                <td><?= htmlspecialchars($row['litragem']) ?></td>
-            </tr>
-        <?php endwhile; ?>
-    </tbody>
-</table>
 
 
     <div class="main">
