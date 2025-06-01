@@ -1,6 +1,21 @@
 <?php
 include('autenticarMotorista.php');
 
+
+function estaDentroDoRaio($latAtual, $lngAtual, $latPosto, $lngPosto, $raioKm = 2) {
+    $raioTerra = 6371;
+    $dLat = deg2rad($latPosto - $latAtual);
+    $dLng = deg2rad($lngPosto - $lngAtual);
+    $a = sin($dLat / 2) * sin($dLat / 2) +
+        cos(deg2rad($latAtual)) * cos(deg2rad($latPosto)) *
+        sin($dLng / 2) * sin($dLng / 2);
+    $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
+    return ($raioTerra * $c) <= $raioKm;
+
+    
+}
+
+
 if (isset($_GET['idtransportadora']) && isset($_SESSION['idtransportadora']) 
     && $_GET['idtransportadora'] == $_SESSION['idtransportadora']) {
 
@@ -33,6 +48,22 @@ if (isset($_GET['idtransportadora']) && isset($_SESSION['idtransportadora'])
         exit;
     }
     $idveiculo = $resultVeiculo->fetch_object()->idveiculo;
+
+
+    $query = "SELECT latitude, longitude FROM posto WHERE idposto = $idposto";
+    $coordenadas = $conn->query($query)->fetch_object();
+
+    // verificar se a litragem enviada esta dentro da litragem maxima do veiculo
+    if estaDentroDoRaio($latitude, $longitude, $coordenadas->latitude, $coordenadas->longitude){
+        $_SESSION['alert'] = [
+            'title' => 'Erro!',
+            'text' => 'Você está fora da distância máxima para o pagamento.',
+            'icon' => 'warning',
+            'confirmButtonColor' => '#2563eb',
+        ];
+        header("Location: index.php?idtransportadora=" . $_SESSION['idtransportadora']);
+        exit;
+    }
 
     // verificar se a litragem enviada esta dentro da litragem maxima do veiculo
     $queryLitragem = "SELECT litragem FROM veiculo WHERE idveiculo = $idveiculo";
