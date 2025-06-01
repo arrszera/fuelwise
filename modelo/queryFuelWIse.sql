@@ -20,11 +20,10 @@ CREATE TABLE IF NOT EXISTS `posto` (
   `idposto` INT NOT NULL AUTO_INCREMENT,
   `endereco` VARCHAR(100) NOT NULL,
   `nome` VARCHAR(45) NOT NULL,
-  `latitude` DECIMAL(10, 2) NOT NULL,
-  `longitude` DECIMAL(10, 2) NOT NULL,
+  `latitude` VARCHAR(20) NOT NULL,
+  `longitude` VARCHAR(20) NOT NULL,
   PRIMARY KEY (`idposto`)
 ) ENGINE=InnoDB;
-
 CREATE TABLE IF NOT EXISTS `usuario` (
   `idusuario` INT NOT NULL AUTO_INCREMENT,
   `email` VARCHAR(255) NOT NULL,
@@ -41,7 +40,7 @@ CREATE TABLE IF NOT EXISTS `usuario` (
 CREATE TABLE IF NOT EXISTS `veiculo` (
   `idveiculo` INT NOT NULL AUTO_INCREMENT,
   `idtransportadora` INT NOT NULL,
-  `placa` VARCHAR(7) NOT NULL,
+  `placa` VARCHAR(10) NOT NULL,
   `modelo` VARCHAR(45) NOT NULL,
   `eixos` TINYINT NOT NULL,
   `litragem` FLOAT NOT NULL,
@@ -50,6 +49,7 @@ CREATE TABLE IF NOT EXISTS `veiculo` (
   FOREIGN KEY (`idtransportadora`) REFERENCES `transportadora` (`idtransportadora`)
 ) ENGINE=InnoDB;
 
+
 CREATE TABLE IF NOT EXISTS `viagem` (
   `idviagem` INT NOT NULL AUTO_INCREMENT,
   `idusuario` INT NOT NULL, 
@@ -57,17 +57,17 @@ CREATE TABLE IF NOT EXISTS `viagem` (
   `data_inicio` DATETIME NOT NULL,
   `data_termino` DATETIME,
   `endereco_origem` VARCHAR(150),
-  `latitude_origem`DECIMAL(10, 7),
-  `longitude_origem` DECIMAL(10, 7),
+  `latitude_origem` DECIMAL(10, 2),
+  `longitude_origem` DECIMAL(10, 2),
   `endereco_destino` VARCHAR(150),
-  `latitude_destino` DECIMAL(10, 7),
-  `longitude_destino` DECIMAL(10, 7),
-  `latitude_atual` DECIMAL(10, 7),
-  `longitude_atual` DECIMAL(10, 7),
+  `latitude_destino` DECIMAL(10, 2),
+  `longitude_destino` DECIMAL(10, 2),
+  `latitude_atual` DECIMAL(10, 2),
+  `longitude_atual` DECIMAL(10, 2),
   `carga` VARCHAR(100) NOT NULL,
   `peso` FLOAT(10,2) NOT NULL,
   `obs` VARCHAR(100),
-  `status` TINYINT,
+  `status` TINYINT NOT NULL,
   PRIMARY KEY (`idviagem`),
   FOREIGN KEY (`idusuario`) REFERENCES `usuario` (`idusuario`),
   FOREIGN KEY (`idveiculo`) REFERENCES `veiculo` (`idveiculo`)
@@ -81,7 +81,6 @@ CREATE TABLE IF NOT EXISTS `combustivel` (
   PRIMARY KEY (`idcombustivel`),
   FOREIGN KEY (`idposto`) REFERENCES `posto` (`idposto`)
 ) ENGINE=InnoDB;
-
 
 CREATE TABLE IF NOT EXISTS `denuncia` (
   `iddenuncia` INT NOT NULL AUTO_INCREMENT,
@@ -131,6 +130,7 @@ CREATE TABLE IF NOT EXISTS `transportadora_usuario` (
   FOREIGN KEY (`idtransportadora`) REFERENCES `transportadora` (`idtransportadora`)
 ) ENGINE=InnoDB;
 
+
 CREATE TABLE IF NOT EXISTS `pagamento` (
   `idpagamento` INT NOT NULL AUTO_INCREMENT,
   `idusuario` INT NOT NULL,
@@ -138,7 +138,9 @@ CREATE TABLE IF NOT EXISTS `pagamento` (
   `idviagem` INT NOT NULL,
   `idtransportadora` INT NOT NULL,
   `litragem` DECIMAL(10,2) NOT NULL,
-  `valor` DECIMAL(10,2) NOT NULL,
+  `valor` DECIMAL(10,2) NOT NULL, 
+  `distanciaPercorrida` DECIMAL(10,2) NOT NULL, 
+  `dataPagamento` DATETIME NOT NULL, 
   `destinatario` VARCHAR(90) NOT NULL,
   `latitudePagamento` DECIMAL(10, 7) NOT NULL,
   `longitudePagamento` DECIMAL(10, 7) NOT NULL,
@@ -146,4 +148,3 @@ CREATE TABLE IF NOT EXISTS `pagamento` (
   PRIMARY KEY (`idpagamento`), -- sem FOREIGN KEYS pois se um posto ou usuario for excluido, não dependencia entre ambos 
   FOREIGN KEY (`idtransportadora`) REFERENCES `transportadora` (`idtransportadora`)
   ) ENGINE=InnoDB;
-
