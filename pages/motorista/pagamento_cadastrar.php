@@ -1,5 +1,5 @@
 <?php
-session_start();
+include('autenticarMotorista.php');
 
 if (isset($_GET['idtransportadora']) && isset($_SESSION['idtransportadora']) 
     && $_GET['idtransportadora'] == $_SESSION['idtransportadora']) {
@@ -15,12 +15,17 @@ if (isset($_GET['idtransportadora']) && isset($_SESSION['idtransportadora'])
     $longitude = $_POST["longitude"];
     $destinatario = $_POST["destinatarioLidoInput"];
     $idtransportadora = $_GET["idtransportadora"];
+    $distanciaPercorrida = $_POST['distanciaPercorrida'];
 
     $query = 'SELECT cpf FROM usuario WHERE idusuario = ' . $idusuario;
     $cpf = $conn->query($query)->fetch_object()->cpf;
 
-    $sql = "INSERT INTO pagamento (idtransportadora, idusuario, idposto, idviagem, litragem, valor, destinatario, cpfPagador, latitudePagamento, longitudePagamento) 
-            VALUES ('$idtransportadora', '$idusuario', '$idposto', '$idviagem', '$litragem', '$valor', '$destinatario', '$cpf', $latitude, $longitude)";
+    $now = new DateTime('now', new DateTimeZone('America/Sao_Paulo'));
+    $dataPagamento = $now->format('Y-m-d H:i:s');
+
+
+    $sql = "INSERT INTO pagamento (idtransportadora, idusuario, idposto, idviagem, litragem, valor, destinatario, cpfPagador, latitudePagamento, longitudePagamento, dataPagamento, distanciaPercorrida) 
+            VALUES ('$idtransportadora', '$idusuario', '$idposto', '$idviagem', '$litragem', '$valor', '$destinatario', '$cpf', $latitude, $longitude, '$dataPagamento', $distanciaPercorrida)";
 
     if ($conn->query($sql)) {
         $idveiculo = $conn->insert_id;

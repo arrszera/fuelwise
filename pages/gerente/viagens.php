@@ -7,8 +7,7 @@
     JOIN usuario ON viagem.idusuario = usuario.idusuario
     JOIN veiculo ON viagem.idveiculo = veiculo.idveiculo
     JOIN transportadora_usuario ON usuario.idusuario = transportadora_usuario.idusuario
-    WHERE transportadora_usuario.idtransportadora = " . (int)$_GET['idtransportadora'] . "  ";  
-
+    WHERE transportadora_usuario.idtransportadora = " . (int)$_GET['idtransportadora'] . " ORDER BY idviagem DESC";  
 
     $resultado = $conn->query($query);
 #    if ($resultado === false) {
@@ -32,8 +31,9 @@
                     'data_termino' => $row['data_termino'],
                     'nome' => $row['nome'],
                     'placa' => $row['placa'],
-                    'modelo' => $row['modelo'],
                     'enderecoOrigem' => $row['endereco_origem'],
+                    'modelo' => $row['modelo'],
+                    'status' => $row['status'],
                     'latitudeOrigem' => $row['latitude_origem'],
                     'longitudeOrigem' => $row['longitude_origem'],
                     'enderecoDestino' => $row['endereco_destino'],
@@ -122,6 +122,7 @@
                             <th>Observação</th>
                             <th>Data Início</th>
                             <th>Data Término</th>
+                            <th>Status</th>
                             <th class="w-120px">Ações</th>
                         </tr>
                     </thead>
@@ -380,9 +381,19 @@
                     </svg>
                     `,
             eye: `<svg class="icon" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="3"></circle><path d="M2 12c2-4 6-7 10-7s8 3 10 7c-2 4-6 7-10 7s-8-3-10-7z"></path></svg>`,
-            map: `<svg width="24" height="24" viewBox="0 0 64 58" xmlns="http://www.w3.org/2000/svg" fill="green">
-                    <path d="M32 6C23.163 6 16 13.163 16 22c0 10.5 13.5 27 16 30 2.5-3 16-19.5 16-30 0-8.837-7.163-16-16-16zm0 22a6 6 0 1 1 0-12 6 6 0 0 1 0 12z"/>
-                </svg>`,
+            map: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="green" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21 3 6"/>
+                    <line x1="9" y1="3" x2="9" y2="18"/>
+                    <line x1="15" y1="6" x2="15" y2="21"/>
+                </svg>
+                `,
+            payment: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="green" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                        <rect width="20" height="14" x="2" y="5" rx="2"/>
+                        <line x1="2" y1="10" x2="22" y2="10"/>
+                    </svg>
+                    `,
         }
 
         function fecharModalMapa() {
@@ -566,6 +577,17 @@
         function fecharModalPagamentos() {
             document.getElementById('modalPagamentos').style.display = 'none';
         }
+
+        function getStatusClass(status) {
+            switch (parseInt(status)) {
+                case 0:
+                    return {'classe' : 'badge-pending', 'frase' : 'pendente'}
+                case 1:
+                    return {'classe' : 'badge-success', 'frase' : 'concluída'}
+                default:
+                    return ''
+            }
+        }
  
         function renderTable(filtered) {
             const tbody = document.getElementById('tableBody')
@@ -578,6 +600,7 @@
 
             filtered.forEach(req => {
                 const tr = document.createElement('tr')
+                const status = getStatusClass(req.status)
 
                 let html = `
                 <td data-label="Nome" class="font-medium">${req.nome}</td>
@@ -588,13 +611,14 @@
                 <td data-label="Observações">${req.obs}</td>
                 <td data-label="Data de início">${req.data_inicio}</td>
                 <td data-label="Data de término">${req.data_termino == 0 || !req.data_termino ? 'Em andamento' : req.data_termino}</td>
+                <td data-label="Status"><div class="badge ${status.classe}">${status['frase']}</div></td>
                 <td data-label="Ações">
                     <div class="actions">
                         <button class="btn-icon btn-edit" title="Editar viagem" data-idviagem="${req.idviagem}">
                             ${icons.edit}
                         </button>
                         <button onclick='abrirModalPagamentos(${JSON.stringify(req.pagamentos)})' class="btn-icon btn-view" title="Ver pagamentos da viagem" data-idviagem="${req.idviagem}">
-                            ${icons.eye}
+                            ${icons.payment}
                         </button>
                         <button onclick='excluirViagem(${req.idviagem})' class="btn-icon btn-deny" title="Excluir">
                             ${icons.x}

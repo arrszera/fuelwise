@@ -18,6 +18,12 @@
       if ($_SESSION['adm'] == 0 && $_SESSION['gerente'] == 0){
         header("Location: motorista/index.php?idtransportadora=".$_SESSION['idtransportadora']); exit;
       }
+      if ($_SESSION['adm'] == 0 && $_SESSION['gerente'] == 1 && isset($_SESSION['idtransportadora'])){
+        header("Location: gerente/index.php?idtransportadora=".$_SESSION['idtransportadora']); exit;
+      }
+      if ($_SESSION['adm'] == 1 && $_SESSION['gerente'] == 0){
+        header("Location: adm/index.php"); exit;
+      }
     }
   ?>
 

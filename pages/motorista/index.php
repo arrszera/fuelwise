@@ -322,6 +322,8 @@ if ($viagemAtual) { ?>
                 </select>
                 <label>Litragem</label>
                 <input style="margin-top: 0px" placeholder="Coloque a litragem" name="litragem"><br>
+                <label>Distância percorrida</label>
+                <input type="number" style="margin-top: 0px" placeholder="Coloque a distância percorrida desde o último pagamento" name="distanciaPercorrida"><br>
                 <small id="coordenadasTexto" style="font-weight: 400; color: #333">Coordenadas: </small>
             </div>
 
