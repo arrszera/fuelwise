@@ -505,7 +505,24 @@
                 confirmButtonText: "Sim, excluir!"
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = `viagem_deletar.php?idviagem=${idviagem}&idtransportadora=` + <?php echo $_SESSION['idtransportadora'] ?>
+                    window.location.href = `viagem_deletar.php?idviagem=${idviagem}&idtransportadora=` + <?= $_SESSION['idtransportadora'] ?>
+                }
+            })
+        }
+
+        function excluirPagamento(idpagamento){
+            Swal.fire({
+                title: "Tem certeza?",
+                text: "Esta ação excluirá permanentemente o pagamento!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                cancelButtonText: "Cancelar",
+                confirmButtonText: "Sim, excluir!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = `pagamento_deletar.php?idpagamento=${idpagamento}&idtransportadora=` + <?= $_SESSION['idtransportadora'] ?>
                 }
             })
         }

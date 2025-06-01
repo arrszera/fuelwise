@@ -91,6 +91,10 @@ h3{
     overflow: hidden !important
 }
 
+.swal2-container, .swal2-center, .swal2-backdrop-show{
+    z-index: 999999999;
+}
+
 /* modais especificos */
 #modalAdicionarCombustivel .modal-content{
     margin: 9% auto;
@@ -222,8 +226,8 @@ h4{
         justify-content: flex-start;
     }
     #modalAdicionarCombustivel .modal-content{
-    margin: 9% auto;
-    width: 70%;
-    height: auto;
-}
+        margin: 9% auto;
+        width: 70%;
+        height: auto;
+    }
 }
