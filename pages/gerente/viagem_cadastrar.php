@@ -46,7 +46,7 @@ if (isset($_GET['idtransportadora']) && isset($_SESSION['idtransportadora'])
         header("location: viagens.php?idtransportadora=".$_SESSION['idtransportadora']); exit;
     }
 
-    $result = $conn->query("SELECT * FROM viagem WHERE idveiculo = '$idveiculo'");
+    $result = $conn->query("SELECT * FROM viagem WHERE idveiculo = '$idveiculo' AND status = 0");
 
     if ($result && $result->num_rows > 0) {
         $_SESSION['alert'] = [
@@ -57,7 +57,7 @@ if (isset($_GET['idtransportadora']) && isset($_SESSION['idtransportadora'])
         ];
         header("location: viagens.php?idtransportadora=".$_SESSION['idtransportadora']); exit;
     }
-    $result = $conn->query("SELECT * FROM viagem WHERE idusuario = '$idusuario'");
+    $result = $conn->query("SELECT * FROM viagem WHERE idusuario = '$idusuario' AND status = 0");
 
     if ($result && $result->num_rows > 0) {
         $_SESSION['alert'] = [

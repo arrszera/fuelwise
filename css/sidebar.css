@@ -84,10 +84,13 @@ body{
     }
 
     .header{
-        margin: none;
+        margin-left: 0px;
     }
     .content{
         display: block;
         padding: 20px;
     }
+    .mobile-menu-list{
+    margin-left: 0px;
+}
 }

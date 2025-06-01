@@ -42,7 +42,7 @@ h3{
 .modal {
     display: none;
     position: fixed;
-    z-index: 1;
+    z-index: 9999;
     left: 0;
     top: 0;
     width: 100%;
@@ -213,4 +213,17 @@ h4{
 
 .hidden{
     display: none;
+}
+
+@media screen and (max-width: 768px) {
+    .modal-content{
+        width: 80%;
+        gap: 0;
+        justify-content: flex-start;
+    }
+    #modalAdicionarCombustivel .modal-content{
+    margin: 9% auto;
+    width: 70%;
+    height: auto;
+}
 }

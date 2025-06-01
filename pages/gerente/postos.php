@@ -140,8 +140,8 @@
                 
                 return `
                 <tr>
-                    <td>${tipoCombustivel}</td>
-                    <td><span id='preco-${c.idcombustivel}'>${parseFloat(c.preco).toFixed(2)}</span></td>
+                    <td data-label="Tipo">${tipoCombustivel}</td>
+                    <td data-label="Preço"><span id='preco-${c.idcombustivel}'>${parseFloat(c.preco).toFixed(2)}</span></td>
                     </td>
                 </tr>`;
             }).join('') :
@@ -182,10 +182,10 @@
             : 'Nenhum combustível cadastrado.';
 
         tr.innerHTML = `
-            <td class="font-medium">${req.nome}</td>
-            <td>${req.endereco}</td>
-            <td>${req.latitude}, ${req.longitude}</td>
-            <td>${combustiveisList}</td>
+            <td data-label="Nome" class="font-medium">${req.nome}</td>
+            <td data-label="Endereço">${req.endereco}</td>
+            <td data-label="Coordenadas">${req.latitude}, ${req.longitude}</td>
+            <td data-label="Lista de combustíveis">${combustiveisList}</td>
         `;
 
         tbody.appendChild(tr);

@@ -456,15 +456,15 @@
                 const tr = document.createElement('tr')
 
                 let html = `
-                <td class="font-medium">${req.nome}</td>
-                <td>${req.placa}</td>
-                <td>${req.modelo}</td>
-                <td>${req.carga}</td>
-                <td>${req.peso}</td>
-                <td>${req.obs}</td>
-                <td>${req.data_inicio}</td>
-                <td>${req.data_termino == 0 || !req.data_termino ? 'Em andamento' : req.data_termino}</td>
-                <td>
+                <td data-label="Nome" class="font-medium">${req.nome}</td>
+                <td data-label="Placa">${req.placa}</td>
+                <td data-label="Modelo">${req.modelo}</td>
+                <td data-label="Carga">${req.carga}</td>
+                <td data-label="Peso">${req.peso}</td>
+                <td data-label="Observações">${req.obs}</td>
+                <td data-label="Data de início">${req.data_inicio}</td>
+                <td data-label="Data de término">${req.data_termino == 0 || !req.data_termino ? 'Em andamento' : req.data_termino}</td>
+                <td data-label="Ações">
                     <div class="actions">
                         <button class="btn-icon btn-edit" title="Editar viagem" data-idviagem="${req.idviagem}">
                             ${icons.edit}

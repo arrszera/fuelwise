@@ -105,7 +105,6 @@ if ($viagemAtual) { ?>
             border: 1px solid #ddd;
             padding: 0px
         }
-
         .cards{
             display: flex;
             flex-direction: column;
@@ -118,7 +117,6 @@ if ($viagemAtual) { ?>
         .card-header{
             padding: 10px;
         }
-
         h2{
             font-weight: 400;
             display: flex;
@@ -154,11 +152,9 @@ if ($viagemAtual) { ?>
             align-items: center;
             overflow: hidden !important;
         }
-
         .modal.show {
             display: flex;
         }
-
         .modal-content {
             background: #fff;
             padding: 20px;
@@ -167,25 +163,38 @@ if ($viagemAtual) { ?>
             max-width: 400px;
             position: relative;
         }
-
         .modal-content h3 {
             margin-top: 0;
         }
-
         .modal-content input, select {
             width: 100%;
             margin-top: 0px;
             padding: 8px;
         }
-
         .modal-buttons {
             margin-top: 10px;
             display: flex;
             justify-content: space-between;
         }
-
         .modal-buttons button {
             padding: 8px 12px;
+        }
+        @media screen and (max-width: 798px) {
+            #map{
+                width: 100%;
+            }
+
+            .map-container{
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .cards{
+                width: 100%;
+            }
         }
     </style>
 </head>

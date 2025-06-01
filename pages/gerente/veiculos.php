@@ -236,12 +236,12 @@
                 const tr = document.createElement('tr')
 
                 let html = `
-                <td class="font-medium">${req.placa}</td>
-                <td>${req.modelo}</td>
-                <td>${req.eixos}</td>
-                <td>${req.litragem}</td>
-                <td>${req.observacao}</td>
-                <td>
+                <td data-label="Placa" class="font-medium">${req.placa}</td>
+                <td data-label="Modelo">${req.modelo}</td>
+                <td data-label="Eixos">${req.eixos}</td>
+                <td data-label="Litragem">${req.litragem}</td>
+                <td data-label="Observação">${req.observacao}</td>
+                <td data-label="Ações">
                     <div class="actions">
                         <button class="btn-icon btn-edit" title="Editar veiculo" data-idveiculo="${req.idveiculo}">
                             ${icons.edit}

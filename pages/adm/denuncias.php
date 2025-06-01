@@ -171,10 +171,10 @@ if ($result->num_rows > 0) {
             filtered.forEach(d => {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td class="font-medium">${d.titulo}</td>
-                    <td>${d.nomeUsuario}</td>
-                    <td>${d.data_criacao}</td>
-                    <td>
+                    <td data-label="Título" class="font-medium">${d.titulo}</td>
+                    <td data-label="Nome">${d.nomeUsuario}</td>
+                    <td data-label="Data de envio">${d.data_criacao}</td>
+                    <td data-label="Ações">
                         <div class="actions">
                             <button class="btn-icon btn-view" title="Ver detalhes" aria-label="Ver detalhes da denúncia">
                                 ${icons.eye}

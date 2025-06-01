@@ -413,9 +413,9 @@
                 
                 return `
                 <tr>
-                    <td>${tipoCombustivel}</td>
-                    <td><input type="number" step="0.01" value='${parseFloat(c.preco).toFixed(2)}' id='preco-${c.idcombustivel}'></td>
-                    <td>
+                    <td data-label="Tipo">${tipoCombustivel}</td>
+                    <td data-label="Valor"><input type="number" step="0.01" value='${parseFloat(c.preco).toFixed(2)}' id='preco-${c.idcombustivel}'></td>
+                    <td data-label="Ações">
                         <div class="actions">
                             <button onclick='excluirCombustivel(${c.idcombustivel})' class="btn-icon btn-deny" title="Excluir">
                             ${icons.x}
@@ -515,10 +515,10 @@
                 const tr = document.createElement('tr')
 
                 tr.innerHTML = `
-                <td class="font-medium">${req.nome}</td>
-                <td>${req.endereco}</td>
-                <td>${req.latitude}, ${req.longitude}</td>
-                <td>
+                <td data-label="Nome do Posto" class="font-medium">${req.nome}</td>
+                <td data-label="Endereço">${req.endereco}</td>
+                <td data-label="Coordenadas">${req.latitude}, ${req.longitude}</td>
+                <td data-label="Ações">
                     <div class="actions">
                         <button class="btn-icon btn-view" title="Ver combustíveis" data-idposto="${req.idposto}">
                             ${icons.fuel}

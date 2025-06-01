@@ -349,11 +349,11 @@
                 const tr = document.createElement('tr')
 
                 let html = `
-                <td class="font-medium">${req.nome_usuario}</td>
-                <td>${req.email}</td>
-                <td>${req.telefone_usuario}</td>
-                <td>${req.cpf}</td>
-                <td>
+                <td data-label="Nome" class="font-medium">${req.nome_usuario}</td>
+                <td data-label="Email">${req.email}</td>
+                <td data-label="Telefone">${req.telefone_usuario}</td>
+                <td data-label="CPF">${req.cpf}</td>
+                <td data-label="Ações">
                     <div class="actions">
                         <button class="btn-icon btn-edit" title="Editar usuário" data-idusuario="${req.idusuario}">
                             ${icons.edit}

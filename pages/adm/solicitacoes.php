@@ -220,11 +220,11 @@
 			const tr = document.createElement('tr');
 
 			html = `
-				<td class="font-medium">${req.nomeTransportadora}</td>
-				<td>${req.nomeUsuario}</td>
-				<td>${req.emailUsuario}</td>
-				<td><span class="badge ${status.classe}">${status.frase}</span></td>
-				<td>
+				<td data-label="Nome da Transportadora" class="font-medium">${req.nomeTransportadora}</td>
+				<td data-label="Nome do usuário">${req.nomeUsuario}</td>
+				<td data-label="Email">${req.emailUsuario}</td>
+				<td data-label="Status"><span class="badge ${status.classe}">${status.frase}</span></td>
+				<td data-label="Ações">
 					<div class="actions">
 						<button class="btn-icon btn-view" title="Ver mais detalhes" aria-label="Ver detalhes de ${req.nomeTransportadora}">
 							${icons.eye}
