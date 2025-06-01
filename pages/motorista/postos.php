@@ -84,16 +84,30 @@
                             <th>Endereço</th>
                             <th>Coordenadas</th>
                             <th>Combustíveis</th>
+                            <th>Ver no Mapa</th>
                         </tr>
                     </thead>
                     <tbody id="tableBody">
                         <!-- Linhas serão inseridas via JS -->
+                         
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 
+        <div id="modalMapa" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Localização do Pagamento</h2>
+                <span onclick="fecharModalMapa()" class="close">&times;</span>
+            </div>
+            <div id="map" style="width: 100%; height: 400px;"></div>
+        </div>
+    </div>
+
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../../js/index.js"></script>
 
@@ -185,7 +199,15 @@
             <td data-label="Endereço">${req.endereco}</td>
             <td data-label="Coordenadas">${req.latitude}, ${req.longitude}</td>
             <td data-label="Lista de combustíveis">${combustiveisList}</td>
-        `;
+            <td><button onclick='abrirMapa(${req.latitude}, ${req.longitude}, ${JSON.stringify(req.nome)}, ${JSON.stringify(req.endereco)}, ${req.idposto})' class="btn-icon btn-map" title="Ver no Mapa">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="green" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21 3 6"/>
+                    <line x1="9" y1="3" x2="9" y2="18"/>
+                    <line x1="15" y1="6" x2="15" y2="21"/>
+                    </svg>
+                </button>     
+            `;
 
         tbody.appendChild(tr);
     });
@@ -226,6 +248,69 @@
                     return 'Desconhecido';
             }
         }
+
+        
+
+        function abrirMapa(latitude, longitude, nome, endereco, idposto) {
+            document.getElementById('modalMapa').style.display = 'block';
+
+            (async function () {
+                mapboxgl.accessToken = 'pk.eyJ1IjoibHVjYXM1NTVhbmRyaWFuaSIsImEiOiJjbWJhMDBqYm0wNW5rMmxvbDl5eHcyYXRnIn0.PCgnmuGP-tgdJity6h2LUg';
+
+                const map = new mapboxgl.Map({
+                    container: 'map',
+                    style: 'mapbox://styles/mapbox/streets-v11',
+                    center: [longitude, latitude],
+                    zoom: 14
+                });
+
+                map.addControl(new mapboxgl.NavigationControl());
+
+                const svgPosto =  `<svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="40"
+                                height="40"
+                                viewBox="0 0 64 64"
+                                fill="none"
+                                stroke="#000000"
+                                stroke-width="2"
+                                stroke-linejoin="round"
+                                stroke-linecap="round"
+                                >
+                                <!-- Corpo da bomba -->
+                                <rect x="14" y="12" width="24" height="40" rx="4" ry="4" fill="#e63946" stroke="#000"/>
+                                <!-- Tela da bomba -->
+                                <rect x="20" y="18" width="12" height="12" rx="2" ry="2" fill="#f1faee" stroke="#000"/>
+                                <!-- Mangueira -->
+                                <path d="M38 14h6v24h-4" stroke="#000" fill="none"/>
+                                <!-- Bico -->
+                                <rect x="42" y="36" width="6" height="8" rx="1" ry="1" fill="#1d3557" stroke="#000"/>
+                                <!-- Detalhes da bomba -->
+                                <line x1="26" y1="38" x2="26" y2="46" stroke="#000"/>
+                                <line x1="32" y1="38" x2="32" y2="46" stroke="#000"/>
+                            </svg>`
+                const svgPostoEl = document.createElement('div');
+                svgPostoEl.innerHTML = svgPosto;
+                const svgElement = svgPostoEl.firstElementChild;
+
+                new mapboxgl.Marker({ element: svgElement })
+                    .setLngLat([longitude, latitude])
+                    .setPopup(new mapboxgl.Popup().setHTML(`<strong>${nome}</strong><br>${endereco}`))
+                    .addTo(map);
+
+                const bounds = new mapboxgl.LngLatBounds();
+                bounds.extend([longitude, latitude]);
+                map.fitBounds(bounds, { padding: 20 });
+
+            })().catch(function (error) {
+                alert("Erro ao obter localização: " + error.message);
+            });
+        }
+
+                function fecharModalMapa() {
+            document.getElementById('modalMapa').style.display = 'none'
+        }
+
 
     </script>
   </body>
