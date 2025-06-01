@@ -4,6 +4,16 @@
     include('../../elements/connection.php');
 
     $sql = "SELECT * FROM viagem WHERE idusuario = ". $_SESSION['id'] . " AND status = 0 ORDER BY data_inicio ASC";
+
+    $veiculo = "SELECT * FROM veiculo
+    JOIN viagem ON veiculo.idveiculo = viagem.idveiculo
+    WHERE viagem.idveiculo = veiculo.idveiculo" ;
+    
+    $resultado = $conn->query($veiculo);
+
+    
+
+
     $agora = new DateTime('now', new DateTimeZone('America/Sao_Paulo'));
     $requests = [];
     $viagemAtual = null;
@@ -203,6 +213,38 @@ if ($viagemAtual) { ?>
         <?php include('../../elements/sidebar.php') ?>
         <?php include('../../elements/alert.php'); ?>
     </div>
+
+    <?php while ($row = $resultado->fetch_assoc()): ?>
+    <tr>
+        <td><?= htmlspecialchars($row['idveiculo']) ?></td>
+        <td><?= htmlspecialchars($row['placa']) ?></td>
+        <td><?= htmlspecialchars($row['modelo']) ?></td>
+        <td><?= htmlspecialchars($row['litragem']) ?></td>
+        <!-- Adicione outros campos conforme necessário -->
+    </tr>
+<?php endwhile; ?>
+
+        <table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Placa</th>
+            <th>Modelo</th>
+            <th>Litragem</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php while ($row = $resultado->fetch_assoc()): ?>
+            <tr>
+                <td><?= htmlspecialchars($row['idveiculo']) ?></td>
+                <td><?= htmlspecialchars($row['placa']) ?></td>
+                <td><?= htmlspecialchars($row['modelo']) ?></td>
+                <td><?= htmlspecialchars($row['litragem']) ?></td>
+            </tr>
+        <?php endwhile; ?>
+    </tbody>
+</table>
+
 
     <div class="main">
         <?php include('../../elements/header.php'); ?>

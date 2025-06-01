@@ -8,6 +8,7 @@
 
 		$sql = "UPDATE viagem 
 		SET idusuario = '".$_POST['idusuario']."', 
+		idveiculo = '".$_POST['idveiculo']."', 
 		peso = '".$_POST['peso']."', 
 		obs = '".$_POST['obs']."', 
 		data_inicio = '".$_POST['data_inicio']."', 

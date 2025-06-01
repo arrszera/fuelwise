@@ -150,11 +150,12 @@
                             FROM usuario 
                             JOIN transportadora_usuario ON usuario.idusuario = transportadora_usuario.idusuario 
                             WHERE transportadora_usuario.idtransportadora = $id
+                            AND usuario.gerente = 0
                             AND NOT EXISTS (
-                            SELECT 1 FROM viagem 
-                            WHERE viagem.idusuario = usuario.idusuario AND viagem.status = 0
-                        )
-                    ";
+                                SELECT 1 FROM viagem 
+                                WHERE viagem.idusuario = usuario.idusuario AND viagem.status = 0
+                            )";
+
                     $motoristas = $conn->query($sql3);
                     if ($motoristas->num_rows > 0) {
                         echo '<select name="idusuario" id="idusuario">';
@@ -304,6 +305,29 @@
                         }
                     ?>
                 </div>
+            <div class="form-group">
+                <label for="veiculo">Veículo</label>
+                <?php 
+                    $id = (int)$_GET['idtransportadora'];
+                    $sql4 = "SELECT idveiculo, placa, modelo 
+                            FROM veiculo 
+                            WHERE idtransportadora = $id
+                            AND NOT EXISTS (
+                            SELECT 1 FROM viagem 
+                            WHERE viagem.idveiculo = veiculo.idveiculo AND viagem.status = 0
+                        )";
+                    $veiculos = $conn->query($sql4);
+                    if ($veiculos->num_rows > 0) {
+                        echo '<select name="idveiculo" id="idveiculo">';
+                        while ($row = $veiculos->fetch_assoc()) {
+                            echo '<option value="' . $row['idveiculo'] . '">' . $row['placa'] . ' - ' . $row['modelo'] . '</option>';
+                        }
+                        echo '</select>';
+                    } else {
+                        echo "<small>Nenhum veículo encontrado</small>";
+                    }
+                ?>
+            </div>
                 <div class="form-group">
                     <label for="peso">Peso</label>
                     <input placeholder="Escreva o peso da carga" type="text" id="peso" name="peso" required>
@@ -610,7 +634,7 @@
                 <td data-label="Peso">${req.peso}</td>
                 <td data-label="Observações">${req.obs}</td>
                 <td data-label="Data de início">${req.data_inicio}</td>
-                <td data-label="Data de término">${req.data_termino == 0 || !req.data_termino ? 'Em andamento' : req.data_termino}</td>
+                <td data-label="Data de término">${!req.data_termino || req.data_termino === '0000-00-00 00:00:00' ? 'Em andamento' : req.data_termino}</td>
                 <td data-label="Status"><div class="badge ${status.classe}">${status['frase']}</div></td>
                 <td data-label="Ações">
                     <div class="actions">

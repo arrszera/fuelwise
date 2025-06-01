@@ -25,7 +25,7 @@
     $conn->query('UPDATE viagem SET latitude_atual = '.$latitude.', longitude_atual = '.$longitude.' WHERE idviagem = '.$idviagem);
 
     if (estaDentroDoRaio($latitude, $longitude, $row['latitude_destino'], $row['longitude_destino'])) {
-        $conn->query('UPDATE viagem SET status = 1, latitude_atual = '.$latitude.', longitude_atual = '.$longitude.' WHERE idviagem = '.$idviagem);
+        $conn->query('UPDATE viagem SET status = 1, latitude_atual = '.$latitude.', longitude_atual = '.$longitude.', data_termino = NOW() WHERE idviagem = '.$idviagem);
         $_SESSION['alert'] = [
             'title' => 'Sucesso!',
             'text' => 'Viagem finalizada com sucesso.',
