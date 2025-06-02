@@ -57,7 +57,7 @@ if (isset($_FILES['anexo']) && $_FILES['anexo']['error'][0] !== 4) {
         } else {
             $_SESSION['alert'] = [
                 'title' => 'Erro no upload!',
-                'text' => "Erro ao enviar o arquivo '$nome_original'.",
+                'text' => "Erro ao enviar o arquivo '$nome_original', pelo menos 3 fotos devem ser selecionadas.",
                 'icon' => 'error',
                 'iconColor' => '#dc2626',
                 'confirmButtonColor' => '#2563eb',
@@ -68,10 +68,22 @@ if (isset($_FILES['anexo']) && $_FILES['anexo']['error'][0] !== 4) {
     }
 }
 
+
+$idusuario = $_POST["idusuario"];
+$idposto = $_POST["postoSelecionado"];
+$idviagem = $_POST["idviagem"];
+$litragem = $_POST["litragem"];
+$valor = $_POST["valor"];
+$latitude = $_POST["latitude"];
+$longitude = $_POST["longitude"];
+$destinatario = $_POST["destinatarioLidoInput"];
+$idtransportadora = $_GET["idtransportadora"];
+$distanciaPercorrida = $_POST['distanciaPercorrida'];
+
 if (count($arquivos) !== 3) {
         $_SESSION['alert'] = [
             'title' => 'Erro no upload!',
-            'text' => "Erro ao enviar o arquivo '$nome_original'.",
+            'text' => "Erro ao enviar, pelo menos 3 fotos devem ser selecionadas. ",
             'icon' => 'error',
             'iconColor' => '#dc2626',
             'confirmButtonColor' => '#2563eb',
@@ -79,18 +91,6 @@ if (count($arquivos) !== 3) {
         header('Location: index.php?idtransportadora=' . $idtransportadora);
         exit;
 }
-
-    $idusuario = $_POST["idusuario"];
-    $idposto = $_POST["postoSelecionado"];
-    $idviagem = $_POST["idviagem"];
-    $litragem = $_POST["litragem"];
-    $valor = $_POST["valor"];
-    $latitude = $_POST["latitude"];
-    $longitude = $_POST["longitude"];
-    $destinatario = $_POST["destinatarioLidoInput"];
-    $idtransportadora = $_GET["idtransportadora"];
-    $distanciaPercorrida = $_POST['distanciaPercorrida'];
-
     $query = 'SELECT cpf FROM usuario WHERE idusuario = ' . $idusuario;
     $cpf = $conn->query($query)->fetch_object()->cpf;
 

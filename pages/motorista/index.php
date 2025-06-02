@@ -335,17 +335,19 @@ if ($viagemAtual) { ?>
                 <input style="margin-top: 0px" placeholder="Coloque a litragem" name="litragem"><br>
                 <label>Distância percorrida</label>
                 <input type="number" style="margin-top: 0px" placeholder="Coloque a distância percorrida desde o último pagamento" name="distanciaPercorrida"><br>
-                <small id="coordenadasTexto" style="font-weight: 400; color: #333">Coordenadas: </small>
                 <div class="form-group">
                     <label>Anexos</label>
                     <input style="display: none" type="file" name="anexo[]" id="anexo" accept=".jpg,.jpeg,.png" multiple>
                     <label style="width: fit-content; font-size: 0.8rem" for="anexo" class="btn">Selecionar arquivo</label>
                     <br>
-                    <div>Arquivos</div>
-                    <p class="hint" id="file-list" name="file-list">Nenhum arquivo selecionado</p>
+                    <small>Você deve enviar as seguintes imagens:<br>- Bomba com o valor.<br>- Posto.<br>- Placa do seu veículo.</small>
                     <br>
-                    <p class="hint">Você pode anexar imagens (JPG, PNG).</p>
+                    <div>Arquivos</div>
+                    
+                    <p id="file-list" name="file-list">Nenhum arquivo selecionado</p>
+                    <br>
                 </div>
+                <small id="coordenadasTexto" style="font-weight: 400; color: #333">Suas coordenadas: </small> <br>
             </div>
             
 

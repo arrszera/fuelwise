@@ -145,9 +145,9 @@ CREATE TABLE IF NOT EXISTS `pagamento` (
   `destinatario` VARCHAR(90) NOT NULL,
   `latitudePagamento` DECIMAL(10, 7) NOT NULL,
   `longitudePagamento` DECIMAL(10, 7) NOT NULL,
-  'pathBomba' VARCHAR (100) NOT NULL,
-  'pathPosto' VARCHAR (100) NOT NULL,
-  'pathPlaca' VARCHAR (100) NOT NULL,
+  `pathBomba` VARCHAR (100) NOT NULL,
+  `pathPosto` VARCHAR (100) NOT NULL,
+  `pathPlaca` VARCHAR (100) NOT NULL,
   `cpfPagador` VARCHAR(11) NOT NULL, -- Em caso de exclusao de usuario, mantem seu cpf salvo em caso de necessidade
   PRIMARY KEY (`idpagamento`), -- sem FOREIGN KEYS pois se um posto ou usuario for excluido, não dependencia entre ambos 
   FOREIGN KEY (`idtransportadora`) REFERENCES `transportadora` (`idtransportadora`)
