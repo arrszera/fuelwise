@@ -249,7 +249,7 @@
                 return
             }
 
-            if (telefone.lenght >= 11 || telefone.length <= 15) {
+            if (telefone.lenght < 11 || telefone.length > 15) {
                 event.preventDefault()
                 Swal.fire({
                     icon: 'warning',
