@@ -882,7 +882,7 @@
             });
 
             setInterval(async () => {
-                const response = await fetch(`pegar_localizacao.php?idviagem=${viagem.idviagem}`);
+                const response = await fetch(`pegar_localizacao.php?idviagem=${viagem.idviagem}&idtransportadora=` + <?= $_SESSION['idtransportadora'] ?>);
                 const updatedViagem = await response.json();
 
                 map.setCenter([updatedViagem.longitude_atual, updatedViagem.latitude_atual]);
@@ -897,7 +897,6 @@
                 map.fitBounds(bounds, { padding: 20 });
             }, 10000); 
         }
-
 
         // Verificacoes
         modalAdicionar.querySelector('form').addEventListener('submit', function(event) {

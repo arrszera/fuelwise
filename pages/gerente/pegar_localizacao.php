@@ -1,5 +1,5 @@
 <?php
-include('autenticacaoGerenete.php');
+include('autenticacaoGerente.php');
 
 if (isset($_GET['idviagem'])) {
     $idviagem = $_GET['idviagem'];
@@ -22,6 +22,7 @@ if (isset($_GET['idviagem'])) {
         $stmt->bind_result($latitude_atual, $longitude_atual);
         
         if ($stmt->fetch()) {
+            header('Content-Type: application/json');
             echo json_encode([
                 'latitude_atual' => $latitude_atual,
                 'longitude_atual' => $longitude_atual
