@@ -17,16 +17,14 @@
 				if ($row['status'] == 1) {
 					excluirTransportadora($_GET['id']);
 					header("location: solicitacoes.php");
-					exit;
 				}
 			}
 		}
-		
 		$query = "UPDATE solicitacao SET status = 2 WHERE idsolicitacao = ".$_GET['id'];
 		$resultado = $conn->query($query);
 		$_SESSION['alert'] = [
 			'title' => 'Sucesso!',
-			'text' => 'Status de solicitação alterado com sucesso!',
+			'text' => 'Status de solicitação alterada com sucesso!',
 			'icon' => 'success',
 			'confirmButtonColor' => '#2563eb',
 		];
@@ -47,6 +45,7 @@ function excluirTransportadora($idsolicitacao) {
     $stmt->close();
 
     if ($cnpj) {
+
         $sql = "DELETE FROM veiculo WHERE idtransportadora IN (SELECT idtransportadora FROM transportadora WHERE cnpj = ?)";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("s", $cnpj);
@@ -65,7 +64,7 @@ function excluirTransportadora($idsolicitacao) {
         $stmt->execute();
         $stmt->close();
 
-        $sql = "DELETE FROM usuario WHERE idusuario IN (SELECT idusuario FROM transportadora_usuario WHERE idtransportadora IN (SELECT idtransportadora FROM transportadora WHERE cnpj = ?))";
+		$sql = "DELETE FROM usuario WHERE idusuario IN (SELECT idusuario FROM transportadora_usuario WHERE idtransportadora IN (SELECT idtransportadora FROM transportadora WHERE cnpj = ?))";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("s", $cnpj);
         $stmt->execute();
@@ -78,4 +77,5 @@ function excluirTransportadora($idsolicitacao) {
         $stmt->close();
     }
 }
+
 ?>
