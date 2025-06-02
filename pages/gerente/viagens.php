@@ -42,7 +42,23 @@
                 ];
             }
 
-            $queryPagamentos = "SELECT * FROM pagamento JOIN posto ON pagamento.idposto = posto.idposto WHERE idviagem = $idviagem";
+            $queryPagamentos = "
+                SELECT 
+                    pagamento.*, 
+                    posto.nome AS nome_posto, 
+                    posto.latitude AS latitude_posto, 
+                    posto.longitude AS longitude_posto, 
+                    usuario.nome AS nome_usuario,
+                    transportadora.nome AS nome_transportadora,
+                    viagem.idviagem
+                    FROM pagamento
+                    JOIN posto ON pagamento.idposto = posto.idposto
+                    JOIN usuario ON pagamento.idusuario = usuario.idusuario
+                    JOIN transportadora ON pagamento.idtransportadora = transportadora.idtransportadora
+                    JOIN viagem ON pagamento.idviagem = viagem.idviagem
+                    WHERE pagamento.idviagem = $idviagem
+            ";
+
             $resultadoPagamentos = $conn->query($queryPagamentos);
     
             $pagamentos = [];
@@ -52,16 +68,22 @@
                         'idpagamento' => $pagamento['idpagamento'],
                         'idusuario' => $pagamento['idusuario'],
                         'idposto' => $pagamento['idposto'],
-                        'nome' => $requests[$idviagem]['nome'],
+                        'nomePosto' => $pagamento['nome_posto'],
+                        'nomeUsuario' => $pagamento['nome_usuario'],
+                        'nomeTransportadora' => $pagamento['nome_transportadora'],
+                        'idviagem' => $pagamento['idviagem'],
                         'idtransportadora' => $pagamento['idtransportadora'],
                         'litragem' => $pagamento['litragem'],
                         'valor' => $pagamento['valor'],
+                        'distancia' => $pagamento['distanciaPercorrida'],
+                        'data' => $pagamento['dataPagamento'],
                         'destinatario' => $pagamento['destinatario'],
                         'latitudePagamento' => $pagamento['latitudePagamento'],
                         'longitudePagamento' => $pagamento['longitudePagamento'],
-                        'latitudePosto' => $pagamento['latitude'],
-                        'longitudePosto' => $pagamento['longitude'],
+                        'latitudePosto' => $pagamento['latitude_posto'],
+                        'longitudePosto' => $pagamento['longitude_posto'],
                         'cpfPagador' => $pagamento['cpfPagador'],
+                        'placa' => $requests[$idviagem]['placa'],
                     ];
                 }
             }
@@ -278,7 +300,6 @@
         window.onload = getDateInSaoPaulo;
     </script>
     
-    <!-- TODO, permitir editar veiculo -->
     <div id="modalEditarViagem" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -383,6 +404,29 @@
                 <span onclick="fecharModalMapa()" class="close">&times;</span>
             </div>
             <div id="map" style="width: 100%; height: 400px;"></div>
+        </div>
+    </div>
+
+    <div id="modalPagamento" class="modal" style="display: none;">
+        <div class="modal-content" style="height: fit-content">
+            <div class="modal-header">
+                <h2>Detalhes do Pagamento</h2>
+                <span onclick="fecharModalPagamento()" class="close">&times;</span>
+            </div>
+
+            <div class="modal-body">
+                <div class="info-pagamento">
+                    <p><strong>Usuário:</strong> <span id="detalheUsuario"></span></p>
+                    <p><strong>Posto:</strong> <span id="detalhePosto"></span></p>
+                    <p><strong>Veículo:</strong> <span id="detalheVeiculo"></span></p>
+                    <p><strong>Litragem:</strong> <span id="detalheLitragem"></span> L</p>
+                    <p><strong>Valor:</strong> R$ <span id="detalheValor"></span></p>
+                    <p><strong>Distância Percorrida:</strong> <span id="detalheDistancia"></span> km</p>
+                    <p><strong>Data do Pagamento:</strong> <span id="detalheData"></span></p>
+                    <p><strong>Destinatário:</strong> <span id="detalheDestinatario"></span></p>
+                    <p><strong>CPF do Pagador:</strong> <span id="detalheCpf"></span></p>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -582,7 +626,7 @@
                                 <button onclick='abrirMapa(${req.latitudePagamento}, ${req.longitudePagamento}, ${req.latitudePosto}, ${req.longitudePosto}, ${JSON.stringify(req.nome_posto)}, ${JSON.stringify(req.endereco_posto)}, ${req.idposto})' class="btn-icon btn-map" title="Ver no Mapa">
                                     ${icons.map}
                                 </button>
-                                <button class="btn-icon btn-eye" title="Ver detalhes do pagamento" data-idpagamento="${req.idpagamento}">
+                                <button onclick='abrirModalDetalhesPagamentos(${JSON.stringify(req)})' class="btn-icon btn-eye" title="Ver detalhes do pagamento" data-idpagamento="${req.idpagamento}">
                                     ${icons.eye}
                                 </button>
                                 <button onclick='excluirPagamento(${req.idpagamento})' class="btn-icon btn-deny" title="Excluir">
@@ -596,6 +640,40 @@
             }
 
             document.getElementById('modalPagamentos').style.display = 'flex';
+        }
+
+        function abrirModalDetalhesPagamentos(pagamentos){
+            document.getElementById('detalheUsuario').innerText = pagamentos.nomeUsuario;
+            document.getElementById('detalhePosto').innerText = pagamentos.nomePosto;
+            document.getElementById('detalheVeiculo').innerText = pagamentos.placa;
+            document.getElementById('detalheLitragem').innerText = pagamentos.litragem;
+            document.getElementById('detalheValor').innerText = pagamentos.valor;
+            document.getElementById('detalheDistancia').innerText = pagamentos.distancia;
+            document.getElementById('detalheData').innerText = pagamentos.data;
+            document.getElementById('detalheDestinatario').innerText = pagamentos.destinatario;
+            document.getElementById('detalheCpf').innerText = pagamentos.cpfPagador;
+
+            document.getElementById('modalPagamento').style.display = 'flex';
+
+            const latitude = parseFloat(pagamentos.latitudePagamento);
+            const longitude = parseFloat(pagamentos.longitudePagamento);
+            initMap(latitude, longitude);
+        }
+
+        function fecharModalPagamento() {
+            document.getElementById('modalPagamento').style.display = 'none';
+        }
+
+        function initMap(lat, lng) {
+            document.getElementById('map').innerHTML = ''; // reset map container
+
+            const map = L.map('map').setView([lat, lng], 15);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(map);
+
+            L.marker([lat, lng]).addTo(map).bindPopup('Local do pagamento').openPopup();
+
         }
 
         function fecharModalPagamentos() {
