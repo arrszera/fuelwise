@@ -1,6 +1,6 @@
 <?php
     session_start(); 
-    if (!($_SESSION['role'] == 3)){
+    if (!($_SESSION['adm'] == 1)){
         header('Location: ../index.php');
         exit;
     }

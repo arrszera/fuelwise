@@ -86,6 +86,9 @@
                         'longitudePosto' => $pagamento['longitude_posto'],
                         'cpfPagador' => $pagamento['cpfPagador'],
                         'placa' => $requests[$idviagem]['placa'],
+                        'pathBomba' => $pagamento['pathBomba'],
+                        'pathPlaca' => $pagamento['pathPlaca'],
+                        'pathPosto' => $pagamento['pathPosto'],
                     ];
                 }
             }
@@ -270,7 +273,6 @@
             <table class="styled-table" style="width:100%; border-collapse: collapse;">
             <thead>
                 <tr>
-                <th>Nome do Usuário</th>
                 <th>Destinatário</th>
                 <th>Valor</th>
                 <th>Litragem</th>
@@ -436,6 +438,10 @@
                     <p><strong>Data do Pagamento:</strong> <span id="detalheData"></span></p>
                     <p><strong>Destinatário:</strong> <span id="detalheDestinatario"></span></p>
                     <p><strong>CPF do Pagador:</strong> <span id="detalheCpf"></span></p>
+                    <div class="imagens-pagamento" id="imagensPagamento" style="margin-top: 20px;">
+                        <h3>Comprovantes:</h3>
+                        <div id="containerImagens" style="display: flex; gap: 10px; flex-wrap: wrap;"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -658,7 +664,6 @@
         }
 
         function abrirModalDetalhesPagamentos(pagamentos){
-            document.getElementById('detalheUsuario').innerText = pagamentos.nomeUsuario;
             document.getElementById('detalhePosto').innerText = pagamentos.nomePosto;
             document.getElementById('detalheVeiculo').innerText = pagamentos.placa;
             document.getElementById('detalheLitragem').innerText = pagamentos.litragem;
@@ -667,6 +672,23 @@
             document.getElementById('detalheData').innerText = pagamentos.data;
             document.getElementById('detalheDestinatario').innerText = pagamentos.destinatario;
             document.getElementById('detalheCpf').innerText = pagamentos.cpfPagador;
+            const containerImagens = document.getElementById('containerImagens');
+            const imagens = [pagamentos.pathBomba, pagamentos.pathPlaca, pagamentos.pathPosto]
+            containerImagens.innerHTML = '';
+
+            if (Array.isArray(imagens)) {
+                imagens.forEach((path) => {
+                    const img = document.createElement('img');
+                    img.src = path;
+                    img.alt = 'Comprovante de pagamento';
+                    img.style.maxWidth = '150px';
+                    img.style.borderRadius = '8px';
+                    img.style.boxShadow = '0 2px 6px rgba(0,0,0,0.2)';
+                    containerImagens.appendChild(img);
+                });
+            } else {
+                containerImagens.innerHTML = '<p>Nenhuma imagem disponível.</p>';
+            }
 
             document.getElementById('modalPagamento').style.display = 'flex';
 
@@ -730,7 +752,7 @@
                 <td data-label="Status"><div class="badge ${status.classe}">${status['frase']}</div></td>
                 <td data-label="Ações">
                     <div class="actions">
-                    <button onclick='abrirMapaTempoReal(${JSON.stringify(req)})' class="btn-icon btn-map" title="Excluir">
+                    <button onclick='abrirMapaTempoReal(${JSON.stringify(req)})' class="btn-icon btn-map" title="Acompanhar em tempo real">
                         ${icons.map}
                     </button>
                         <button class="btn-icon btn-edit" title="Editar viagem" data-idviagem="${req.idviagem}">
@@ -806,7 +828,7 @@
 
                 new mapboxgl.Marker({ element: svgElement })
                     .setLngLat([longitudePosto, latitudePosto])
-                    .setPopup(new mapboxgl.Popup().setHTML(`<strong>${nomePosto}</strong><br>${enderecoPosto}`))
+                    .setPopup(new mapboxgl.Popup().setHTML(`<strong>Posto</strong>`))
                     .addTo(map);
 
                 const bounds = new mapboxgl.LngLatBounds();
