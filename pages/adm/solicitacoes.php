@@ -1,10 +1,10 @@
 <?php 
+
     session_start(); 
     if (!($_SESSION['role'] == 3)){
         header('Location: ../index.php');
         exit;
     }
-    include('../../elements/alert.php');
 
     include('../../elements/connection.php');
 
@@ -50,6 +50,7 @@
     <div class="sidebar">
         <?php 
             include('../../elements/sidebar.php');
+            include('../../elements/alert.php');
         ?>
     </div>
     <div class="main">
