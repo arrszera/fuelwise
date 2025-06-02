@@ -25,6 +25,40 @@
     if ($viagensResult && $row = $viagensResult->fetch_assoc()) {
         $totalViagens = (int)$row['total'];
     }
+
+    // Pega o id da transportadora da sessão
+$idTransportadora = intval($_SESSION['idtransportadora']);
+
+// Query para média de gasto por viagem dos últimos 12 meses
+$mediaGastoPorViagemQuery = "
+    SELECT 
+        DATE_FORMAT(dataPagamento, '%Y-%m') AS mes,
+        SUM(valor) AS total_gasto,
+        COUNT(idviagem) AS total_viagens
+    FROM pagamento
+    WHERE idtransportadora = $idTransportadora
+      AND dataPagamento >= DATE_SUB(CURDATE(), INTERVAL 12 MONTH)
+    GROUP BY mes
+    ORDER BY mes
+";
+
+$resultadoMedia = $conn->query($mediaGastoPorViagemQuery);
+
+$dadosGraficoMedia = [];
+
+if ($resultadoMedia && $resultadoMedia->num_rows > 0) {
+    while ($linha = $resultadoMedia->fetch_assoc()) {
+        $totalGasto = (float)$linha['total_gasto'];
+        $totalViagens = (int)$linha['total_viagens'];
+        $mediaGasto = $totalViagens > 0 ? $totalGasto / $totalViagens : 0;
+
+        $dadosGraficoMedia[] = [
+            'mes' => $linha['mes'],
+            'media_gasto' => round($mediaGasto, 2)
+        ];
+    }
+}
+
     
     $dataGrafico = [];
     
@@ -62,7 +96,11 @@
 ?>
 <script>
   const graficoData = <?php echo json_encode($dataGrafico); ?>;
+  const dadosMediaGastoViagem = <?php echo json_encode($dadosGraficoMedia); ?>;
+
 </script>
+
+
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -318,9 +356,11 @@
                     <canvas id="graficoGastosDistancia"></canvas>
                 </div>
                 <div class="card" style="padding: 20px; width: 100%; height: 100%">
-                    <h2>Gastos mensais de combustível</h2>
-                    <canvas id="graficoGastosDistancia"></canvas>
+                    <h2>Média Mensal de Gasto por Viagem</h2>
+                    <canvas id="graficoMediaGastoViagem"></canvas>
                 </div>
+
+
             </div>
         </div>
     </div>
@@ -377,5 +417,53 @@
 </script>
 <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
 <script src="https://unpkg.com/html5-qrcode"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const ctxMedia = document.getElementById('graficoMediaGastoViagem').getContext('2d');
+
+  const labelsMedia = dadosMediaGastoViagem.map(item => item.mes);
+  const dadosMedia = dadosMediaGastoViagem.map(item => item.media_gasto);
+
+  new Chart(ctxMedia, {
+    type: 'line',
+    data: {
+      labels: labelsMedia,
+      datasets: [{
+        label: 'Média de gasto por viagem (R$)',
+        data: dadosMedia,
+        borderColor: '#4caf50',
+        backgroundColor: '#4caf5055',
+        tension: 0.3,
+        fill: true,
+        pointRadius: 5,
+        pointHoverRadius: 7
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: true, position: 'top' },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              return 'R$ ' + context.formattedValue;
+            }
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          title: { display: true, text: 'R$ (Reais)' }
+        },
+        x: {
+          title: { display: true, text: 'Mês' }
+        }
+      }
+    }
+  });
+</script>
+
 </body>
 </html>
