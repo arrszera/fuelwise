@@ -21,6 +21,65 @@ if (isset($_GET['idtransportadora']) && isset($_SESSION['idtransportadora'])
 
     include("../../elements/connection.php");
 
+$upload_dir = '../assets/uploads/';
+if (!is_dir($upload_dir)) {
+    mkdir($upload_dir, 0755, true);
+}
+
+$arquivos = [];
+
+if (isset($_FILES['anexo']) && $_FILES['anexo']['error'][0] !== 4) {
+    foreach ($_FILES['anexo']['tmp_name'] as $key => $tmp_name) {
+        $nome_original = basename($_FILES['anexo']['name'][$key]);
+        $extensao = strtolower(pathinfo($nome_original, PATHINFO_EXTENSION));
+        $permitidos = ['jpg', 'jpeg', 'png'];
+
+        if (!in_array($extensao, $permitidos)) {
+            $_SESSION['alert'] = [
+                'title' => 'Arquivo inválido!',
+                'text' => "O tipo de arquivo '$extensao' não é permitido.",
+                'icon' => 'warning',
+                'iconColor' => '#f59e0b',
+                'confirmButtonColor' => '#2563eb',
+            ];
+            header("Location: suporte.php");
+            exit;
+        }
+
+        $nome_novo = uniqid() . '_' . preg_replace('/[^a-zA-Z0-9.\-_]/', '_', $nome_original);
+        $caminho_final = $upload_dir . $nome_novo;
+
+        if (move_uploaded_file($tmp_name, $caminho_final)) {
+            $arquivos[] = [
+                'nome_arquivo' => $nome_novo,
+                'path' => $caminho_final
+            ];
+        } else {
+            $_SESSION['alert'] = [
+                'title' => 'Erro no upload!',
+                'text' => "Erro ao enviar o arquivo '$nome_original'.",
+                'icon' => 'error',
+                'iconColor' => '#dc2626',
+                'confirmButtonColor' => '#2563eb',
+            ];
+            header("Location: suporte.php");
+            exit;
+        }
+    }
+}
+
+if (count($arquivos) !== 3) {
+        $_SESSION['alert'] = [
+            'title' => 'Erro no upload!',
+            'text' => "Erro ao enviar o arquivo '$nome_original'.",
+            'icon' => 'error',
+            'iconColor' => '#dc2626',
+            'confirmButtonColor' => '#2563eb',
+        ];
+        header('Location: index.php?idtransportadora=' . $idtransportadora);
+        exit;
+}
+
     $idusuario = $_POST["idusuario"];
     $idposto = $_POST["postoSelecionado"];
     $idviagem = $_POST["idviagem"];
@@ -54,7 +113,7 @@ if (isset($_GET['idtransportadora']) && isset($_SESSION['idtransportadora'])
     $coordenadas = $conn->query($query)->fetch_object();
 
     // verificar se a litragem enviada esta dentro da litragem maxima do veiculo
-    if estaDentroDoRaio($latitude, $longitude, $coordenadas->latitude, $coordenadas->longitude){
+    if (!estaDentroDoRaio($latitude, $longitude, $coordenadas->latitude, $coordenadas->longitude)){
         $_SESSION['alert'] = [
             'title' => 'Erro!',
             'text' => 'Você está fora da distância máxima para o pagamento.',
@@ -83,27 +142,29 @@ if (isset($_GET['idtransportadora']) && isset($_SESSION['idtransportadora'])
     $now = new DateTime('now', new DateTimeZone('America/Sao_Paulo'));
     $dataPagamento = $now->format('Y-m-d H:i:s');
 
-    $sql = "INSERT INTO pagamento (idtransportadora, idusuario, idposto, idviagem, litragem, valor, destinatario, cpfPagador, latitudePagamento, longitudePagamento, dataPagamento, distanciaPercorrida) 
-            VALUES ('$idtransportadora', '$idusuario', '$idposto', '$idviagem', '$litragem', '$valor', '$destinatario', '$cpf', $latitude, $longitude, '$dataPagamento', $distanciaPercorrida)";
+    $sql = "INSERT INTO pagamento (idtransportadora, idusuario, idposto, idviagem, litragem, valor, destinatario, cpfPagador, latitudePagamento, longitudePagamento, dataPagamento, distanciaPercorrida, pathBomba, pathPosto, pathPlaca) 
+            VALUES ('$idtransportadora', '$idusuario', '$idposto', '$idviagem', '$litragem', '$valor', '$destinatario', '$cpf', $latitude, $longitude, '$dataPagamento', $distanciaPercorrida,'{$arquivos[0]['path']}', '{$arquivos[1]['path']}', '{$arquivos[2]['path']}' )";
 
-    if ($conn->query($sql)) {
-        $_SESSION['alert'] = [
-            'title' => 'Sucesso!',
-            'text' => 'Pagamento cadastrado com sucesso.',
-            'icon' => 'success',
-            'confirmButtonColor' => '#2563eb',
-        ];
-        header('Location: index.php?idtransportadora=' . $_SESSION['idtransportadora']);
-        exit;
-    } else {
-        $_SESSION['alert'] = [
-            'title' => 'Erro!',
-            'text' => 'Algo deu errado ao salvar o pagamento.',
-            'icon' => 'warning',
-            'confirmButtonColor' => '#2563eb',
-        ];
-        header("Location: index.php?idtransportadora=" . $_SESSION['idtransportadora']);
-        exit;
-    }
+if ($conn->query($sql)) {
+    $_SESSION['alert'] = [
+        'title' => 'Sucesso!',
+        'text' => 'Pagamento cadastrado com sucesso.',
+        'icon' => 'success',
+        'confirmButtonColor' => '#2563eb',
+    ];
+    header('Location: index.php?idtransportadora=' . $_SESSION['idtransportadora']);
+    exit;
+} else {
+    $erro = $conn->error;  // pega o erro real do MySQL
+    $_SESSION['alert'] = [
+        'title' => 'Erro!',
+        'text' => "Algo deu errado ao salvar o pagamento. Erro: $erro",
+        'icon' => 'warning',
+        'confirmButtonColor' => '#2563eb',
+    ];
+    header("Location: index.php?idtransportadora=" . $_SESSION['idtransportadora']);
+    exit;
+}
+
 }
 ?>

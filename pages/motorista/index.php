@@ -295,7 +295,7 @@ if ($viagemAtual) { ?>
 
     <div id="qrModal" class="modal">
         <div class="modal-content">
-        <form onsubmit="cadastrarPagamento()" method="POST" action="pagamento_cadastrar.php?idtransportadora=<?php echo $_GET['idtransportadora']; ?>"> 
+        <form onsubmit="cadastrarPagamento()" enctype="multipart/form-data" method="POST" action="pagamento_cadastrar.php?idtransportadora=<?php echo $_GET['idtransportadora']; ?>"> 
 
             <h3 style="font-weight: 600; color: #2563eb; font-size: 1.3rem">Registrar Pagamento</h3>
             <div id="qr-reader"></div>
@@ -336,7 +336,19 @@ if ($viagemAtual) { ?>
                 <label>Distância percorrida</label>
                 <input type="number" style="margin-top: 0px" placeholder="Coloque a distância percorrida desde o último pagamento" name="distanciaPercorrida"><br>
                 <small id="coordenadasTexto" style="font-weight: 400; color: #333">Coordenadas: </small>
+                <div class="form-group">
+                    <label>Anexos</label>
+                    <input style="display: none" type="file" name="anexo[]" id="anexo" accept=".jpg,.jpeg,.png" multiple>
+                    <label style="width: fit-content; font-size: 0.8rem" for="anexo" class="btn">Selecionar arquivo</label>
+                    <br>
+                    <div>Arquivos</div>
+                    <p class="hint" id="file-list" name="file-list">Nenhum arquivo selecionado</p>
+                    <br>
+                    <p class="hint">Você pode anexar imagens (JPG, PNG).</p>
+                </div>
             </div>
+            
+
 
             <div class="modal-buttons">
                 <button id="cancelar" type="button" class="btn">Cancelar</button>
@@ -756,7 +768,62 @@ if ($viagemAtual) { ?>
             return false;
         }
     }
+    
 </script>
+<script>
+
+    const icons = {
+        x: `<svg class="icon" viewBox="0 0 24 24" stroke="currentColor"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`,
+    }
+    
+    
+    
+    let selectedFiles = []
+    
+    function removeFile(index) {
+        selectedFiles.splice(index, 1)
+        renderFileList()
+        resetFileInput()
+    }
+    document.getElementById('anexo').addEventListener('change', function () {
+        for (let file of this.files) {
+            selectedFiles.push(file)
+        }
+        renderFileList()
+        resetFileInput()
+    })
+    
+    function renderFileList() {
+        
+        const fileList = document.getElementById('file-list')
+        fileList.innerHTML = ''
+        
+        if (selectedFiles.length === 0) {
+            fileList.innerHTML = '<p class="hint">Nenhum arquivo selecionado</p>'
+            return
+        }
+        
+        selectedFiles.forEach((file, index) => {
+            const item = document.createElement('div')
+            item.className = 'file-list-item'
+            item.innerHTML = `
+            <span>${file.name}</span>
+            <button type="button" class="btn-icon btn-deny" onclick="removeFile(${index})">
+            ${icons.x}
+            </button>
+            `
+            fileList.appendChild(item)
+        })
+    }
+    
+    
+    function resetFileInput() {
+        const dataTransfer = new DataTransfer()
+        selectedFiles.forEach(file => dataTransfer.items.add(file))
+        const input = document.getElementById('anexo')
+        input.files = dataTransfer.files
+    }
+    </script>
 
 </body>
 </html>
