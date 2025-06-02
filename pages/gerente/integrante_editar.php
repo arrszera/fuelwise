@@ -1,16 +1,49 @@
 <?php
     include('autenticacaoGerente.php');
 
-	// TODO contra SQL injection
+	function validarCPF($cpf){
+		if (strlen($cpf) !== 11) {
+			return false;
+		}
+
+		if (preg_match('/(\d)\1{10}/', $cpf)) {
+			return false;
+		}
+
+		for ($t = 9; $t < 11; $t++) {
+			$soma = 0;
+			for ($i = 0; $i < $t; $i++) {
+				$soma += $cpf[$i] * (($t + 1) - $i);
+			}
+			$digito = (10 * $soma) % 11;
+			$digito = ($digito == 10) ? 0 : $digito;
+
+			if ($cpf[$t] != $digito) {
+				return false;
+			}
+		}
+
+		return true;
+	}
 
 	if(isset($_POST['idusuario']) && isset($_GET['idtransportadora'])){
 		include('../../elements/connection.php');
 		
-		$cpf = $_POST['cpf'];
+		$cpf = preg_replace('/\D/', '', $_POST["cpf"]);
 		$email = $_POST['email'];
-		$idusuario = $_POST['idusuario'];
+		$idusuario = (int)$_POST['idusuario'];
 
-		$result = $conn->query("SELECT * FROM usuario WHERE cpf = '$cpf' OR email='$email' AND idusuario != $idusuario");
+		if (!validarCPF($cpf)) {
+			$_SESSION['alert'] = [
+				'title' => 'Erro!',
+				'text' => 'Esse CPF é inválido.',
+				'icon' => 'warning', 
+				'confirmButtonColor' => '#2563eb',
+			];
+			header("location: integrantes.php?idtransportadora=".$_SESSION['idtransportadora']); exit;
+		}
+
+		$result = $conn->query("SELECT * FROM usuario WHERE (cpf = '$cpf' OR email='$email') AND idusuario != $idusuario");
 
 		if ($result && $result->num_rows > 0) {
 			$_SESSION['alert'] = [

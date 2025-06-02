@@ -45,30 +45,45 @@ function excluirTransportadora($idsolicitacao) {
     $stmt->close();
 
     if ($cnpj) {
-
         $sql = "DELETE FROM veiculo WHERE idtransportadora IN (SELECT idtransportadora FROM transportadora WHERE cnpj = ?)";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("s", $cnpj);
         $stmt->execute();
         $stmt->close();
-		
+
         $sql = "DELETE FROM pagamento WHERE idtransportadora IN (SELECT idtransportadora FROM transportadora WHERE cnpj = ?)";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("s", $cnpj);
         $stmt->execute();
         $stmt->close();
 
+        // Pega todos os usuários relacionados à transportadora
+        $sql = "SELECT idusuario FROM transportadora_usuario WHERE idtransportadora IN (SELECT idtransportadora FROM transportadora WHERE cnpj = ?)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("s", $cnpj);
+        $stmt->execute();
+        $stmt->bind_result($idusuario);
+        $usuarios = [];
+        while ($stmt->fetch()) {
+            $usuarios[] = $idusuario;
+        }
+        $stmt->close();
+
+        // Apaga primeiro as relações na tabela transportadora_usuario
         $sql = "DELETE FROM transportadora_usuario WHERE idtransportadora IN (SELECT idtransportadora FROM transportadora WHERE cnpj = ?)";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("s", $cnpj);
         $stmt->execute();
         $stmt->close();
 
-		$sql = "DELETE FROM usuario WHERE idusuario IN (SELECT idusuario FROM transportadora_usuario WHERE idtransportadora IN (SELECT idtransportadora FROM transportadora WHERE cnpj = ?))";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("s", $cnpj);
-        $stmt->execute();
-        $stmt->close();
+        // Depois apaga os usuários
+        foreach ($usuarios as $idusuario) {
+            $sql = "DELETE FROM usuario WHERE idusuario = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("i", $idusuario);
+            $stmt->execute();
+            $stmt->close();
+        }
 
         $sql = "DELETE FROM transportadora WHERE cnpj = ?";
         $stmt = $conn->prepare($sql);
@@ -77,5 +92,4 @@ function excluirTransportadora($idsolicitacao) {
         $stmt->close();
     }
 }
-
 ?>

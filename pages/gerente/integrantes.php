@@ -285,7 +285,7 @@
                 return
             }
 
-            if (!/^\d{11}$/.test(cpf)) {
+            if (!/^\d{11}$/.test(cpf.replace(/\D/g, ''))) {
                 event.preventDefault()
                 Swal.fire({
                     icon: 'warning',

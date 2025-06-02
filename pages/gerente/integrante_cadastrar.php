@@ -1,6 +1,31 @@
 <?php
 include('autenticacaoGerente.php');
 
+function validarCPF($cpf){
+    if (strlen($cpf) !== 11) {
+        return false;
+    }
+
+    if (preg_match('/(\d)\1{10}/', $cpf)) {
+        return false;
+    }
+
+    for ($t = 9; $t < 11; $t++) {
+        $soma = 0;
+        for ($i = 0; $i < $t; $i++) {
+            $soma += $cpf[$i] * (($t + 1) - $i);
+        }
+        $digito = (10 * $soma) % 11;
+        $digito = ($digito == 10) ? 0 : $digito;
+
+        if ($cpf[$t] != $digito) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 if (isset($_GET['idtransportadora']) && isset($_SESSION['idtransportadora']) 
     && $_SESSION['gerente'] == 1 && $_GET['idtransportadora'] == $_SESSION['idtransportadora']) {
 
@@ -10,7 +35,7 @@ if (isset($_GET['idtransportadora']) && isset($_SESSION['idtransportadora'])
     $email = $_POST["email"];
     $senha = password_hash($_POST["senha"], PASSWORD_DEFAULT);
     $telefone = $_POST["telefone_usuario"];
-    $cpf = $_POST["cpf"];
+    $cpf = preg_replace('/\D/', '', $_POST["cpf"]);
     $gerente = 0;
 
     $result = $conn->query("SELECT * FROM usuario WHERE cpf = '$cpf' OR email='$email'");
@@ -19,6 +44,16 @@ if (isset($_GET['idtransportadora']) && isset($_SESSION['idtransportadora'])
         $_SESSION['alert'] = [
             'title' => 'Erro!',
             'text' => 'Esse CPF ou E-mail já foi registrado.',
+            'icon' => 'warning', 
+            'confirmButtonColor' => '#2563eb',
+        ];
+        header("location: integrantes.php?idtransportadora=".$_SESSION['idtransportadora']); exit;
+    }
+
+    if (!validarCPF($cpf)) {
+        $_SESSION['alert'] = [
+            'title' => 'Erro!',
+            'text' => 'Esse CPF é inválido.',
             'icon' => 'warning', 
             'confirmButtonColor' => '#2563eb',
         ];

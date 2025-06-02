@@ -160,7 +160,7 @@ if ($viagemAtual) { ?>
             z-index: 9999;
             justify-content: center;
             align-items: center;
-            overflow: hidden !important;
+            overflow-x: hidden !important;
         }
         .modal.show {
             display: flex;
@@ -294,7 +294,7 @@ if ($viagemAtual) { ?>
     </div>
 
     <div id="qrModal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content" style="margin-top: 120px">
         <form onsubmit="cadastrarPagamento()" enctype="multipart/form-data" method="POST" action="pagamento_cadastrar.php?idtransportadora=<?php echo $_GET['idtransportadora']; ?>"> 
 
             <h3 style="font-weight: 600; color: #2563eb; font-size: 1.3rem">Registrar Pagamento</h3>
@@ -520,6 +520,14 @@ if ($viagemAtual) { ?>
         navigator.geolocation.watchPosition(async function(position) {
             const latitude = position.coords.latitude;
             const longitude = position.coords.longitude;
+
+            fetch('buscar_posto.php', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `latitude=${latitude}&longitude=${longitude}`
+            });
 
             const mudouPouco = ultimaLatitude && ultimaLongitude &&
                 Math.abs(latitude - ultimaLatitude) < 0.0005 &&

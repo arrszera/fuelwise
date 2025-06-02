@@ -438,9 +438,9 @@
                     <p><strong>Data do Pagamento:</strong> <span id="detalheData"></span></p>
                     <p><strong>Destinatário:</strong> <span id="detalheDestinatario"></span></p>
                     <p><strong>CPF do Pagador:</strong> <span id="detalheCpf"></span></p>
-                    <div class="imagens-pagamento" id="imagensPagamento" style="margin-top: 20px;">
+                    <div class="imagens-pagamento" id="imagensPagamento" style="margin-top: 20px; width: 100%; justify-content: space-around">
                         <h3>Comprovantes:</h3>
-                        <div id="containerImagens" style="display: flex; gap: 10px; flex-wrap: wrap;"></div>
+                        <div id="containerImagens" style="display: block; gap: 10px; width: 100%"></div>
                     </div>
                 </div>
             </div>
@@ -637,7 +637,6 @@
                 pagamentos.forEach(req => {
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
-                        <td data-label="Nome do usuário" class="font-medium">${req.nome || '-'}</td>
                         <td data-label="Nome do destinatário">${req.destinatario}</td>
                         <td data-label="Valor">R$ ${parseFloat(req.valor).toFixed(2)}</td>
                         <td data-label="Litragem">${parseFloat(req.litragem).toFixed(2)} L</td>
