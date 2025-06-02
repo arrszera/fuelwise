@@ -22,26 +22,37 @@
     }
   ?>
 
+<main class="container">
   <header>
     <h1>Política de Cookies - FuelWise</h1>
   </header>
 
-  <main>
+  <section>
     <h2>1. O que são Cookies?</h2>
-    <p>Cookies são pequenos arquivos de texto armazenados no seu dispositivo quando você visita o nosso site ou utiliza o aplicativo FuelWise. Eles ajudam a melhorar a sua experiência, lembrando preferências e fornecendo funcionalidades personalizadas.</p>
+    <p>Cookies são pequenos arquivos de texto armazenados no seu dispositivo (computador, smartphone ou tablet) quando você acessa o site ou utiliza o aplicativo FuelWise. Eles permitem que o site reconheça o seu dispositivo em visitas futuras, facilitando a navegação, personalizando conteúdos e ajudando a melhorar a experiência do usuário.</p>
+    <p>Os cookies não coletam informações sensíveis ou pessoais sem o seu consentimento prévio, e você pode gerenciar suas preferências a qualquer momento.</p>
 
     <h2>2. Como Utilizamos Cookies</h2>
-    <p>O FuelWise utiliza cookies para armazenar informações de sessão, coletar dados estatísticos sobre o uso da plataforma, e personalizar conteúdos de acordo com suas preferências. Não utilizamos cookies para fins publicitários de terceiros.</p>
+    <p>O FuelWise utiliza cookies para os seguintes fins:</p>
+    <ul>
+      <li><strong>Cookies Essenciais:</strong> Necessários para o funcionamento do site e do aplicativo, como autenticação de usuários, manutenção de sessões e segurança da plataforma.</li>
+      <li><strong>Cookies de Desempenho:</strong> Coletam informações sobre como os usuários interagem com o FuelWise, como páginas visitadas, tempo de navegação e erros encontrados, para melhorar o desempenho e corrigir problemas.</li>
+      <li><strong>Cookies de Funcionalidade:</strong> Permitem lembrar suas preferências, como idioma, região e configurações personalizadas, para oferecer uma experiência mais adequada às suas necessidades.</li>
+      <li><strong>Cookies de Análise:</strong> Utilizados para gerar estatísticas anônimas e entender o comportamento de uso da plataforma, como frequência de visitas, páginas acessadas e interações gerais.</li>
+    </ul>
+    <p><strong>Importante:</strong> O FuelWise <strong>não utiliza cookies para publicidade de terceiros</strong> ou para coleta de dados sensíveis sem o seu consentimento.</p>
 
     <h2>3. Gerenciamento de Cookies</h2>
-    <p>Você pode desativar ou excluir os cookies nas configurações do seu navegador. No entanto, isso pode impactar a funcionalidade e o desempenho do FuelWise.</p>
+    <p>Você tem o controle sobre o uso de cookies e pode, a qualquer momento, desativar ou excluir cookies diretamente nas configurações do seu navegador. No entanto, desativar alguns cookies pode afetar a funcionalidade do site e limitar o uso de determinados recursos do FuelWise.</p>
+    <p>Para gerenciar cookies no seu navegador, siga as instruções específicas para cada sistema (como Google Chrome, Mozilla Firefox, Microsoft Edge, Safari, entre outros). Consulte a documentação oficial do navegador para obter orientações detalhadas.</p>
 
     <h2>4. Alterações na Política de Cookies</h2>
-    <p>Podemos atualizar esta Política de Cookies a qualquer momento. Recomendamos que você a revise periodicamente para se manter informado sobre eventuais mudanças.</p>
+    <p>O FuelWise reserva-se o direito de atualizar esta Política de Cookies a qualquer momento, a fim de refletir mudanças legais, técnicas ou de funcionalidade. Recomendamos que você revise esta política periodicamente para estar ciente de eventuais alterações. Quaisquer mudanças relevantes serão comunicadas por meio do nosso site ou aplicativo.</p>
 
     <h2>5. Contato</h2>
-    <p>Se tiver dúvidas ou solicitações relacionadas a esta Política de Cookies, entre em contato pelo e-mail: <a href="mailto:contato@fuelwise.com">contato@fuelwise.com</a>.</p>
-  </main>
+    <p>Em caso de dúvidas, solicitações ou para exercer seus direitos relacionados a esta Política de Cookies, entre em contato com a equipe do FuelWise pelo e-mail: <a href="mailto:contato@fuelwise.com">contato@fuelwise.com</a>.</p>
+  </section>
+</main>
 
   <?php include('../elements/footer.php') ?>
 

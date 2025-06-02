@@ -39,6 +39,8 @@
                     'enderecoDestino' => $row['endereco_destino'],
                     'latitudeDestino' => $row['latitude_destino'],
                     'longitudeDestino' => $row['longitude_destino'],
+                    'longitudeAtual' => $row['longitude_atual'],
+                    'latitudeAtual' => $row['latitude_atual'],
                 ];
             }
 
@@ -141,7 +143,6 @@
                             <th>Modelo do Veículo</th>
                             <th>Carga</th>
                             <th>Peso</th>
-                            <th>Observação</th>
                             <th>Data Início</th>
                             <th>Data Término</th>
                             <th>Status</th>
@@ -407,6 +408,16 @@
         </div>
     </div>
 
+    <div id="modalMapaTempoReal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Localização atual da viagem</h2>
+                <span onclick="fecharModalMapaTempoReal()" class="close">&times;</span>
+            </div>
+            <div id="mapTempoReal" style="width: 100%; height: 400px;"></div>
+        </div>
+    </div>
+
     <div id="modalPagamento" class="modal" style="display: none;">
         <div class="modal-content" style="height: fit-content">
             <div class="modal-header">
@@ -466,6 +477,10 @@
 
         function fecharModalMapa() {
             document.getElementById('modalMapa').style.display = 'none'
+        }
+
+        function fecharModalMapaTempoReal(){
+            document.getElementById('modalMapaTempoReal').style.display = 'none'
         }
 
         function fecharModal() {
@@ -710,12 +725,14 @@
                 <td data-label="Modelo">${req.modelo}</td>
                 <td data-label="Carga">${req.carga}</td>
                 <td data-label="Peso">${req.peso}</td>
-                <td data-label="Observações">${req.obs}</td>
                 <td data-label="Data de início">${req.data_inicio}</td>
                 <td data-label="Data de término">${!req.data_termino || req.data_termino === '0000-00-00 00:00:00' ? 'Em andamento' : req.data_termino}</td>
                 <td data-label="Status"><div class="badge ${status.classe}">${status['frase']}</div></td>
                 <td data-label="Ações">
                     <div class="actions">
+                    <button onclick='abrirMapaTempoReal(${JSON.stringify(req)})' class="btn-icon btn-map" title="Excluir">
+                        ${icons.map}
+                    </button>
                         <button class="btn-icon btn-edit" title="Editar viagem" data-idviagem="${req.idviagem}">
                             ${icons.edit}
                         </button>
@@ -800,6 +817,85 @@
             })().catch(function (error) {
                 alert("Erro ao obter localização: " + error.message);
             });
+        }
+
+        async function abrirMapaTempoReal(viagem) {
+            console.log(viagem);
+            document.getElementById('modalMapaTempoReal').style.display = 'block';
+
+            mapboxgl.accessToken = 'pk.eyJ1IjoibHVjYXM1NTVhbmRyaWFuaSIsImEiOiJjbWJhMDBqYm0wNW5rMmxvbDl5eHcyYXRnIn0.PCgnmuGP-tgdJity6h2LUg';
+
+            const map = new mapboxgl.Map({
+                container: 'mapTempoReal',
+                style: 'mapbox://styles/mapbox/streets-v11',
+                center: [viagem.longitudeAtual, viagem.latitudeAtual],
+                zoom: 14
+            });
+
+            map.addControl(new mapboxgl.NavigationControl());
+
+            const origem = [viagem.longitudeAtual, viagem.latitudeAtual];
+            const destino = [viagem.longitudeDestino, viagem.latitudeDestino];
+
+            new mapboxgl.Marker({ color: 'red' })
+                .setLngLat(origem)
+                .setPopup(new mapboxgl.Popup().setHTML("<strong>Local do motorista</strong>"))
+                .addTo(map);
+
+            new mapboxgl.Marker({ color: 'green' })
+                .setLngLat(destino)
+                .setPopup(new mapboxgl.Popup().setHTML(`<strong>Destino</strong><br>${viagem.enderecoDestino}`))
+                .addTo(map);
+
+            const query = await fetch(`https://api.mapbox.com/directions/v5/mapbox/driving/${origem[0]},${origem[1]};${destino[0]},${destino[1]}?geometries=geojson&access_token=${mapboxgl.accessToken}`);
+            const data = await query.json();
+
+            const route = data.routes[0].geometry;
+
+            map.on('load', () => {
+                map.addSource('route', {
+                    'type': 'geojson',
+                    'data': {
+                        'type': 'Feature',
+                        'properties': {},
+                        'geometry': route
+                    }
+                });
+
+                map.addLayer({
+                    'id': 'route',
+                    'type': 'line',
+                    'source': 'route',
+                    'layout': {
+                        'line-join': 'round',
+                        'line-cap': 'round'
+                    },
+                    'paint': {
+                        'line-color': '#0074D9',
+                        'line-width': 5
+                    }
+                });
+
+                const bounds = new mapboxgl.LngLatBounds();
+                route.coordinates.forEach(coord => bounds.extend(coord));
+                map.fitBounds(bounds, { padding: 20 });
+            });
+
+            setInterval(async () => {
+                const response = await fetch(`pegar_localizacao.php?idviagem=${viagem.idviagem}&idtransportadora=` + <?= $_SESSION['idtransportadora'] ?>);
+                const updatedViagem = await response.json();
+
+                map.setCenter([updatedViagem.longitude_atual, updatedViagem.latitude_atual]);
+
+                const marker = new mapboxgl.Marker({ color: 'red' })
+                    .setLngLat([updatedViagem.longitude_atual, updatedViagem.latitude_atual])
+                    .setPopup(new mapboxgl.Popup().setHTML("<strong>Local do motorista</strong>"))
+                    .addTo(map);
+                
+                const bounds = new mapboxgl.LngLatBounds();
+                bounds.extend([updatedViagem.longitude_atual, updatedViagem.latitude_atual]);
+                map.fitBounds(bounds, { padding: 20 });
+            }, 10000); 
         }
 
         // Verificacoes
