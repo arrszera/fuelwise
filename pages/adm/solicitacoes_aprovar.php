@@ -44,9 +44,11 @@
         $stmt->bind_param("sssssi", $linha->emailUsuario, $linha->nomeUsuario, $linha->senha, $linha->telefoneUsuario, $linha->cpf, $status);
         if ($stmt->execute()){
             $idusuario = $conn->insert_id;
-            $query = "INSERT INTO transportadora(nome, endereco, cidade, estado, cep, cnpj) VALUES(?, ?, ?, ?, ?, ?)";
+            $query = "INSERT INTO transportadora(nome, endereco, cidade, estado, cep, cnpj, dataCriacao) VALUES(?, ?, ?, ?, ?, ?, ?)";
             $stmt = $conn->prepare($query);
-            $stmt->bind_param("ssssss", $linha->nomeTransportadora, $linha->endereco, $linha->cidade, $linha->estado, $linha->cep, $linha->cnpj);
+            $now = new DateTime('now', new DateTimeZone('America/Sao_Paulo'));
+            $agora = $now->format('Y-m-d H:i:s');
+            $stmt->bind_param("ssssss", $linha->nomeTransportadora, $linha->endereco, $linha->cidade, $linha->estado, $linha->cep, $linha->cnpj, $agora);
             if ($stmt->execute()){
                 $idtransportadora = $conn->insert_id;
                 $query = "INSERT INTO transportadora_usuario(idusuario, idtransportadora, datalogin) VALUES(?, ?, ?)";

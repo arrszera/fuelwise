@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS `transportadora` (
   `cep` VARCHAR(8) NOT NULL,
   `cnpj` VARCHAR(14) NOT NULL,
   `telefone` VARCHAR(25) NOT NULL,
+  `dataCriacao` DATETIME NOT NULL,
   PRIMARY KEY (`idtransportadora`),
   UNIQUE (`cnpj`)
 ) ENGINE=InnoDB;

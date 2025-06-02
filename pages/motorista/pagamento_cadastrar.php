@@ -1,6 +1,21 @@
 <?php
 include('autenticarMotorista.php');
 
+
+function estaDentroDoRaio($latAtual, $lngAtual, $latPosto, $lngPosto, $raioKm = 2) {
+    $raioTerra = 6371;
+    $dLat = deg2rad($latPosto - $latAtual);
+    $dLng = deg2rad($lngPosto - $lngAtual);
+    $a = sin($dLat / 2) * sin($dLat / 2) +
+        cos(deg2rad($latAtual)) * cos(deg2rad($latPosto)) *
+        sin($dLng / 2) * sin($dLng / 2);
+    $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
+    return ($raioTerra * $c) <= $raioKm;
+
+    
+}
+
+
 if (isset($_GET['idtransportadora']) && isset($_SESSION['idtransportadora']) 
     && $_GET['idtransportadora'] == $_SESSION['idtransportadora']) {
 
@@ -20,34 +35,75 @@ if (isset($_GET['idtransportadora']) && isset($_SESSION['idtransportadora'])
     $query = 'SELECT cpf FROM usuario WHERE idusuario = ' . $idusuario;
     $cpf = $conn->query($query)->fetch_object()->cpf;
 
+    $queryVeiculo = "SELECT idveiculo FROM viagem WHERE idviagem = $idviagem";
+    $resultVeiculo = $conn->query($queryVeiculo);
+    if (!$resultVeiculo || $resultVeiculo->num_rows === 0) {
+        $_SESSION['alert'] = [
+            'title' => 'Erro!',
+            'text' => 'Viagem não encontrada.',
+            'icon' => 'warning',
+            'confirmButtonColor' => '#2563eb',
+        ];
+        header("Location: index.php?idtransportadora=" . $_SESSION['idtransportadora']);
+        exit;
+    }
+    $idveiculo = $resultVeiculo->fetch_object()->idveiculo;
+
+
+    $query = "SELECT latitude, longitude FROM posto WHERE idposto = $idposto";
+    $coordenadas = $conn->query($query)->fetch_object();
+
+    // verificar se a litragem enviada esta dentro da litragem maxima do veiculo
+    if estaDentroDoRaio($latitude, $longitude, $coordenadas->latitude, $coordenadas->longitude){
+        $_SESSION['alert'] = [
+            'title' => 'Erro!',
+            'text' => 'Você está fora da distância máxima para o pagamento.',
+            'icon' => 'warning',
+            'confirmButtonColor' => '#2563eb',
+        ];
+        header("Location: index.php?idtransportadora=" . $_SESSION['idtransportadora']);
+        exit;
+    }
+
+    // verificar se a litragem enviada esta dentro da litragem maxima do veiculo
+    $queryLitragem = "SELECT litragem FROM veiculo WHERE idveiculo = $idveiculo";
+    $litragemMaxima = $conn->query($queryLitragem)->fetch_object()->litragem;
+
+    if ($litragem > $litragemMaxima) {
+        $_SESSION['alert'] = [
+            'title' => 'Erro!',
+            'text' => 'A litragem informada excede a capacidade do veículo.',
+            'icon' => 'warning',
+            'confirmButtonColor' => '#2563eb',
+        ];
+        header("Location: index.php?idtransportadora=" . $_SESSION['idtransportadora']);
+        exit;
+    }
+
     $now = new DateTime('now', new DateTimeZone('America/Sao_Paulo'));
     $dataPagamento = $now->format('Y-m-d H:i:s');
-
 
     $sql = "INSERT INTO pagamento (idtransportadora, idusuario, idposto, idviagem, litragem, valor, destinatario, cpfPagador, latitudePagamento, longitudePagamento, dataPagamento, distanciaPercorrida) 
             VALUES ('$idtransportadora', '$idusuario', '$idposto', '$idviagem', '$litragem', '$valor', '$destinatario', '$cpf', $latitude, $longitude, '$dataPagamento', $distanciaPercorrida)";
 
     if ($conn->query($sql)) {
-        $idveiculo = $conn->insert_id;
         $_SESSION['alert'] = [
             'title' => 'Sucesso!',
             'text' => 'Pagamento cadastrado com sucesso.',
-            'icon' => 'success', 
+            'icon' => 'success',
             'confirmButtonColor' => '#2563eb',
         ];
-        header('Location: index.php?idtransportadora=' . $_SESSION['idtransportadora']); 
+        header('Location: index.php?idtransportadora=' . $_SESSION['idtransportadora']);
         exit;
     } else {
         $_SESSION['alert'] = [
             'title' => 'Erro!',
-            'text' => 'Algo deu errado.',
-            'icon' => 'warning', 
+            'text' => 'Algo deu errado ao salvar o pagamento.',
+            'icon' => 'warning',
             'confirmButtonColor' => '#2563eb',
         ];
-        header("location: index.php?idtransportadora=".$_SESSION['idtransportadora']); 
+        header("Location: index.php?idtransportadora=" . $_SESSION['idtransportadora']);
         exit;
     }
-//
-    exit;
 }
 ?>

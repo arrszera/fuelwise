@@ -4,6 +4,16 @@
     include('../../elements/connection.php');
 
     $sql = "SELECT * FROM viagem WHERE idusuario = ". $_SESSION['id'] . " AND status = 0 ORDER BY data_inicio ASC";
+
+    $veiculo = "SELECT * FROM veiculo
+    JOIN viagem ON veiculo.idveiculo = viagem.idveiculo
+    WHERE viagem.idveiculo = veiculo.idveiculo" ;
+    
+    $resultado = $conn->query($veiculo);
+
+    
+
+
     $agora = new DateTime('now', new DateTimeZone('America/Sao_Paulo'));
     $requests = [];
     $viagemAtual = null;
@@ -203,6 +213,7 @@ if ($viagemAtual) { ?>
         <?php include('../../elements/sidebar.php') ?>
         <?php include('../../elements/alert.php'); ?>
     </div>
+
 
     <div class="main">
         <?php include('../../elements/header.php'); ?>
